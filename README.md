@@ -10,7 +10,7 @@ KYANPU*CAMP is a website where users can discover campgrounds. This project was 
 
 ### 📝Notes
 
-> [view more notes](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/NOTES.md)
+> [View More Notes](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/NOTES.md)
 
 ### 💻 Features:
 
