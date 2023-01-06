@@ -2,15 +2,15 @@
 
 ### 🔑 Introduction
 
-KYANPU_CAMP is a website where users can discover campgrounds. This project was part of _Colt Steele's web dev course on udemy._
+KYANPU*CAMP is a website where users can discover campgrounds. This project was part of \_Colt Steele's web dev course on udemy.*
 
-### 		📰Certificate
+### 📰Certificate
 
 > ![check50.png](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/img/check50.png.jpeg)
 
-### 		📝Notes
+### 📝Notes
 
->  [view more notes](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/NOTES.md)
+> [view more notes](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/NOTES.md)
 
 ### 💻 Features:
 
@@ -52,8 +52,8 @@ This project was created using Node.js, Express, MongoDB, and Bootstrap. Passpor
   cd Kyanpucamp
   npm init -y
   ```
-  
-### 🏗️  Dependencies
+
+### 🏗️ Dependencies
 
 ```
   "express": $ npm install express
@@ -65,14 +65,15 @@ This project was created using Node.js, Express, MongoDB, and Bootstrap. Passpor
   "connect-flash": $ npm install connect-flash
   "Path": $ npm install --save path
   "express-session": $ npm install express-session
-  "passport" 
-  "passport-local" 
-  "passport-local-mongoose" 
+  "passport"
+  "passport-local"
+  "passport-local-mongoose"
 ```
 
-
 ### 📣 Acknowledgments
+
 The skeleton of this project was based on Colt Steele's YelpCamp during the Web Development Bootcamp.
 
 ### 🔒 License
+
 Copyright Notice and Statement: currently not offering any license. Permission only to view and download.Declare
