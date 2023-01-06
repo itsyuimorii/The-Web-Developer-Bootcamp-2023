@@ -152,3 +152,42 @@ app.get('/comments/:id', (req, res) => {
 })
 ```
 
+## Routes: Edit | Update | Delete comments
+
+```javascript
+// *******************************************
+// EDIT - renders a form to edit a comment
+// *******************************************
+app.get('/comments/:id/edit', (req, res) => {
+    const { id } = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/edit', { comment })
+})
+// *******************************************
+// UPDATE - updates a particular comment
+// *******************************************
+app.patch('/comments/:id', (req, res) => {
+    const { id } = req.params;
+    const foundComment = comments.find(c => c.id === id);
+
+    //get new text from req.body
+    const newCommentText = req.body.comment;
+    //update the comment with the data from req.body:
+    foundComment.comment = newCommentText;
+    //redirect back to index (or wherever you want)
+    res.redirect('/comments')
+})
+
+// *******************************************
+// DELETE/DESTROY- removes a single comment
+// *******************************************
+app.delete('/comments/:id', (req, res) => {
+    const { id } = req.params;
+    comments = comments.filter(c => c.id !== id);
+    res.redirect('/comments');
+})
+```
+
+## [The UUID package](https://www.npmjs.com/package/uuid)
+
+## [method-override](https://expressjs.com/en/resources/middleware/method-override.html)
