@@ -84,3 +84,26 @@ Copyright Notice and Statement: currently not offering any license. Permission o
 
 
 
+## 1. Create server
+
+```js
+const express = require("express");
+
+const path = require("path");
+const app = express();
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+app.listen(3000, () => {
+  console.log("listening on port http://127.0.0.1:3000");
+});
+
+```
+
+## 2. Create Campground model 
+
