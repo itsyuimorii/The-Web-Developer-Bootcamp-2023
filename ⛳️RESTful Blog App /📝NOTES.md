@@ -2,8 +2,6 @@
 
 ### Create Project
 
-首先創建專案資料夾並安裝套件：
-
 ```bash
 # Create Project Folder
 $ mkdir BlogApp
@@ -28,23 +26,25 @@ $ touch views/index.ejs
 
 ```javascript
 // Import dependencies
-const bodyParser = require('body-parser'),
-      mongoose   = require('mongoose'),
-      express    = require('express'),
-      app        = express();
+const bodyParser = require("body-parser"),
+  mongoose = require("mongoose"),
+  express = require("express"),
+  app = express();
 
 // Application Config
-mongoose.connect('mongodb://localhost:27017/blog_app', {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/blog_app", {
+  useNewUrlParser: true,
+});
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database Schema Config
 const blogSchema = new mongoose.Schema({
   title: String,
   image: String,
   body: String,
-  created: {type: Date, default: Date.now}
+  created: { type: Date, default: Date.now },
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
@@ -57,21 +57,21 @@ const Blog = mongoose.model("Blog", blogSchema);
 // });
 
 // Index Routes
-app.get('/', function (req, res) {
-  res.redirect('/blogs');
+app.get("/", function (req, res) {
+  res.redirect("/blogs");
 });
 
-app.get("/blogs", function(req, res) {
-  Blog.find({}, function(err, blogs) {
+app.get("/blogs", function (req, res) {
+  Blog.find({}, function (err, blogs) {
     if (err) {
       console.log("Error");
     } else {
-      res.render("index", {blogs: blogs});
+      res.render("index", { blogs: blogs });
     }
   });
 });
 
-app.listen(process.env.PORT, process.env.IP, function() {
+app.listen(process.env.PORT, process.env.IP, function () {
   console.log("SERVER IS RUNNING!");
 });
 ```
@@ -146,15 +146,15 @@ $ touch views/partials/footer.ejs
 
 ```css
 i.icon {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 .container.main {
-    margin-top: 7.0em;
+  margin-top: 7em;
 }
 
 #delete {
-    display: inline;
+  display: inline;
 }
 ```
 
@@ -163,13 +163,13 @@ i.icon {
 在下一個課程中，講師將會介紹一種新的方式來透過 `<form>` 表單提交資料到伺服器端，在以往我們會使用 `name` 屬性：
 
 ```html
-<input type="text" name="title">
+<input type="text" name="title" />
 ```
 
 新的使用方法會是：
 
 ```html
-<input type="text" name="blog[title]"> 
+<input type="text" name="blog[title]" />
 ```
 
 前一種方法要取值時使用 `req.body.title`，而後者則為 `req.body.blog.title`。
@@ -180,13 +180,13 @@ i.icon {
 
 ```javascript
 // NEW ROUTE
-app.get("/blogs/new", function(req, res) {
+app.get("/blogs/new", function (req, res) {
   res.render("new");
 });
 
 // CREATE ROUTE
-app.post("/blogs", function(req, res) {
-  Blog.create(req.body.blog, function(err, newBlog) {
+app.post("/blogs", function (req, res) {
+  Blog.create(req.body.blog, function (err, newBlog) {
     if (err) {
       res.render("new");
     } else {
@@ -239,14 +239,14 @@ app.post("/blogs", function(req, res) {
 
 ```javascript
 // SHOW ROUTE
-app.get("/blogs/:id", function(req, res) {
-    Blog.findById(req.params.id, function(err, foundBlog) {
-        if (err) {
-            res.redirect("/blogs");
-        } else {
-            res.render("show", {blog: foundBlog});
-        }
-    });
+app.get("/blogs/:id", function (req, res) {
+  Blog.findById(req.params.id, function (err, foundBlog) {
+    if (err) {
+      res.redirect("/blogs");
+    } else {
+      res.render("show", { blog: foundBlog });
+    }
+  });
 });
 ```
 
@@ -264,7 +264,7 @@ app.get("/blogs/:id", function(req, res) {
         <span><%= blog.created.toDateString() %></span>
       </div>
       <div class="description">
-        <p><%- blog.body %></p> 
+        <p><%- blog.body %></p>
       </div>
       <a class="ui orange basic button" href="/blogs/<%= blog._id %>/edit">Edit</a>
       <form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
@@ -326,8 +326,8 @@ $ npm install method-override --save
 
 ```javascript
 // DESTROY ROUTE
-app.delete("/blogs/:id", function(req, res) {
-  Blog.findByIdAndRemove(req.params.id, function(err) {
+app.delete("/blogs/:id", function (req, res) {
+  Blog.findByIdAndRemove(req.params.id, function (err) {
     if (err) {
       res.redirect("/blogs");
     } else {
@@ -338,8 +338,6 @@ app.delete("/blogs/:id", function(req, res) {
 ```
 
 ## Note about RESTful Blog App: Final Touches
-
-
 
 ## [Lecture] RESTful Blog App: Final Touches
 
@@ -356,18 +354,20 @@ $ npm install express-sanitizer --save
 
 ```javascript
 // Import dependencies
-const bodyParser       = require('body-parser'),
-      methodOverride   = require("method-override"),
-      expressSanitizer = require("express-sanitizer"),
-      mongoose         = require('mongoose'),
-      express          = require('express'),
-      app              = express();
+const bodyParser = require("body-parser"),
+  methodOverride = require("method-override"),
+  expressSanitizer = require("express-sanitizer"),
+  mongoose = require("mongoose"),
+  express = require("express"),
+  app = express();
 
 // Application Config
-mongoose.connect('mongodb://localhost:27017/blog_app', {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/blog_app", {
+  useNewUrlParser: true,
+});
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(expressSanitizer());
 
@@ -376,7 +376,7 @@ const blogSchema = new mongoose.Schema({
   title: String,
   image: String,
   body: String,
-  created: {type: Date, default: Date.now}
+  created: { type: Date, default: Date.now },
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
@@ -389,29 +389,29 @@ const Blog = mongoose.model("Blog", blogSchema);
 // });
 
 // INDEX ROUTER
-app.get('/', function (req, res) {
-  res.redirect('/blogs');
+app.get("/", function (req, res) {
+  res.redirect("/blogs");
 });
 
-app.get("/blogs", function(req, res) {
-  Blog.find({}, function(err, blogs) {
+app.get("/blogs", function (req, res) {
+  Blog.find({}, function (err, blogs) {
     if (err) {
       console.log("Error");
     } else {
-      res.render("index", {blogs: blogs});
+      res.render("index", { blogs: blogs });
     }
   });
 });
 
 // NEW ROUTE
-app.get("/blogs/new", function(req, res) {
+app.get("/blogs/new", function (req, res) {
   res.render("new");
 });
 
 // CREATE ROUTE
-app.post("/blogs", function(req, res) {
+app.post("/blogs", function (req, res) {
   req.body.blog.body = req.sanitize(req.body.blog.body);
-  Blog.create(req.body.blog, function(err, newBlog) {
+  Blog.create(req.body.blog, function (err, newBlog) {
     if (err) {
       res.render("new");
     } else {
@@ -421,42 +421,46 @@ app.post("/blogs", function(req, res) {
 });
 
 // SHOW ROUTE
-app.get("/blogs/:id", function(req, res) {
-  Blog.findById(req.params.id, function(err, foundBlog) {
+app.get("/blogs/:id", function (req, res) {
+  Blog.findById(req.params.id, function (err, foundBlog) {
     if (err) {
       res.redirect("/blogs");
     } else {
-      res.render("show", {blog: foundBlog});
+      res.render("show", { blog: foundBlog });
     }
   });
 });
 
 // EDIT ROUTE
-app.get("/blogs/:id/edit", function(req, res) {
-  Blog.findById(req.params.id, function(err, foundBlog) {
+app.get("/blogs/:id/edit", function (req, res) {
+  Blog.findById(req.params.id, function (err, foundBlog) {
     if (err) {
       res.redirect("/blogs");
     } else {
-      res.render("edit", {blog: foundBlog});  
+      res.render("edit", { blog: foundBlog });
     }
   });
 });
 
 // UPDATE ROUTE
-app.put("/blogs/:id", function(req, res) {
+app.put("/blogs/:id", function (req, res) {
   req.body.blog.body = req.sanitize(req.body.blog.body);
-  Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog) {
-    if (err) {
-      res.redirect("/blogs");
-    } else {
-      res.redirect("/blogs/" + req.params.id);
+  Blog.findByIdAndUpdate(
+    req.params.id,
+    req.body.blog,
+    function (err, updatedBlog) {
+      if (err) {
+        res.redirect("/blogs");
+      } else {
+        res.redirect("/blogs/" + req.params.id);
+      }
     }
-  });
+  );
 });
 
 // DESTROY ROUTE
-app.delete("/blogs/:id", function(req, res) {
-  Blog.findByIdAndRemove(req.params.id, function(err) {
+app.delete("/blogs/:id", function (req, res) {
+  Blog.findByIdAndRemove(req.params.id, function (err) {
     if (err) {
       res.redirect("/blogs");
     } else {
@@ -465,8 +469,7 @@ app.delete("/blogs/:id", function(req, res) {
   });
 });
 
-app.listen(process.env.PORT, process.env.IP, function() {
+app.listen(process.env.PORT, process.env.IP, function () {
   console.log("SERVER IS RUNNING!");
 });
 ```
-

@@ -1,5 +1,19 @@
 # 🌟CAPSTONE 2: RESTful Comments App: INDEX
 
+## GET vs POST
+
+- used to retrieve information
+- Data is sent via query string
+- Information is plainly visible in the URL!
+- Limited amount of data can be sent
+
+- Used to post data to the server
+- Used to write/create/update
+- Data is sent via request body, not a query string!
+- Can send any sort of data (JSON!)
+
+## REST
+
 ```bash
 touch index.js
 mkdir views
@@ -64,9 +78,9 @@ app.set("view engine", "ejs");
 // **********************************
 // INDEX - renders multiple comments
 // **********************************
-app.get('/comments', (req, res) => {
-    res.render('comments/index', { comments });
-})
+app.get("/comments", (req, res) => {
+  res.render("comments/index", { comments });
+});
 
 app.listen(3000, () => {
   console.log("ON PORT 3000!");
@@ -103,7 +117,7 @@ app.listen(3000, () => {
 
 ## Routes: Create New Comment
 
-### 		`res.redirect` 
+### `res.redirect`
 
 > The **res.redirect()** function redirects to the URL derived from the specified path, with specified status, a integer (positive) which corresponds to an HTTP status code. The default status is “302 Found”.
 >
@@ -124,32 +138,31 @@ app.listen(3000, () => {
 // **********************************
 // NEW - renders a form
 // **********************************
-app.get('/comments/new', (req, res) => {
-    res.render('comments/new');
-})
-
+app.get("/comments/new", (req, res) => {
+  res.render("comments/new");
+});
 
 // **********************************
 // CREATE - creates a new comment
 // **********************************
-app.post('/comments', (req, res) => {
-    const { username, comment } = req.body;
-    comments.push({ username, comment, id: uuid() })
-    res.redirect('/comments');
-})
+app.post("/comments", (req, res) => {
+  const { username, comment } = req.body;
+  comments.push({ username, comment, id: uuid() });
+  res.redirect("/comments");
+});
 ```
 
-## Routes: Show Comments 
+## Routes: Show Comments
 
 ```javascript
 // *******************************************
 // SHOW - details about one particular comment
 // *******************************************
-app.get('/comments/:id', (req, res) => {
-    const { id } = req.params;
-    const comment = comments.find(c => c.id === id);
-    res.render('comments/show', { comment })
-})
+app.get("/comments/:id", (req, res) => {
+  const { id } = req.params;
+  const comment = comments.find((c) => c.id === id);
+  res.render("comments/show", { comment });
+});
 ```
 
 ## Routes: Edit | Update | Delete comments
@@ -158,34 +171,34 @@ app.get('/comments/:id', (req, res) => {
 // *******************************************
 // EDIT - renders a form to edit a comment
 // *******************************************
-app.get('/comments/:id/edit', (req, res) => {
-    const { id } = req.params;
-    const comment = comments.find(c => c.id === id);
-    res.render('comments/edit', { comment })
-})
+app.get("/comments/:id/edit", (req, res) => {
+  const { id } = req.params;
+  const comment = comments.find((c) => c.id === id);
+  res.render("comments/edit", { comment });
+});
 // *******************************************
 // UPDATE - updates a particular comment
 // *******************************************
-app.patch('/comments/:id', (req, res) => {
-    const { id } = req.params;
-    const foundComment = comments.find(c => c.id === id);
+app.patch("/comments/:id", (req, res) => {
+  const { id } = req.params;
+  const foundComment = comments.find((c) => c.id === id);
 
-    //get new text from req.body
-    const newCommentText = req.body.comment;
-    //update the comment with the data from req.body:
-    foundComment.comment = newCommentText;
-    //redirect back to index (or wherever you want)
-    res.redirect('/comments')
-})
+  //get new text from req.body
+  const newCommentText = req.body.comment;
+  //update the comment with the data from req.body:
+  foundComment.comment = newCommentText;
+  //redirect back to index (or wherever you want)
+  res.redirect("/comments");
+});
 
 // *******************************************
 // DELETE/DESTROY- removes a single comment
 // *******************************************
-app.delete('/comments/:id', (req, res) => {
-    const { id } = req.params;
-    comments = comments.filter(c => c.id !== id);
-    res.redirect('/comments');
-})
+app.delete("/comments/:id", (req, res) => {
+  const { id } = req.params;
+  comments = comments.filter((c) => c.id !== id);
+  res.redirect("/comments");
+});
 ```
 
 ## [The UUID package](https://www.npmjs.com/package/uuid)
