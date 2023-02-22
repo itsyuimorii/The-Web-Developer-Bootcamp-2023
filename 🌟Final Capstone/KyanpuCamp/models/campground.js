@@ -1,14 +1,7 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
-mongoose.connect("mongodb://127.0.0.1:27017/KyanpuCamp", {
-  userNewUrlParser: true,
-  userCreateIndex: true,
-  useUnifiedTopology: true,
-});
-
-const CampgroundSchema = mongoose.Schema({
+const CampgroundSchema = new Schema({
   title: String,
   price: String,
   description: String,

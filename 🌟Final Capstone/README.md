@@ -98,24 +98,38 @@ app.listen(3000, () => {
 });
 ```
 
-## 2. Ejs and path 
+## 2. Ejs
 
-create views/home.ejs
+views/home.ejs
 
 ```js
-<h1>Hello Kyanpu Camp</h1>
+ <body>
+    <!- For printing variable these
+      tags are used: <%= %>
+    -->
+    <h1><%= title %></h1>
+
+    <!- For business logic these
+    tags are used: <% %>
+    --> <% if(true){ %>
+    <h4>Greetings from KyanpuCamp</h4>
+    <% } %>
+  </body>
 ```
 
 app.js
 
 ```js
-const path = require("path");
-
+//write this middleware to setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {
-  res.render("home");
+  // Rendering our web page i.e. Demo.ejs
+  // and passing title variable through it
+  res.render("Demo", {
+    title: "View Engine Demo",
+  });
 });
 ```
 
@@ -129,7 +143,6 @@ models/campground.js
 
 ```js
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const CampgroundSchema = mongoose.Schema({
@@ -149,15 +162,16 @@ app.js
 
 ```js
 const mongoose = require("mongoose");
-```
 
-models/campground.js
-
-```js
-mongoose.connect("mongodb://127.0.0.1:27017/KyanpuCamp", {
-  userNewUrlParser: true,
-  userCreateIndex: true,
+mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
+  useNewUrlParser: true,
   useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "database is connection error"));
+db.once("open", () => {
+  console.log("database is connected successfully");
 });
 ```
 
