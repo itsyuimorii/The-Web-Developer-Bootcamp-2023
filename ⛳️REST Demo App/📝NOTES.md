@@ -24,7 +24,7 @@ touch show.ejs
 
 ```
 
-## RESTFUL Demo (fullcode)
+## RESTFUL Demo (fullCode)
 
 // GET /comments - list all comments
 // POST /comments - Create a new comment
