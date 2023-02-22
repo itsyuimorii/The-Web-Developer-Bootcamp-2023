@@ -24,54 +24,9 @@ touch show.ejs
 
 ```
 
-## RESTFUL Demo
-
-### ejs
-
-```js
-// Views folder and EJS setup:
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-```
-
-```bash
-npm i ejs
-```
-
-### fake database
-
-```java
-// Our fake database:
-let comments = [
-    {
-        id: uuid(),
-        username: 'Todd',
-        comment: 'lol that is so funny!'
-    },
-    {
-        id: uuid(),
-        username: 'Skyler',
-        comment: 'I like to go birdwatching with my dog'
-    },
-    {
-        id: uuid(),
-        username: 'Sk8erBoi',
-        comment: 'Plz delete your account, Todd'
-    },
-    {
-        id: uuid(),
-        username: 'onlysayswoof',
-        comment: 'woof woof woof'
-    }
-]
-```
-
-````js
-app.get("/comments",(req,res)=>{
-  res.render("comments/index"); //views/comments/index.ejs
-})
-
 ## RESTFUL Demo (fullCode)
+
+## Routes: list all comments
 
 // GET /comments - list all comments
 // POST /comments - Create a new comment
@@ -79,9 +34,27 @@ app.get("/comments",(req,res)=>{
 // PATCH /comments/:id - Update one comment
 // DELETE /comments/:id - Destroy one comment
 
-> Fake database
+### ejs
 
-```java
+```bash
+npm i ejs
+```
+
+```js
+// Views folder and EJS setup:
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+```
+
+```js
+app.get("/comments",(req,res)=>{
+  res.render("comments/index");
+})
+```
+
+### create a fake database
+
+````js
 // Our fake database:
 let comments = [
     {
@@ -109,7 +82,7 @@ let comments = [
 
 > index.js
 
-```javascript
+```js
 const path = require("path");
 const express = require("express");
 const app = express();
@@ -134,7 +107,7 @@ app.listen(3000, () => {
 });
 ```
 
-> index.ejs
+### create a new file - views/comments/index.ejs
 
 ```ejs
 <!DOCTYPE html>
@@ -199,7 +172,7 @@ app.post("/comments", (req, res) => {
 });
 ```
 
-## Routes: Show Comments
+### Routes: Show Comments
 
 ```javascript
 // *******************************************
@@ -212,7 +185,7 @@ app.get("/comments/:id", (req, res) => {
 });
 ```
 
-## Routes: Edit | Update | Delete comments
+### Routes: Edit | Update | Delete comments
 
 ```javascript
 // *******************************************
@@ -248,6 +221,6 @@ app.delete("/comments/:id", (req, res) => {
 });
 ```
 
-## [The UUID package](https://www.npmjs.com/package/uuid)
+### [The UUID package](https://www.npmjs.com/package/uuid)
 
 ## [method-override](https://expressjs.com/en/resources/middleware/method-override.html)
