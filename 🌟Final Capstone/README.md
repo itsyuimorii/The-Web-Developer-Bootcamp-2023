@@ -86,11 +86,30 @@ Copyright Notice and Statement: currently not offering any license. Permission o
 
 ## 1. Create server
 
+app.js
+
 ```js
 const express = require("express");
 
-const path = require("path");
 const app = express();
+ 
+app.listen(3000, () => {
+  console.log("listening on port http://127.0.0.1:3000");
+});
+```
+
+## 2. Ejs and path 
+
+create views/home.ejs
+
+```js
+<h1>Hello Kyanpu Camp</h1>
+```
+
+app.js
+
+```js
+const path = require("path");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -98,12 +117,39 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/", (req, res) => {
   res.render("home");
 });
+```
 
-app.listen(3000, () => {
-  console.log("listening on port http://127.0.0.1:3000");
+
+
+## 2. Create Campground model 
+
+> create Schema
+
+models/campground.js
+
+```js
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+
+const CampgroundSchema = mongoose.Schema({
+  title: String,
+  price: String,
+  description: String,
+  location: String,
 });
+
+module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ```
 
-## 2. Create Campground model 
+> connect mongoose 
+
+app.js
+
+```js
+const mongoose = require("mongoose");
+```
+
+models/campground.js
 
