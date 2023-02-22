@@ -12,7 +12,7 @@
 - Data is sent via request body, not a query string!
 - Can send any sort of data (JSON!)
 
-## REST
+## What is REST?
 
 ```bash
 touch index.js
@@ -23,6 +23,53 @@ cd comments
 touch show.ejs
 
 ```
+
+## RESTFUL Demo
+
+### ejs
+
+```js
+// Views folder and EJS setup:
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+```
+
+```bash
+npm i ejs
+```
+
+### fake database
+
+```java
+// Our fake database:
+let comments = [
+    {
+        id: uuid(),
+        username: 'Todd',
+        comment: 'lol that is so funny!'
+    },
+    {
+        id: uuid(),
+        username: 'Skyler',
+        comment: 'I like to go birdwatching with my dog'
+    },
+    {
+        id: uuid(),
+        username: 'Sk8erBoi',
+        comment: 'Plz delete your account, Todd'
+    },
+    {
+        id: uuid(),
+        username: 'onlysayswoof',
+        comment: 'woof woof woof'
+    }
+]
+```
+
+````js
+app.get("/comments",(req,res)=>{
+  res.render("comments/index"); //views/comments/index.ejs
+})
 
 ## RESTFUL Demo (fullCode)
 
@@ -58,7 +105,7 @@ let comments = [
         comment: 'woof woof woof'
     }
 ]
-```
+````
 
 > index.js
 
