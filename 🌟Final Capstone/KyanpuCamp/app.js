@@ -1,4 +1,15 @@
 const express = require("express");
+
+const path = require("path");
 const app = express();
 
-app.listen("listening on port http://localhost:8080");
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+app.listen(3000, () => {
+  console.log("listening on port https://localhost:3000");
+});
