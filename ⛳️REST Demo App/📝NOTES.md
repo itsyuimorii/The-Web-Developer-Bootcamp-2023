@@ -107,7 +107,9 @@ app.listen(3000, () => {
 });
 ```
 
-### create a new file - views/comments/index.ejs
+### create a new file 
+
+views/comments/index.ejs
 
 ```ejs
 <!DOCTYPE html>
@@ -137,22 +139,7 @@ app.listen(3000, () => {
 
 ## Routes: Create New Comment
 
-### `res.redirect`
 
-> The **res.redirect()** function redirects to the URL derived from the specified path, with specified status, a integer (positive) which corresponds to an HTTP status code. The default status is “302 Found”.
->
-> **Syntax:**
->
-> ```
-> res.redirect([status, ] path)
-> ```
->
-> **Parameter:** This function accepts two parameters as mentioned above and described below:
->
-> - **status:** This parameter holds the HTTP status code
-> - **path:** This parameter describes the path.
->
-> **Return Value:** It returns an Object.
 
 ```javascript
 // **********************************
@@ -172,6 +159,29 @@ app.post("/comments", (req, res) => {
 });
 ```
 
+ views/comments/new.ejs
+
+```js
+<body>
+    <h1>Make a new comment</h1>
+    <form action="/comments" method="post">
+        <section>
+            <label for="username">Enter username:</label>
+            <input type="text" id="username" placeholder="username" name="username">
+        </section>
+        <section>
+            <label for="comment">Comment Text</label>
+            <br>
+            <textarea id="comment" cols="30" rows="5" name="comment"></textarea>
+        </section>
+        <button>Submit</button>
+    </form>
+    <a href="/comments">Back to Index</a>
+</body>
+```
+
+
+
 ### Routes: Show Comments
 
 ```javascript
@@ -184,6 +194,8 @@ app.get("/comments/:id", (req, res) => {
   res.render("comments/show", { comment });
 });
 ```
+
+
 
 ### Routes: Edit | Update | Delete comments
 
@@ -221,6 +233,6 @@ app.delete("/comments/:id", (req, res) => {
 });
 ```
 
-### [The UUID package](https://www.npmjs.com/package/uuid)
+[The UUID package](https://www.npmjs.com/package/uuid)
 
-## [method-override](https://expressjs.com/en/resources/middleware/method-override.html)
+[method-override](https://expressjs.com/en/resources/middleware/method-override.html)

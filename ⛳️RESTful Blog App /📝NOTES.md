@@ -15,8 +15,6 @@ $ npm install ejs --save
 
 ### Initiate Views File
 
-創建頁面：
-
 ```bash
 $ mkdir views
 $ touch views/index.ejs
