@@ -11,5 +11,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("listening on port https://localhost:3000");
+  console.log("listening on port http://127.0.0.1:3000");
 });
