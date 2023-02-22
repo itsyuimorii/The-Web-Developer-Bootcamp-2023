@@ -84,7 +84,7 @@ Copyright Notice and Statement: currently not offering any license. Permission o
 
 
 
-## 1. Create server
+## 💥. Create server
 
 app.js
 
@@ -98,7 +98,7 @@ app.listen(3000, () => {
 });
 ```
 
-## 2. Ejs
+## 💥. Ejs
 
 views/home.ejs
 
@@ -112,7 +112,7 @@ views/home.ejs
     <!- For business logic these
     tags are used: <% %>
     --> <% if(true){ %>
-    <h4>Greetings from KyanpuCamp</h4>
+    <h4>Greetings from itsyuimorii</h4>
     <% } %>
   </body>
 ```
@@ -133,11 +133,9 @@ app.get("/", (req, res) => {
 });
 ```
 
+## 💥. create Campground model 
 
-
-## 2. Create Campground model 
-
-> create Schema
+> Create the schema for the campground model
 
 models/campground.js
 
@@ -146,14 +144,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CampgroundSchema = mongoose.Schema({
+  //Add validations to the User model
+  //+ username: {type: String, lowercase: true, required: [true, "can't be blank"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true},
+
   title: String,
   price: String,
   description: String,
   location: String,
 });
 
+//first param is the name of db, second is the rule
 module.exports = mongoose.model("Campground", CampgroundSchema);
-
 ```
 
 > connect mongoose 
@@ -175,3 +176,29 @@ db.once("open", () => {
 });
 ```
 
+## 💥. create a new campground testing in one of routes
+
+app.js
+
+```js
+app.get("/makecampground", async (req, res) => {
+  const camp = new Campground({
+    title: "Campground Demo",
+    description: "Testing the routes",
+  });
+  await camp.save();
+  res.send(camp);
+});
+```
+
+![json](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/json.png)
+
+> Check database
+
+```bash
+mongosh
+use Kyanpu-camp
+db.campgrounds.find()
+```
+
+![db.find](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/db.find.png)

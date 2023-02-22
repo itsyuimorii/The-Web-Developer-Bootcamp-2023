@@ -42,5 +42,5 @@ app.get("/makecampground", async (req, res) => {
 
 app.listen(8080, function (error) {
   if (error) throw error;
-  console.log("listening on port http://127.0.0.1:3000");
+  console.log("listening on port http://127.0.0.1:8080");
 });
