@@ -254,7 +254,9 @@ const seedDB = async () => {
 
 ```
 
-## Campgrounds index
+## 💥All campgrounds listing page
+
+> models/campground.js
 
 ```js
 const mongoose = require("mongoose");
@@ -270,6 +272,8 @@ const CampgroundSchema = new Schema({
 module.exports = mongoose.model("Campground", CampgroundSchema);
 ```
 
+### 1. add new router
+
 > app.js
 
 `Campground.find({})` method to retrieve data from ` models/campground.js `
@@ -281,6 +285,8 @@ app.get("/campgrounds", async (req, res) => {
 });
 ```
 
+### 2. For loop list all new campground site from db
+
 > /views/campgrounds/index.ejs
 
 ```html
@@ -290,13 +296,13 @@ app.get("/campgrounds", async (req, res) => {
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Campgrounds</title>
+    <title>All campgrounds listing page</title>
   </head>
   <body>
-    <h1>All Campgrounds</h1>
+    <h1>All campgrounds listing page</h1>
     <ul>
       <% for (let campground of campgroundData) { %>
-      <li><%= campground.title %></li>
+      <li><%= campgroundData.title %></li>
       <% } %>
     </ul>
   </body>
@@ -347,8 +353,99 @@ index.ejs中有所有campground list, 在campground.title外層增加a標籤即�
 ```js
 <ul>
    <% for (let campground of campgroundData) { %>
-   <li><a href="/campgrounds/campground._id"><%= campground.title %></a></li>
+   <li><a href="/campgrounds/<%= campground._id %>"><%= campground.title %></a></li>
    <% } %>
 </ul>
 ```
 
+ ![list all camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/list all camp.png)
+
+
+
+### 3. findById and showing the campground data 
+
+```js
+app.get("/campgrounds/:id", async (req, res) => {
+  const campgroundId = await Campground.findById(req.params.id);
+  res.render("campgrounds/show", { campgroundId });
+});
+```
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show</title>
+  </head>
+  <body>
+    <h1>Campgrounds Detail pages</h1>
+    <h2><%= campgroundId.title %></h2>
+    <h2><%= campgroundId.location %></h2>
+  </body>
+</html>
+
+```
+
+![show](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/show.png)
+
+## 💥 Create new campground
+
+### 1. Create new route
+
+```js
+
+app.get("/campgrounds/new", async (req, res) => {
+  res.render("campgrounds/new");
+});
+```
+
+📝note: this route must be exist before campgrounds/:id, as it is new. this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
+
+### 2. Create `new.ejs`, it is a form for user to input new campground info
+
+> views/campgrounds/new.ejs
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="/campgrounds" method="POST">
+      <div>
+        <label for="title">Title</label>
+        <input type="text id="title" name="campground[title]">
+        <label for="location">Location</label>
+        <input type="text id="location" name="campground[location]">
+        <button>Add campground</button>
+      </div>
+    </form>
+  </body>
+</html>
+```
+
+notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 
+
+![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/new camp.png)
+
+### 3. Set the endpoint to set a POST request for the "form submission destination" when the "Add Camp" button is clicked.
+
+> app.js
+
+```js
+//parse the body when using "req.body"
+app.use(express.urlencoded({ extended: true }));
+
+app.post("./campgrounds", async (req, res) => {
+  res.send(req.body);
+});
+```
+
+![req.body ](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/req.body .png)

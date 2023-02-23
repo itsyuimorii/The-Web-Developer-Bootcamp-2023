@@ -21,6 +21,8 @@ const app = express();
 //write this middleware to setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+//parse the body when using "req.body"
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
@@ -35,11 +37,22 @@ app.get("/campgrounds", async (req, res) => {
   const campgroundData = await Campground.find({});
   res.render("campgrounds/index", { campgroundData });
 });
+//Create new campground
+//this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
+app.get("/campgrounds/new", async (req, res) => {
+  res.render("campgrounds/new");
+});
+
+//setup endpoint, when click`add campground` button as a post where the form is submitted to
+app.post("/campgrounds", async (req, res) => {
+  res.send(req.body);
+});
 
 //detail page for showing single campground
 //id for looking up the corresponding campground from database
 app.get("/campgrounds/:id", async (req, res) => {
-  res.render("campgrounds/show");
+  const campgroundId = await Campground.findById(req.params.id);
+  res.render("campgrounds/show", { campgroundId });
 });
 
 /* //create a new campground testing in one of routes
