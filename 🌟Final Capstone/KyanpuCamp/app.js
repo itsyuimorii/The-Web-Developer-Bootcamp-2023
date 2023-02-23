@@ -37,7 +37,7 @@ app.get("/makecampground", async (req, res) => {
     description: "Testing the routes",
   });
   await camp.save();
-  res.send(camp);
+  //res.send(camp);
 });
 
 app.listen(8080, function (error) {
