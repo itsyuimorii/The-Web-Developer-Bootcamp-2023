@@ -228,7 +228,7 @@ db.once("open", () => {
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
-//添加单条信息～
+// Add a single message ~
 // const seedDB = async () => {
 //     await Campground.deleteMany({});// Delete previous records
 //     const c = new Campground({ title: 'purple field' });//Add New Record
