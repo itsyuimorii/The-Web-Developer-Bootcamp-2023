@@ -656,3 +656,12 @@ show.ejs
 ```
 
 # 02. Express Middleware 
+
+REQUEST ----->
+
+- middleware are just function 
+- each middlware has **access** to the `request` and `response` object
+- middleware can **end the HTTP request** by sending back a ***response*** with methods like `res.send()`
+- OR middleware can be **chained together**, one after antoher by calling `next()`
+
+RESPONSE ----->
