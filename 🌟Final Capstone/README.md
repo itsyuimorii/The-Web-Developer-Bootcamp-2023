@@ -1,8 +1,8 @@
 # 🏕 KYANPU_CAMP (キャンプ)
 
-## 🚀 01. basic CRUD for Kyanpucamp
+## 📍 01. Campgrounds CURD
 
-## 💥. Create basic server
+## 💥. Creating the Basic Express App
 
 > app.js
 
@@ -16,7 +16,7 @@ app.listen(3000, () => {
 });
 ```
 
-## 💥. Ejs
+## 💥. what is Ejs
 
 > views/home.ejs
 
@@ -51,9 +51,9 @@ app.get("/", (req, res) => {
 });
 ```
 
-## 💥. create Campground model 
+## 💥. Campground Model Bascis
 
-Create the schema for the campground model
+### 1. Create the schema for the campground model
 
 > models/campground.js
 
@@ -94,7 +94,7 @@ db.once("open", () => {
 });
 ```
 
-## 💥. create a new campground testing in one of routes
+### 2. Create a new campground testing in one of routes
 
 > app.js
 
@@ -111,7 +111,7 @@ app.get("/makecampground", async (req, res) => {
 
 ![json](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/json.png)
 
-Check database
+### 3. Check new database
 
 ```bash
 mongosh
@@ -121,7 +121,9 @@ db.campgrounds.find()
 
 ![db.find](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/db.find.png)
 
-## 💥. setup some fake campgrounds seed data
+## 💥. Seeding Campground
+
+**Setup some fake campgrounds seed data**
 
 > /seeds/index.js
 
@@ -172,7 +174,7 @@ const seedDB = async () => {
 
 ```
 
-## 💥 listing all campgrounds page
+## 💥 Listing all campgrounds page
 
 > models/campground.js
 
@@ -228,7 +230,7 @@ app.get("/campgrounds", async (req, res) => {
 
 ```
 
-## 💥 Show router 
+## 💥 Campground Show Router 
 
 > detail page for showing single campground
 
@@ -309,7 +311,7 @@ app.get("/campgrounds/:id", async (req, res) => {
 
 ![show](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/show.png)
 
-## 💥 Create new campground
+## 💥  Campground New & Create Router 
 
 ### 1. Create new route
 
@@ -410,7 +412,7 @@ app.post("/campgrounds", async (req, res) => {
 <div><a href="/campgrounds">All campgrounds list</a></div>
 ```
 
-## 💥Edit campground info
+## 💥 Campground Edit & Update Router 
 
 ### 1. create new route
 
@@ -550,7 +552,7 @@ app.put("/campgrounds/:id/", async (req, res) => {
 
 ![update info](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update info.png)
 
-## 💥 Delete camp
+## 💥 Campground Delete Route
 
 > app.js
 
@@ -573,7 +575,7 @@ app.delete("/campgrounds/:id/", async (req, res) => {
     </p>
 ```
 
-# 02. Express Middleware 
+## 📍02. Express Middleware 
 
 REQUEST ----->
 
@@ -586,5 +588,5 @@ RESPONSE ----->
 
 [morgan](https://github.com/expressjs/morgan)
 
-
+## 📍03. Adding Basic Styles
 
