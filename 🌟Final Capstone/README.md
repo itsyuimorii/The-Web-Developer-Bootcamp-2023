@@ -631,3 +631,5 @@ app.put("/campgrounds/:id/", async (req, res) => {
 ![campground[title]](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update.png)
 
 ![update info](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update info.png)
+
+## 💥 Delete camp

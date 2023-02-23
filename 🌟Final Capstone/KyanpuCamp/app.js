@@ -74,13 +74,16 @@ app.put("/campgrounds/:id/", async (req, res) => {
   //res.send("IT WORKED!");
   //update the campground info
   const { id } = req.params;
-  // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });
+  // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });/
   const campground = await Campground.findByIdAndUpdate(id, {
     ...req.body.campground,
   });
   res.redirect(`/campgrounds/${campground._id}`);
 });
-
+//page for delete
+app.delete("/campgrounds/:id/", async (req, res) => {
+  const { id } = req.params;
+});
 /* //create a new campground testing in one of routes
 app.get("/makecampground", async (req, res) => {
   const camp = new Campground({
