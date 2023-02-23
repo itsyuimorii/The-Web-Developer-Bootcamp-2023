@@ -627,3 +627,31 @@ app.get('/secret', verifyPassword, (req, res) => {
 
 ## 📍03. Adding Basic Styles
 
+### 1. what is [EJS mate](https://github.com/JacksonTian/ejs-mate)
+
+Given a template, index.ejs:
+```js
+<% layout('boilerplate') -%>
+<h1>I am the <%= what %> template</h1>
+```
+And a layout, boilerplate.ejs:
+```js
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>It's <%= who %></title>
+  </head>
+  <body>
+    <section>
+      <%- body -%>
+    </section>
+  </body>
+</html>
+```
+
+### 2. Installation
+
+```js
+$ npm install ejs-mate --save
+```
+
