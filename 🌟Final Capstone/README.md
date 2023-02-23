@@ -342,6 +342,8 @@ Enter the address in the browser plus any random id http://127.0.0.1:8080/campgr
 
 > views/campgrounds/index.ejs
 
+index.ejs中有所有campground list, 在campground.title外層增加a標籤即可實現此效果, 
+
 ```js
 <ul>
    <% for (let campground of campgroundData) { %>
