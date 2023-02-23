@@ -575,7 +575,9 @@ app.delete("/campgrounds/:id/", async (req, res) => {
     </p>
 ```
 
-## 📍02. Express Middleware 
+## 📍02. Express Middleware
+
+### 1. Overview 
 
 REQUEST ----->
 
@@ -586,7 +588,42 @@ REQUEST ----->
 
 RESPONSE ----->
 
-[morgan](https://github.com/expressjs/morgan)
+### 1. [morgan](https://github.com/expressjs/morgan)
+
+```js
+const morgan = require('morgan');
+
+app.use(morgan('tiny'));
+```
+
+### 2. Using middleware one specific routes
+
+> instead of using `app.use`, Routes HTTP GET requests to the specified path with the specified callback functions.
+
+```js
+app.get(path, callback [, callback ...])
+```
+
+| Argument   | Description                                                  | Default         |
+| ---------- | ------------------------------------------------------------ | --------------- |
+| `path`     | The path for which the middleware function is invoked; can be any of:A string representing a path.A path pattern.A regular expression pattern to match paths.An array of combinations of any of the above.For examples, see [Path examples](https://expressjs.com/en/5x/api.html#path-examples). | '/' (root path) |
+| `callback` | Callback functions; can be:A middleware function.A series of middleware functions (separated by commas).An array of middleware functions.A combination of all of the above. |                 |
+
+```js
+....
+const verifyPassword = (req, res, next) => {
+    const { password } = req.query;
+    if (password === 'passwords') {
+        next();
+    }
+    res.send("YOU NEED A PASSWORD!")
+}
+
+app.get('/secret', verifyPassword, (req, res) => {
+    res.send('')
+})
+....
+```
 
 ## 📍03. Adding Basic Styles
 
