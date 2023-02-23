@@ -1,92 +1,10 @@
 # 🏕 KYANPU_CAMP (キャンプ)
 
-### 🔑 Introduction
+## 🚀 01. basic CRUD for Kyanpucamp
 
-KYANPU*CAMP is a website where users can discover campgrounds. This project was part of \_Colt Steele's web dev course on udemy.*
+## 💥. Create basic server
 
-### 📰Certificate
-
-> ![check50.png](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/check50.png.jpeg)
-
-### 📝Notes
-
-> [View More Notes](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/NOTES.md)
-
-### 💻 Features:
-
-Users cannot manage posts and view user profiles without authentication, nor can they edit or delete posts and comments created by other users
-
-- ✂️**Create, read, update, delete** campsites and campsite reviews
-- 🪪**Manage account** Options for users to edit their profile or delete their account
-- 🤖Creation of routes with **authentication**
-- ⚡️**User profile** includes more information about the user (full name, email, phone, join date)
-- 🔎**Search** for campgrounds by name or location
-- 📚**Sort** campgrounds (ratings, reviews and prices)
-- 🧩[Google Maps API](https://developers.google.com/maps/documentation)
-- 💎Create and update forms with client-side and server-side **validation**
-
-### ⚙️ Built With
-
-This project was created using Node.js, Express, MongoDB, and Bootstrap. Passport.js was used to handle authentication.
-
-- 🪄**Node.js** used as environment for writing server-side code
-- 🗑RESTful routing using express and mongoose
-- 🤖 Express **Cookie-Session** middleware
-- 📢Templating Node.js applications with **EJS**
-- 🔎Responsive sites with **Bootstrap** allowed _mobile_ friendly
-- 🚧 Express **method-override** middleware to handle update and delete features
-- 💾 Non-relational database (**MongoDB**)
-- **📫Mongoose** for configuring MongoDB models
-- ⚡️Using the **"Flash" middleware** allows the user to send information (objects, arrays, etc.) to the request to which the user wants to be redirected.
-- 🔐 Deploying applications to **Heroku** and databases to MongoDB Atlas
-- 🔬Database hosted on **mLab**
-- **💳passport.js** for password hash and salt
-- 📍Geocoder with **Google Maps API** for rendering locations of campsites
-
-### 🚀 Getting Started
-
-- Install [mongodb](https://www.mongodb.com/)
-- Create a cloudinary account to get an API key and secret code
-  ```
-  git clone https://github.com/itsyuimorii/Kyanpu-camp.git
-  cd Kyanpucamp
-  npm init -y
-  ```
-
-### 🏗️ Dependencies
-
-```
-  "express": $ npm install express
-  "ejs": $ npm install ejs-mate
-  "Schemas": $ npm install -g schemas
-  "method-override: $ npm install method-override
-  "mongoose": $ npm install mongoose
-  "geocoder":
-  "connect-flash": $ npm install connect-flash
-  "Path": $ npm install --save path
-  "express-session": $ npm install express-session
-  "passport"
-  "passport-local"
-  "passport-local-mongoose"
-```
-
-### 📣 Acknowledgments
-
-The skeleton of this project was based on Colt Steele's YelpCamp during the Web Development Bootcamp.
-
-### 🔒 License
-
-Copyright Notice and Statement: currently not offering any license. Permission only to view and download.Declare
-
-
-
-
-
-# 🚀 01. basic CRUD for Kyanpucamp
-
-## 💥. Create server
-
-app.js
+> app.js
 
 ```js
 const express = require("express");
@@ -100,7 +18,7 @@ app.listen(3000, () => {
 
 ## 💥. Ejs
 
-views/home.ejs
+> views/home.ejs
 
 ```js
  <body>
@@ -117,7 +35,7 @@ views/home.ejs
   </body>
 ```
 
-app.js
+> app.js
 
 ```js
 //write this middleware to setup view engine
@@ -135,9 +53,9 @@ app.get("/", (req, res) => {
 
 ## 💥. create Campground model 
 
-> Create the schema for the campground model
+Create the schema for the campground model
 
-models/campground.js
+> models/campground.js
 
 ```js
 const mongoose = require("mongoose");
@@ -157,9 +75,9 @@ const CampgroundSchema = mongoose.Schema({
 module.exports = mongoose.model("Campground", CampgroundSchema);
 ```
 
-> connect mongoose 
+connect mongoose 
 
-app.js
+> app.js
 
 ```js
 const mongoose = require("mongoose");
@@ -178,7 +96,7 @@ db.once("open", () => {
 
 ## 💥. create a new campground testing in one of routes
 
-app.js
+> app.js
 
 ```js
 app.get("/makecampground", async (req, res) => {
@@ -193,7 +111,7 @@ app.get("/makecampground", async (req, res) => {
 
 ![json](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/json.png)
 
-> Check database
+Check database
 
 ```bash
 mongosh
@@ -254,7 +172,7 @@ const seedDB = async () => {
 
 ```
 
-## 💥All campgrounds listing page
+## 💥 listing all campgrounds page
 
 > models/campground.js
 
@@ -285,7 +203,7 @@ app.get("/campgrounds", async (req, res) => {
 });
 ```
 
-### 2. For loop list all new campground site from db
+### 2.  loop(all new campground site) from db
 
 > /views/campgrounds/index.ejs
 
@@ -404,7 +322,7 @@ app.get("/campgrounds/new", async (req, res) => {
 
 📝note: this route must be exist before campgrounds/:id, as it is new. this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
 
-### 2. Create `new.ejs`, it is a form for user to input new campground info
+### 2. create `new.ejs`, it is a form for user to input new campground info
 
 > views/campgrounds/new.ejs
 
@@ -435,9 +353,9 @@ notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 ![
 
 ![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampform.png)
 
-### 3. Set the endpoint to set a POST request for the "form submission destination" when the "Add Camp" button is clicked.
+### 3. Set the endpoint to set a POST request for the "form submission destination" when the "add Campground" button is clicked.
 
-### 1. test body.parse
+### 3.1 Testing body.parse
 
 > app.js
 
@@ -454,7 +372,7 @@ app.post("./campgrounds", async (req, res) => {
 
 ![parsebody](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/parsebody.png)
 
-### 2. After getting the data from the client side, create this new camp
+### 3.2 After getting the data from the client side, create this new camp
 
 ```js
 app.post("/campgrounds", async (req, res) => {
@@ -470,7 +388,7 @@ app.post("/campgrounds", async (req, res) => {
 
 ![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/new camp.png)
 
-### 4. add `<a href="">` to page
+### 3.3 add `<a href="">` to page
 
 > views/campgrounds/index.ejs
 
@@ -634,7 +552,7 @@ app.put("/campgrounds/:id/", async (req, res) => {
 
 ## 💥 Delete camp
 
-app.js
+> app.js
 
 ```js
 //page for delete
@@ -645,7 +563,7 @@ app.delete("/campgrounds/:id/", async (req, res) => {
 });
 ```
 
-show.ejs
+> show.ejs
 
 ```js
     <p>
