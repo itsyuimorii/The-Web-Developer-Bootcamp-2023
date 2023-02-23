@@ -254,3 +254,99 @@ const seedDB = async () => {
 
 ```
 
+## Campgrounds index
+
+```js
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const CampgroundSchema = new Schema({
+  title: String,
+  price: String,
+  description: String,
+  location: String,
+});
+
+module.exports = mongoose.model("Campground", CampgroundSchema);
+```
+
+> app.js
+
+`Campground.find({})` method to retrieve data from ` models/campground.js `
+
+```js
+app.get("/campgrounds", async (req, res) => {
+  const campgroundData = await Campground.find({});
+  res.render("campgrounds/index", { campgroundData });
+});
+```
+
+> /views/campgrounds/index.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campgrounds</title>
+  </head>
+  <body>
+    <h1>All Campgrounds</h1>
+    <ul>
+      <% for (let campground of campgroundData) { %>
+      <li><%= campground.title %></li>
+      <% } %>
+    </ul>
+  </body>
+</html>
+
+```
+
+## 💥 Show router 
+
+> detail page for showing single campground
+
+### 1. add new router
+
+app.js
+
+```js
+//id for testing to look up the corresponding campground from database
+app.get("/campgrounds/:id", async (req, res) => {
+  res.render("campgrounds/show");
+});
+```
+
+> views/campgrounds/show.ejs
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show</title>
+  </head>
+  <body>
+    <h1>Campground Detail page Testing!</h1>
+  </body>
+</html>
+```
+
+Enter the address in the browser plus any random id http://127.0.0.1:8080/campgrounds/42dlc9sjq, it will display Campground Detail Page Testing!
+
+### 2. add link to each campgrouond
+
+> views/campgrounds/index.ejs
+
+```js
+<ul>
+   <% for (let campground of campgroundData) { %>
+   <li><a href="/campgrounds/campground._id"><%= campground.title %></a></li>
+   <% } %>
+</ul>
+```
+

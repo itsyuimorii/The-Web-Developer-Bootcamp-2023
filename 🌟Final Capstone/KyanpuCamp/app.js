@@ -30,7 +30,19 @@ app.get("/", (req, res) => {
   });
 });
 
-//create a new campground testing in one of routes
+//list all campgrounds
+app.get("/campgrounds", async (req, res) => {
+  const campgroundData = await Campground.find({});
+  res.render("campgrounds/index", { campgroundData });
+});
+
+//detail page for showing single campground
+//id for looking up the corresponding campground from database
+app.get("/campgrounds/:id", async (req, res) => {
+  res.render("campgrounds/show");
+});
+
+/* //create a new campground testing in one of routes
 app.get("/makecampground", async (req, res) => {
   const camp = new Campground({
     title: "Campground Demo",
@@ -38,7 +50,7 @@ app.get("/makecampground", async (req, res) => {
   });
   await camp.save();
   //res.send(camp);
-});
+}); */
 
 app.listen(8080, function (error) {
   if (error) throw error;
