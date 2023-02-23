@@ -433,9 +433,11 @@ app.get("/campgrounds/new", async (req, res) => {
 
 notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 
 
-![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/new camp.png)
+![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampform.png)
 
 ### 3. Set the endpoint to set a POST request for the "form submission destination" when the "Add Camp" button is clicked.
+
+### 1. test body.parse
 
 > app.js
 
@@ -448,6 +450,184 @@ app.post("./campgrounds", async (req, res) => {
 });
 ```
 
-![newcamp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcamp.png)
+![newcamp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampinfo.png)
 
 ![parsebody](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/parsebody.png)
+
+### 2. After getting the data from the client side, create this new camp
+
+```js
+app.post("/campgrounds", async (req, res) => {
+  //res.send(req.body);
+  
+  //take request of body campground instead of our route and submit that or create a new campground
+  const campground = new Campground(req.body.campground);
+  await campground.save(); //save data into database
+  
+  res.redirect(`/campgrounds/${campground._id}`);
+});
+```
+
+![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/new camp.png)
+
+### 4. add `<a href="">` to page
+
+> views/campgrounds/index.ejs
+
+```js
+<div><a href="/campgrounds/new">Add new campground</a></div>
+```
+
+> views/campgrounds/show.ejs
+
+```js
+<footer>
+  <a href="/campgrounds">All campgrounds List</a>
+</footer>
+```
+
+>views/campgrounds/new.ejs
+
+```js
+<div><a href="/campgrounds">All campgrounds list</a></div>
+```
+
+## 💥Edit campground info
+
+### 1. create new route
+
+```js
+//page for editing
+app.get("/campgrounds/:id/edit", async (req, res) => {
+  //assume we found a id, Editing info based on id
+  const campgroundId = await Campground.findById(req.params.id);
+  res.render("campgrounds/edit", { campgroundId });
+});
+```
+
+### 2. create ejs file
+
+> views/campgrounds/edit.ejs
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit campground</title>
+  </head>
+  <body>
+    <h1>Edit campground</h1>
+    <form action="/campgrounds/" method="POST">
+      <div>
+        <label for="title">Title</label>
+        <input type="text id="title" name="campground[title]">
+      </div>
+      <div>
+        <label for="location">Location</label>
+        <input type="text id="location" name="campground[location]">
+      </div>
+
+      <button>Add new campground</button>
+      <div>
+        <a href="/campgrounds/<%= campgroundId._id %>">Back to Campground</a>
+      </div>
+    </form>
+  </body>
+</html>
+
+```
+
+> add `edit` link at `show.ejs`
+
+```js
+<p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
+```
+
+### 3. pre populate the values for titles and location
+
+> views/campgrounds/edit.ejs
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit campground</title>
+  </head>
+  <body>
+    <h1>Edit campground</h1>
+    <form action="/campgrounds/" method="POST">
+      <div>
+        <label for="title">Title</label>
+        <input type="text id="title" name="campground[title]" value="<%=
+        campgroundId.title %>">
+      </div>
+      <div>
+        <label for="location">Location</label>
+        <input type="text id="location" name="campground[location]"value="<%=
+        campgroundId.location %>">
+      </div>
+
+      <button>Update Campground</button>
+      <div>
+        <a href="/campgrounds/<%= campgroundId._id %>">Back to Campground</a>
+      </div>
+    </form>
+  </body>
+</html>
+```
+
+### 4. faking `post request` into put by using `method-override`
+
+using this method to fake a put/patch
+
+> app.js
+
+```js
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+
+app.put("/campgrounds/:id/", async (req, res) => {
+  res.send("IT WORKED!");
+});
+```
+
+> views/campgrounds/edit.ejs
+
+```JS
+   <form action="/campgrounds/<%=campgroundId._id%>?_method=PUT" method="POST">
+```
+
+![edit](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/edit.png)
+
+![succeesful](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/succeesful.png)
+
+### 
+
+**So we are making it to that put route with out `post request` that we are faking out express into thinking or into treating like its a`put request`**
+
+### 4. update campground info
+
+we need `id`,`req.body.campground` as a new data for that campground
+
+```js
+app.put("/campgrounds/:id/", async (req, res) => {
+  //res.send("IT WORKED!");
+  //update the campground info
+  const { id } = req.params;
+  // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });
+  const campground = await Campground.findByIdAndUpdate(id, {
+    ...req.body.campground,
+  });
+  res.redirect(`/campgrounds/${campground._id}`);
+});
+```
+
+![campground[title]](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update.png)
+
+![update info](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update info.png)

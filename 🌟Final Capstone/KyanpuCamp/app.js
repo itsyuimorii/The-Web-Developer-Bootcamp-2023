@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const Campground = require("./models/campground");
+const methodOverride = require("method-override");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -23,6 +24,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 //parse the body when using "req.body"
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
@@ -44,8 +46,14 @@ app.get("/campgrounds/new", async (req, res) => {
 });
 
 //setup endpoint, when click`add campground` button as a post where the form is submitted to
+
 app.post("/campgrounds", async (req, res) => {
-  res.send(req.body);
+  //res.send(req.body);
+  //create a new model
+  const campground = new Campground(req.body.campground);
+  console.log(campground);
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`);
 });
 
 //detail page for showing single campground
@@ -53,6 +61,24 @@ app.post("/campgrounds", async (req, res) => {
 app.get("/campgrounds/:id", async (req, res) => {
   const campgroundId = await Campground.findById(req.params.id);
   res.render("campgrounds/show", { campgroundId });
+});
+
+//page for editing
+app.get("/campgrounds/:id/edit", async (req, res) => {
+  //assume we found a id
+  const campgroundId = await Campground.findById(req.params.id);
+  res.render("campgrounds/edit", { campgroundId });
+});
+
+app.put("/campgrounds/:id/", async (req, res) => {
+  //res.send("IT WORKED!");
+  //update the campground info
+  const { id } = req.params;
+  // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });
+  const campground = await Campground.findByIdAndUpdate(id, {
+    ...req.body.campground,
+  });
+  res.redirect(`/campgrounds/${campground._id}`);
 });
 
 /* //create a new campground testing in one of routes

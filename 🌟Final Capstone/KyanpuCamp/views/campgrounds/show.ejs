@@ -7,8 +7,12 @@
     <title>Show</title>
   </head>
   <body>
-    <h1>Campgrounds Detail pages</h1>
+    <h1>Campgrounds Detail page</h1>
     <h2><%= campgroundId.title %></h2>
     <h2><%= campgroundId.location %></h2>
+    <p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
+    <footer>
+      <a href="/campgrounds">All campgrounds List</a>
+    </footer>
   </body>
 </html>
