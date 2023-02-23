@@ -431,7 +431,7 @@ app.get("/campgrounds/new", async (req, res) => {
 </html>
 ```
 
-notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 
+notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 ![campground[title]](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/campground[title].png)
 
 ![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampform.png)
 
