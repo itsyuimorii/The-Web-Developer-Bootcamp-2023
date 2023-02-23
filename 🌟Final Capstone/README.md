@@ -448,4 +448,6 @@ app.post("./campgrounds", async (req, res) => {
 });
 ```
 
-![req.body ](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/req.body .png)
+![newcamp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcamp.png)
+
+![parsebody](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/parsebody.png)
