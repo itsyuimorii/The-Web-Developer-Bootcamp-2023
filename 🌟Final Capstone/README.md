@@ -109,7 +109,7 @@ app.get("/makecampground", async (req, res) => {
 });
 ```
 
-![json](/images/json.png)
+![json](/🌟Final Capstone/images/json.png)
 
 Check database
 
