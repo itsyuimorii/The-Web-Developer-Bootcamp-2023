@@ -83,7 +83,9 @@ app.put("/campgrounds/:id/", async (req, res) => {
 //page for delete
 app.delete("/campgrounds/:id/", async (req, res) => {
   const { id } = req.params;
+  await Campground.findByIdAndDelete(id);
 });
+
 /* //create a new campground testing in one of routes
 app.get("/makecampground", async (req, res) => {
   const camp = new Campground({
