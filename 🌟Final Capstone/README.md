@@ -633,3 +633,25 @@ app.put("/campgrounds/:id/", async (req, res) => {
 ![update info](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update info.png)
 
 ## 💥 Delete camp
+
+app.js
+
+```js
+//page for delete
+app.delete("/campgrounds/:id/", async (req, res) => {
+  const { id } = req.params;
+  await Campground.findByIdAndDelete(id);
+  res.redirect("/campgrounds");
+});
+```
+
+show.ejs
+
+```js
+    <p>
+      <form action="/campgrounds/<%=campgroundId._id%>?_method=DELETE" method="POST">
+        <button>Delete</button>
+      </form>
+    </p>
+```
+
