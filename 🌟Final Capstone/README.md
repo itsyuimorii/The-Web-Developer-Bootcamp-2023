@@ -109,7 +109,7 @@ app.get("/makecampground", async (req, res) => {
 });
 ```
 
-![json](/🌟Final Capstone/images/json.png)
+![json](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/json.png)
 
 Check database
 
