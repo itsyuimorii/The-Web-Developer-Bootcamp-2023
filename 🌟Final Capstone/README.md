@@ -109,7 +109,7 @@ app.get("/makecampground", async (req, res) => {
 });
 ```
 
-![json](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/json.png)
+![json](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/json.png)
 
 ### 3. Check new database
 
@@ -119,7 +119,7 @@ use Kyanpu-camp
 db.campgrounds.find()
 ```
 
-![db.find](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/db.find.png)
+![db.find](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/db.find.png)
 
 ## 💥. Seeding Campground
 
@@ -278,9 +278,7 @@ index.ejs中有所有campground list, 在campground.title外層增加a標籤即�
 </ul>
 ```
 
- ![list all camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/list all camp.png)
-
-
+ ![list all camp](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/list%20all%20camp.png)
 
 ### 3. findById and showing the campground data 
 
@@ -309,7 +307,7 @@ app.get("/campgrounds/:id", async (req, res) => {
 
 ```
 
-![show](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/show.png)
+![show](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/show.png)
 
 ## 💥  Campground New & Create Router 
 
@@ -351,7 +349,9 @@ app.get("/campgrounds/new", async (req, res) => {
 </html>
 ```
 
-notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 ![campground[title]](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/campground[title].png)
+notes📝: `name="campground[title]"` -> This way of writing is for better classification 
+
+![campground[title]](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/campground%5Btitle%5D.png)
 
 ![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampform.png)
 
@@ -370,9 +370,9 @@ app.post("./campgrounds", async (req, res) => {
 });
 ```
 
-![newcamp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampinfo.png)
+![newcamp](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/new%20camp.png)
 
-![parsebody](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/parsebody.png)
+![parsebody](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/parsebody.png)
 
 ### 3.2 After getting the data from the client side, create this new camp
 
@@ -388,7 +388,7 @@ app.post("/campgrounds", async (req, res) => {
 });
 ```
 
-![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/new camp.png)
+![new camp](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/new%20camp.png)
 
 ### 3.3 add `<a href="">` to page
 
@@ -523,13 +523,11 @@ app.put("/campgrounds/:id/", async (req, res) => {
    <form action="/campgrounds/<%=campgroundId._id%>?_method=PUT" method="POST">
 ```
 
-![edit](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/edit.png)
+![edit](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/edit.png)
 
-![succeesful](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/succeesful.png)
+![succeesful](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/succeesful.png)
 
-### 
-
-**So we are making it to that put route with out `post request` that we are faking out express into thinking or into treating like its a`put request`**
+So we are making it to that put route with out `post request` that we are faking out express into thinking or into treating like its a`put request`
 
 ### 4. update campground info
 
@@ -548,9 +546,9 @@ app.put("/campgrounds/:id/", async (req, res) => {
 });
 ```
 
-![campground[title]](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update.png)
+![campground[title]](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/update.png)
 
-![update info](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/update info.png)
+![update info](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/update%20info.png)
 
 ## 💥 Campground Delete Route
 
