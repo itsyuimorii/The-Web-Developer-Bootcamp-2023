@@ -713,23 +713,22 @@ app.engine("ejs", ejsMate);
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
       integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
-      crossorigin="anonymous"
-    />
+      crossorigin="anonymous"/>
   </head>
 
   <body>
-    <main><%- body %></main>
+    <%- include('../partials/navbar')%>
+    <main class="container mt-5"><%- body %></main>
+    <%- include('../partials/footer')%>
 
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <script
       src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
       integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
   </body>
 </html>
 
@@ -750,8 +749,7 @@ app.engine("ejs", ejsMate);
       data-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup"
       aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+      aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -781,5 +779,49 @@ app.engine("ejs", ejsMate);
     <%- include('../partials/navbar')%>
     <main class="container mt-5"><%- body %></main>
     <%- include('../partials/footer')%>
+```
+
+- using flexbox
+
+> views/layout/boilerplate.ejs
+
+```js
+  <body class="d-flex flex-column vh-100">
+```
+
+## 📍04. Adding images
+
+> models/campground.js
+
+```js
+
+const CampgroundSchema = new Schema({
+  title: String,
+  price: Number,
+  image: String,
+  description: String,
+  location: String,
+});
+```
+
+>seeds/index.js
+
+```js
+const seedDB = async () => {
+  await Campground.deleteMany({}); // Delete previous records
+  for (let i = 0; i < 300; i++) {
+    const random1000 = Math.floor(Math.random() * 1000);
+    const price = Math.floor(Math.random() * 20) + 10;
+    const camp = new Campground({
+      location: `${cities[random1000].city}, ${cities[random1000].state}`,
+      title: `${sample(descriptors)} ${sample(places)}`,
+      image: "https://source.unsplash.com/collections/483251",
+      description:
+        "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
+      price,
+    });
+    await camp.save();
+  }
+};
 ```
 
