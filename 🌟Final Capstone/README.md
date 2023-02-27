@@ -794,13 +794,10 @@ app.engine("ejs", ejsMate);
 > models/campground.js
 
 ```js
-
+//add two more properties
 const CampgroundSchema = new Schema({
-  title: String,
-  price: Number,
   image: String,
   description: String,
-  location: String,
 });
 ```
 
@@ -825,4 +822,11 @@ const seedDB = async () => {
 };
 ```
 
-- 命令行 : `node seeds/index.js`
+🚀if update the files -> **seeds or models**, **Be sure to update** in the command line : `node seeds/index.js`
+
+```ejs
+ <img src="<%= campgroundId.image %>" alt="">
+ <p><%= campgroundId.description %></p>
+ <p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
+```
+
