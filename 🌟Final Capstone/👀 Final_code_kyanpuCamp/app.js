@@ -90,16 +90,16 @@ app.delete("/campgrounds/:id/", async (req, res) => {
   res.redirect("/campgrounds");
 });
 
-/* //create a new campground testing in one of routes
-app.get("/makecampground", async (req, res) => {
+//create a new campground testing in one of routes
+/* app.get("/makecampground", async (req, res) => {
   const camp = new Campground({
     title: "Campground Demo",
     description: "Testing the routes",
   });
   await camp.save();
   //res.send(camp);
-}); */
-
+});
+ */
 app.listen(8080, function (error) {
   if (error) throw error;
   console.log("listening on port http://127.0.0.1:8080");
