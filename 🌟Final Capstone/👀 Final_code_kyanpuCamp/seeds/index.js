@@ -17,13 +17,14 @@ db.once("open", () => {
 });
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
+/* 
+const seedDB = async () => {
+  await Campground.deleteMany({}); // Delete previous records
+  const c = new Campground({ title: "purple field" }); //Add New Record
+  await c.save();
+};
 
-// const seedDB = async () => {
-//     await Campground.deleteMany({});// Delete previous records
-//     const c = new Campground({ title: 'purple field' });//Add New Record
-//await c.save();
-
-// array[Math.floor(Math.random() * array.length)], Generate a random number from 0 to array length - 1
+seedDB(); */
 
 const seedDB = async () => {
   await Campground.deleteMany({}); // Delete previous records
@@ -34,16 +35,16 @@ const seedDB = async () => {
     const camp = new Campground({
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
-      /* image: "https://source.unsplash.com/collections/483251",
+      image: "https://unsplash.com/collection/3671729",
       description:
         "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
-      price, */
+      price,
     });
     await camp.save();
   }
 };
 
-// Disconnect mongoose after running
+//Disconnect mongoose after running
 seedDB().then(() => {
   mongoose.connection.close();
 });

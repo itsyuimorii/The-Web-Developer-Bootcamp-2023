@@ -825,3 +825,4 @@ const seedDB = async () => {
 };
 ```
 
+- 命令行 : `node seeds/index.js`
