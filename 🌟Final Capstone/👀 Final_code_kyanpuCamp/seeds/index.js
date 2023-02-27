@@ -24,6 +24,7 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 //await c.save();
 
 // array[Math.floor(Math.random() * array.length)], Generate a random number from 0 to array length - 1
+
 const seedDB = async () => {
   await Campground.deleteMany({}); // Delete previous records
   for (let i = 0; i < 300; i++) {
@@ -41,6 +42,7 @@ const seedDB = async () => {
     await camp.save();
   }
 };
+
 // Disconnect mongoose after running
 seedDB().then(() => {
   mongoose.connection.close();
