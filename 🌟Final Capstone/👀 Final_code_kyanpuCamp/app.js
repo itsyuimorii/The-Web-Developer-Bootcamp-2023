@@ -1,9 +1,10 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+
 const Campground = require("./models/campground");
 const methodOverride = require("method-override");
-const morgan = require("morgan");
+const ejsMate = require("ejs-mate");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -20,6 +21,7 @@ db.once("open", () => {
 //create app instance
 const app = express();
 
+app.engine("ejs", ejsMate);
 //write this middleware to setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

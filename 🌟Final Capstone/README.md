@@ -653,4 +653,48 @@ And a layout, boilerplate.ejs:
 $ npm install ejs-mate --save
 ```
 
-### 3. 
+### 3. notify app.js using `ejs-mate`
+
+```js
+const ejsMate = require("ejs-mate");
+
+app.engine("ejs", ejsMate);
+```
+
+### 4. create `layout`
+
+> views/layout/boillerplate.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KyanpuCamp</title>
+  </head>  
+  <body> 
+      <h1>navbar placeholder</h1>
+      <main><%- body %></main>
+      <h1>footer placeholder</h1> 
+  </body>
+</html>
+```
+
+> views/campgrounds/index.ejs
+
+```html
+<% layout("layout/boilerplate") %>
+  
+<h1>All Campgrounds List</h1>
+<div><a href="/campgrounds/new">Add new campground</a></div>
+<ul>
+  <% for (let campground of campgroundData) { %>
+  <li>
+    <a href="/campgrounds/<%=campground._id%>"><%=campground.title%></a>
+  </li>
+  <% } %>
+</ul>
+```
+
+> as well as new.ejs / show.ejs / edit.ejs
