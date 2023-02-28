@@ -573,7 +573,7 @@ app.delete("/campgrounds/:id/", async (req, res) => {
     </p>
 ```
 
-## 📍02. Express Middleware
+## 📍Express Middleware
 
 ### 1. Overview 
 
@@ -623,7 +623,7 @@ app.get('/secret', verifyPassword, (req, res) => {
 ....
 ```
 
-## 📍03. Adding Basic Styles
+## 📍Adding Basic Styles
 
 ### 1. what is [EJS mate](https://github.com/JacksonTian/ejs-mate)
 
@@ -789,7 +789,7 @@ app.engine("ejs", ejsMate);
   <body class="d-flex flex-column vh-100">
 ```
 
-## 📍04. Adding images
+## 📍Adding images
 
 > models/campground.js
 
@@ -830,7 +830,7 @@ const seedDB = async () => {
  <p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
 ```
 
-## 📍05. Update styling	
+## 📍Update styling	
 
 > views/campgrounds/new.ejs
 
@@ -901,6 +901,8 @@ const seedDB = async () => {
 </div>
 ```
 
+![img](https://lh3.googleusercontent.com/8UruckGRD-nHcOs6QhwaBAQj7_mmvDL5p1W3aGamqQ3SnGtpnElQC1Wg2Wj9k8tTEe7f2gTdr40Ie6RbrAhqp15eSrsCA1GJ9wlu2Qwhz8aCh5YyxDhWjvj2B_DfkxIqO78dqGyCyqTQM9uLpkf5udijCp1dtzScNIIKP9AA5_dKGBG0HcTpHaGapKaQTpNRIRf6zigkWAN_qfYj_HUpqM4eMp7AZVIhXq89JwcgfeKc4NDjtMsYox64YZpm5ZIkTWR2T3T_ioTXbViQou4cWy9YaVWqhgi2HxEp-gl5grCufToRNyeOIjiU7Xa9p3MilK8Sy-CCskfJi8wrrO8nPoRbRWTRe-qf2Bdw00atprpT7MqyiBeQkAkUi3GOsXizALz3nwjqRFG0nXs0sSbiE5Y5xwj5P4NOM40TtMjm3TQ0PcOXGXs8H3mwq_WfLPJ5-nzUW7-lDx6VWuAyjKEFUz3hcuSRNIwdM5MASxD1WNaEE9VpxgHyMDEXI5HZxIh8T5GGa914n5DXmCIyLWYSyY2sqsojgNZYSC83rVKyo-hMA0TYYlHl8Evy8WJg1yNaAhswRTTjSoj8qHYhQ0rRasbvP7zMFoV9icoNjrxfewf-q2iEWiYtxy2D6GgPtUyH9K94GQbXx1fpn7kFgZ51EAMKSNC2Khk8qf9_fQlpRn10_sLh3vwLPq9xKfTtI4_vPrYHzr02eg-_EIOgAcqgv1eD8QIc78-KcF7w4fu41kDVMFA2qh8OTBR2pEbGEc0t82Lv4-tdf0ZjTyKyFF-pZ4BUNNhAM_uwPLkOMLDH5lpKpTX6COePHZ9f3EXBgQzZRT8MHcgPZQb6FyRDS8wxjdettL9Vdiqc3ENQ4izJXN2uL_dvhdzAmFerwu6lq5YTQcg4duKafDStgUkONU6SNoi0UBSKmtCAqxb44QVh4J8gZP3uv7McBJcjvvY63YQCAypX7tAzG40CAvcuJZaCPZvLxTDnUwyxyDLviNcgE4dwHgI4xovRsOqBm8RKx_CKIv8F-vjIH3r_fpEJyOgWDs3G-sQUINSOvWdZWSC4mlsyOwL20f0Qo_hutabylg=w3306-h1708-no?authuser=0)
+
 > views/campgrounds/index.ejs
 
 ```js
@@ -932,6 +934,8 @@ const seedDB = async () => {
   <% } %>
 </ul>
 ```
+
+![img](https://lh3.googleusercontent.com/cFy2CybaIJZSK-KY6BZz0m-OI77xrQCH1BXYVqiN0KQPlKRN7SgyIzCiKAsOdWibu728mkaTFCX3TnDr1ryw-bzoy0qYyFaqiMa0PYPOW-btGsHAf_ltXWauH_JWZlaO8kJ6ngjzV6N5WDfCiebAOoiMegW-bj4MTMdpU2Eu1CqQNZWCkqdNt5NPlR-Toa0--mxqQJEIr358fvrf-acd_iknxucVutkhmYUqTzx7R6xP-weq11y9eRp2eH765HbeZsdqbKQmR00fsfiLmMS8lSeKvFsGxjIDndb1hmR6L1a6faRiUZSaN_nZpCDSlqrzUClZ2G2I__RbQUT71KMXxA7lapzG3Y9V0KsOItHtC4A78FxPDX4wabuUHayDWSdjk4yaA4GPgNMyuTl4xGPU_Iy5RIHrayBl_fyOhlnbUAbG2bNubVG7fQC1B9MIFEwpR3mNmMDlmpKCnjTwUroEEkvBUXGCA7Dmc-ytDUdERWWAzyP7C070U6BidoxcV1v2aLnAZUtBze68dbnExnXFPuv7BGyeVA2Lb1HlMgB_sgZrf6pTxkS09kcNG4geDhb_ZneXAAP9jEe6fFLuQ8PwnIWBUP160t_vMNe3fZzcXf8SyfE2AYfGaNcxs1jKQyNoOYTKZESTDV0Ulgt2zZD7QTNn6A0PHS2g7jRuLFwbZGln4tL-splm7gljCIVc-Dmyis7qxcjdpfJ2GKC8e6sjEN4Yb9KkAlMVZ0ZdDjh3m27EofUDZF_VcgV0LhQVyzKJQ2cvyumPtFkiFXtuGN9eiz8DbApGWanyJ9tuwqtQtL4lVNu1NMYGPqE_VrSkTy_wk3Z5tfEv8FJOfVNvYa7kBQivpTD-CVn6JV4gZNB6GnNAlyM_3tBDXq4fIkq3QD4kTs_7EnBlPVUOlabXUSE4aTy4i3VV0USsOD5fzjJOvoeb__54zyMZcEeGe4qyvF0cBztshHYXdSp-BBmSr5B-HSXsKc7VG1Ae8dbVdnyWwcoTGyPlarLIAwG8kgeNiRsgRSRFFcXeva8kx_-Zs4HxM4U9JrYFPo0pU46j3pijPfnQ5AGzMidmsHLYv6bLXA=w3274-h1692-no?authuser=0)
 
 > views/campgrounds/show.ejs
 
@@ -971,3 +975,4 @@ const seedDB = async () => {
 
 ```
 
+![img](https://lh3.googleusercontent.com/DQ6Frb9cbc4zcJtFzppN6AZjg7_-31CrGMmkD1O_lP0BcAWJ1pmEAfHiab3KZlvpC-FFm1fzKZplV50yHyTUp76fHZ3S6lg4UeGaVA5t8eDjgtrq8MDTRwKsIVlz-MPJvmlr4M4buS11dp4tWNzeeszLREZFIeHJ9jb0dUay5MTYrsPmOl8E2f8fC3fd1CN8ygLua1nt2RGa7mSz5d-Xs9NUZiAE6tLkNhu-bBRvYQXNnaPIoyiNsqU-ZLKjGc-FxJ6tyVw9wEgoadfoQZ8BJpSWvc1NPYO8XPIzNyI7tM67ZtezwzSxGgmWzH9l7H9pI8lfUDC4klsl_Dli0JeNokGhyyu0jQQ4lAMN-BId6-4J2GMbOyslLWQBTj6uRTIPAUtnI_9cjchMKIqktqoBBCyvJ-IZ-4NzKCwSO-7nyhhuEmeewYHQgIuN8YPqcpfFUa_qErOUY2TOJFjDtZR-doif2sm2aqXAOX-GzC31XZwg__-kXamnEDHG8bOnEGtbsWwUvG4CmL_Y9fnLMNHbsBRia-2BjUWpP-RDIuiWkFlSwyZT4Pfmp5te0RfUAZl_LYHkn_ImXuDoExngjhEyt0vypzLqbKFQsOvbKnwMzVf9Gew51ytBWq3MAwGJe_kMHtZJEuSIIPw0BFeFKeXfjdO5tdQ5GI1S54PTjr9mr2kaVlMqd3WdUoVi7siSqNE3ZH9ytJIDZxKVAVg8JvIOOEtrpVASw_ITMHQcG0lLmQy0tyVawO_rAFbGLMYEz0ATxgB3m0BJSiDOb1sLd-rUzBZBNVD1d2_2kuOICWsQItjILb7zsDnI006N81VWwjIDU2URWkVOCammtiKSNQgUrauM81zqJowZJ2rjM0fCPYqJu3GyqsRg7X9uv29e2qaILFj0pal2MWOdDgk_oUsbP1L05NPON7vTsEW4sPJoiDwCd5k6i5mvUPMEZJsiMXjKd-kqC-DHCqKGMcqK2Tq5mlzjtfrSvygAgMqTNdTb5h3rRI1M53LvQB0DhQNhVWgKR7yxgIwueUPjkFePBRks92D27H1GPs-Y8Z1kjGJpik08P-zwfwHUgSskU0CkaA=w3308-h1704-no?authuser=0)
