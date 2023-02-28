@@ -830,4 +830,107 @@ const seedDB = async () => {
  <p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
 ```
 
-## 📍05. update styling	
+## 📍05. Update styling	
+
+> views/campgrounds/new.ejs
+
+```js
+<% layout("layout/boilerplate") %>
+<div class="row">
+  <h1 class="text-center">⛺️ New Campground</h1>
+  <div class="col-6 offset-3">
+    <form action="/campgrounds" method="POST">
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          id="title"
+          name="campground[title]"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          id="location"
+          name="campground[location]"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="image">Image Url</label>
+        <input
+          class="form-control"
+          type="text"
+          id="image"
+          name="campground[image]"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="price">Campground Price</label>
+        <div class="input-group">
+          <span class="input-group-text" id="price-label">$</span>
+          <input
+            type="text"
+            class="form-control"
+            id="price"
+            placeholder="0.00"
+            aria-label="price"
+            aria-describedby="price-label"
+            name="campground[price]"
+          />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea
+          class="form-control"
+          type="text"
+          id="description"
+          name="campground[description]"
+        ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-success">Add new campground</button>
+      </div>
+    </form>
+    <a href="/campgrounds">All campgrounds list</a></div>
+  </div>
+</div>
+```
+
+> views/campgrounds/index.ejs
+
+```js
+<% layout("layout/boilerplate") %>
+<h1>All Campgrounds List</h1>
+<div><a href="/campgrounds/new">Add new campground</a></div>
+<ul>
+  <% for (let campground of campgroundData) { %>
+  <div class="card" mb-3>
+    <div class="row">
+      <div class="col-md-4">
+        <img class="img-fluid" alt="" src="<%=campground.image %>" />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%= campground.title %></h5>
+          <p class="card-text"><%= campground.description %></p>
+          <p class="card-text">
+            <small class="text-muted"> <%= campground.location %> </small>
+          </p>
+          <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>"
+            >View <%= campground.title %>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% } %>
+</ul>
+
+```
+
