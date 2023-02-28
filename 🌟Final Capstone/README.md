@@ -830,3 +830,4 @@ const seedDB = async () => {
  <p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
 ```
 
+## 📍05. update styling	
