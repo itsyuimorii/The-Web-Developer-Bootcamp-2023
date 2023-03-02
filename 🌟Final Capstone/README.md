@@ -1101,7 +1101,7 @@ app.use((err, req, res, next) => {
 
 ### Defining ExpressError Class
 
-> new 📁utils/ExpressError.js
+> new 📁 /utils/ExpressError.js
 
 ```js
 class ExpressError extends Error {
@@ -1113,5 +1113,22 @@ class ExpressError extends Error {
 }
 
 module.exports = ExpressError;
+```
+
+> new 📁/utils/catchAsync.js
+
+```js
+module.exports = (func) => {
+  return (req, res, next) => {
+    func(req, res, next).catch(next);
+  };
+};
+```
+
+> app.js	
+
+```js
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 ```
 
