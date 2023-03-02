@@ -1130,5 +1130,25 @@ module.exports = (func) => {
 ```js
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+
+
+
+app.post(
+  "/campgrounds",
+  catchAsync(async (req, res, next) => {
+    //res.send(req.body);
+    //create a new model
+    const campground = new Campground(req.body.campground);
+    //console.log(campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
+
+
+app.use((err, req, res, next) => {
+  res.send("something went wrong");
+});
+
 ```
 

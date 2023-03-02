@@ -6,6 +6,9 @@ const Campground = require("./models/campground");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 
+const catchAsync = require("./utils/catchAsync");
+const ExpressError = require("./utils/ExpressError");
+
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
   useNewUrlParser: true,
@@ -55,7 +58,6 @@ app.post(
   catchAsync(async (req, res, next) => {
     //res.send(req.body);
     //create a new model
-
     const campground = new Campground(req.body.campground);
     //console.log(campground);
     await campground.save();
