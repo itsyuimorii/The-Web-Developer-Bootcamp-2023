@@ -33,6 +33,24 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+const validateCampground = (req, res, next) => {
+  const campgroundSchema = Joi.object({
+    campground: Joi.object({
+      title: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      image: Joi.string().required,
+      location: Joi.string().required,
+      description: Joi.string().required,
+    }).required(),
+  });
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  }
+  // console.log(result);
+};
+
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
   // and passing title variable through it
@@ -66,15 +84,7 @@ app.post(
     //res.send(req.body);
     // if (!req.body.campground)
     //   throw new ExpressError("Invalid Campground Data", 400);
-    const campgroundSchema = Joi.object({
-      campground: Joi.object({
-        title: Joi.string().required(),
-        price: Joi.number().required().min(0),
-        image: Joi.string().required,
-      }).required(),
-    });
-    const result = campgroundSchema.validate(req.body);
-    res.send(result);
+
     //create a new model
     const campground = new Campground(req.body.campground);
     //console.log(campground);
