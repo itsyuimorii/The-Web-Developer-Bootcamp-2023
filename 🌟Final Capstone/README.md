@@ -1074,3 +1074,28 @@ module.exports = AppError;
  <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required/>
 ```
 
+### basic error
+
+> app.js
+
+```js
+app.post("/campgrounds", async (req, res, next) => {
+  //res.send(req.body);
+  //create a new model
+  try {
+    const campground = new Campground(req.body.campground);
+    //console.log(campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  } catch (error) {
+    next(error);
+  }
+});
+```
+
+```js
+app.use((err, req, res, next) => {
+  //error handling logic
+});
+```
+
