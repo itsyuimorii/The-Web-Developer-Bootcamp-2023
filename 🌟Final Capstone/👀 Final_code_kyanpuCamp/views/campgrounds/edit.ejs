@@ -18,6 +18,7 @@
           value="<%=campgroundId.title %>"
           required
         />
+
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
@@ -58,11 +59,10 @@
             name="campground[price]"
             value="<%=campgroundId.price %>"
             required
-          />\
+          />
           <div class="valid-feedback">Looks good!</div>
         </div>
       </div>
-
       <div class="mb-3">
         <label class="form-label" for="description">Description</label>
         <textarea
@@ -70,6 +70,7 @@
           type="text"
           id="description"
           name="campground[description]"
+          required
         >
 <%= campgroundId.description%></textarea
         >

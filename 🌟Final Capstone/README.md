@@ -1031,7 +1031,7 @@ module.exports = AppError;
 
 ### Validate new campground form
 
-> new.ejs
+> /views/layout/boilerplate.ejs
 
 ```js
 <script>
@@ -1058,6 +1058,8 @@ module.exports = AppError;
 </script>
 ```
 
+> new.ejs & edit.ejs
+>
 > add `required` for each input and `class="validated-form"`
 
 ```js
@@ -1072,4 +1074,3 @@ module.exports = AppError;
  <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required/>
 ```
 
-> edit.ejs
