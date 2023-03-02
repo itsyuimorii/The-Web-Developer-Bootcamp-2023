@@ -1028,3 +1028,48 @@ module.exports = AppError;
 ## 📍Kyanpu Errors & Validating data
 
 [Bootstrap Validation](https://getbootstrap.com/docs/5.0/forms/validation/)
+
+### Validate new campground form
+
+> new.ejs
+
+```js
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validated-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
+```
+
+> add `required` for each input and `class="validated-form"`
+
+```js
+ <form action="/campgrounds" method="POST" novalidate class="validated-form">
+   
+ <input class="form-control" type="text" id="title" name="campground[title]" required/>
+   
+ <input class="form-control" type="text" id="location" name="campground[location]" required/>
+   
+ <input class="form-control" type="text" id="image" name="campground[image]" required/>
+   
+ <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required/>
+```
+
+### 
