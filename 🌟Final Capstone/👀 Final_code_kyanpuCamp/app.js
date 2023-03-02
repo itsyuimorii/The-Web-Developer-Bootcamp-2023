@@ -41,15 +41,21 @@ app.get("/", (req, res) => {
 });
 
 //list all campgrounds
-app.get("/campgrounds", async (req, res) => {
-  const campgroundData = await Campground.find({});
-  res.render("campgrounds/index", { campgroundData });
-});
+app.get(
+  "/campgrounds",
+  catchAsync(async (req, res) => {
+    const campgroundData = await Campground.find({});
+    res.render("campgrounds/index", { campgroundData });
+  })
+);
 //Create new campground
 //this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
-app.get("/campgrounds/new", async (req, res) => {
-  res.render("campgrounds/new");
-});
+app.get(
+  "/campgrounds/new",
+  catchAsync(async (req, res) => {
+    res.render("campgrounds/new");
+  })
+);
 
 //setup endpoint, when click`add campground` button as a post where the form is submitted to
 
@@ -61,43 +67,60 @@ app.post(
     const campground = new Campground(req.body.campground);
     //console.log(campground);
     await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
+    res.redirect(`/ campgrounds/${campground._id}`);
   })
 );
 
 //detail page for showing single campground
 //id for looking up the corresponding campground from database
-app.get("/campgrounds/:id", async (req, res) => {
-  const campgroundId = await Campground.findById(req.params.id);
-  res.render("campgrounds/show", { campgroundId });
-});
+app.get(
+  "/campgrounds/:id",
+  catchAsync(async (req, res) => {
+    const campgroundId = await Campground.findById(req.params.id);
+    res.render("campgrounds/show", { campgroundId });
+  })
+);
 
 //page for editing
-app.get("/campgrounds/:id/edit", async (req, res) => {
-  //assume we found a id
-  const campgroundId = await Campground.findById(req.params.id);
-  res.render("campgrounds/edit", { campgroundId });
-});
+app.get(
+  "/campgrounds/:id/edit",
+  catchAsync(async (req, res) => {
+    //assume we found a id
+    const campgroundId = await Campground.findById(req.params.id);
+    res.render("campgrounds/edit", { campgroundId });
+  })
+);
 
-app.put("/campgrounds/:id/", async (req, res) => {
-  //res.send("IT WORKED!");
-  //update the campground info
-  const { id } = req.params;
-  // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });/
-  const campground = await Campground.findByIdAndUpdate(id, {
-    ...req.body.campground,
-  });
-  res.redirect(`/campgrounds/${campground._id}`);
-});
+app.put(
+  "/campgrounds/:id/",
+  catchAsync(async (req, res) => {
+    //res.send("IT WORKED!");
+    //update the campground info
+    const { id } = req.params;
+    // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });/
+    const campground = await Campground.findByIdAndUpdate(id, {
+      ...req.body.campground,
+    });
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
 //page for delete
-app.delete("/campgrounds/:id/", async (req, res) => {
-  const { id } = req.params;
-  await Campground.findByIdAndDelete(id);
-  res.redirect("/campgrounds");
+app.delete(
+  "/campgrounds/:id/",
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect("/campgrounds");
+  })
+);
+//for every path call next()
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Page not Found", 404));
 });
 
 app.use((err, req, res, next) => {
-  res.send("something went wrong");
+  const { statusCode = 500, message = "something went wrong" } = err;
+  res.status(statusCode).send(message);
 });
 
 //create a new campground testing in one of routes
