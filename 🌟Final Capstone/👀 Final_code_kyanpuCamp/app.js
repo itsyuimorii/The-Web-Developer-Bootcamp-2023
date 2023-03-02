@@ -94,9 +94,9 @@ app.delete("/campgrounds/:id/", async (req, res) => {
   res.redirect("/campgrounds");
 });
 
-app.use((err, req, res, next) => {
-  res.send("something went wrong");
-});
+// app.use((err, req, res, next) => {
+//   res.send("something went wrong");
+// });
 
 //create a new campground testing in one of routes
 /* app.get("/makeCampground", async (req, res) => {
