@@ -117,7 +117,7 @@ app.delete(
 );
 //for every path call next()
 app.all("*", (req, res, next) => {
-  next(new ExpressError("Page not Found", 404));
+  next(new ExpressError("Page Not Found", 404));
 });
 
 app.use((err, req, res, next) => {
