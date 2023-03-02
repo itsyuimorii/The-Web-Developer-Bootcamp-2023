@@ -1024,3 +1024,7 @@ module.exports = AppError;
 
 
 ### Differentiating Mongoose Errors
+
+## 📍Kyanpu Errors & Validating data
+
+[Bootstrap Validation](https://getbootstrap.com/docs/5.0/forms/validation/)
