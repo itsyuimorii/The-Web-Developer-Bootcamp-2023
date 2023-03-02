@@ -1152,3 +1152,20 @@ app.use((err, req, res, next) => {
 
 ```
 
+### More Error
+
+```js
+//for every path call next()
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Page not Found", 404));
+});
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message = "something went wrong" } = err;
+  res.status(statusCode).send(message);
+});
+```
+
+
+> browser: Cast to ObjectId failed for value "63fasdfd84a62ba0c31ba0a9f7c7" (type string) at path "_id" for model "Campground"
+

@@ -63,6 +63,8 @@ app.post(
   "/campgrounds",
   catchAsync(async (req, res, next) => {
     //res.send(req.body);
+    if (!req.body.campground)
+      throw new ExpressError("Invalid Campground Data", 400);
     //create a new model
     const campground = new Campground(req.body.campground);
     //console.log(campground);
