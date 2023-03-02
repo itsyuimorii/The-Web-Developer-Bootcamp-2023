@@ -1155,6 +1155,20 @@ app.use((err, req, res, next) => {
 ### More Error
 
 ```js
+app.post(
+  "/campgrounds",
+  catchAsync(async (req, res, next) => {
+    //res.send(req.body);
+    if (!req.body.campground)
+      throw new ExpressError("Invalid Campground Data", 400);
+    //create a new model
+    const campground = new Campground(req.body.campground);
+    //console.log(campground);
+    await campground.save();
+    res.redirect(`/ campgrounds/${campground._id}`);
+  })
+);
+
 //for every path call next()
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page not Found", 404));
@@ -1169,3 +1183,24 @@ app.use((err, req, res, next) => {
 
 > browser: Cast to ObjectId failed for value "63fasdfd84a62ba0c31ba0a9f7c7" (type string) at path "_id" for model "Campground"
 
+### Defining Error template
+
+> /views/error.ejs
+
+```js
+<% layout('layouts/boilerplate')%>
+<div class="row">
+  <div class="col-6 offset-3">
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%=err.message%></h4>
+      <p><%= err.stack %></p>
+    </div>
+  </div>
+</div>
+```
+
+### JOI https://joi.dev/api/
+
+
+
+## 

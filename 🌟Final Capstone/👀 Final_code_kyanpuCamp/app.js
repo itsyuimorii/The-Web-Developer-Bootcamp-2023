@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const joi = require("joi");
 
 const Campground = require("./models/campground");
 const methodOverride = require("method-override");
@@ -63,8 +64,17 @@ app.post(
   "/campgrounds",
   catchAsync(async (req, res, next) => {
     //res.send(req.body);
-    if (!req.body.campground)
-      throw new ExpressError("Invalid Campground Data", 400);
+    // if (!req.body.campground)
+    //   throw new ExpressError("Invalid Campground Data", 400);
+    const campgroundSchema = Joi.object({
+      campground: Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0),
+        image: Joi.string().required,
+      }).required(),
+    });
+    const result = campgroundSchema.validate(req.body);
+    res.send(result);
     //create a new model
     const campground = new Campground(req.body.campground);
     //console.log(campground);
