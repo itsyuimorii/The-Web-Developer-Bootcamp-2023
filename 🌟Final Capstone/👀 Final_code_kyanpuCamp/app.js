@@ -50,13 +50,17 @@ app.get("/campgrounds/new", async (req, res) => {
 
 //setup endpoint, when click`add campground` button as a post where the form is submitted to
 
-app.post("/campgrounds", async (req, res) => {
+app.post("/campgrounds", async (req, res, next) => {
   //res.send(req.body);
   //create a new model
-  const campground = new Campground(req.body.campground);
-  console.log(campground);
-  await campground.save();
-  res.redirect(`/campgrounds/${campground._id}`);
+  try {
+    const campground = new Campground(req.body.campground);
+    //console.log(campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  } catch (error) {
+    next(error);
+  }
 });
 
 //detail page for showing single campground
@@ -90,8 +94,12 @@ app.delete("/campgrounds/:id/", async (req, res) => {
   res.redirect("/campgrounds");
 });
 
+app.use((err, req, res, next) => {
+  res.send("something went wrong");
+});
+
 //create a new campground testing in one of routes
-/* app.get("/makecampground", async (req, res) => {
+/* app.get("/makeCampground", async (req, res) => {
   const camp = new Campground({
     title: "Campground Demo",
     description: "Testing the routes",
