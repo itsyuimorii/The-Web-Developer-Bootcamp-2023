@@ -1074,7 +1074,7 @@ module.exports = AppError;
  <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required/>
 ```
 
-### basic error
+### Basic Error Handler test
 
 > app.js
 
@@ -1097,5 +1097,21 @@ app.post("/campgrounds", async (req, res, next) => {
 app.use((err, req, res, next) => {
   //error handling logic
 });
+```
+
+### Defining ExpressError Class
+
+> new 📁utils/ExpressError.js
+
+```js
+class ExpressError extends Error {
+  constructor(message, statusCode) {
+    super();
+    this.message = message;
+    this.statusCode = statusCode;
+  }
+}
+
+module.exports = ExpressError;
 ```
 
