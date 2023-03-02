@@ -1072,4 +1072,4 @@ module.exports = AppError;
  <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required/>
 ```
 
-### 
+> edit.ejs
