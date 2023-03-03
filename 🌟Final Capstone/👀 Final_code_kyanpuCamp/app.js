@@ -1,14 +1,15 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const joi = require("joi");
-const { campgroundSchema } = require("./schemas.js");
-const Campground = require("./models/campground");
-const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 
+const { campgroundSchema } = require("./schemas.js");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
+
+const methodOverride = require("method-override");
+
+const Campground = require("./models/campground");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -55,6 +56,7 @@ app.get("/", (req, res) => {
 //list all campgrounds
 app.get(
   "/campgrounds",
+
   catchAsync(async (req, res) => {
     const campgroundData = await Campground.find({});
     res.render("campgrounds/index", { campgroundData });
@@ -73,6 +75,7 @@ app.get(
 
 app.post(
   "/campgrounds",
+  validateCampground,
   catchAsync(async (req, res, next) => {
     //res.send(req.body);
     // if (!req.body.campground)
@@ -128,14 +131,15 @@ app.delete(
     res.redirect("/campgrounds");
   })
 );
-//for every path call next()
+
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "something went wrong" } = err;
-  res.status(statusCode).send(message);
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Oh No, Something Went Wrong!";
+  res.status(statusCode).render("error", { err });
 });
 
 //create a new campground testing in one of routes
