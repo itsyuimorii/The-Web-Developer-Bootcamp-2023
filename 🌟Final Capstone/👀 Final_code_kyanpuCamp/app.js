@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const joi = require("joi");
-
+const { campgroundSchema } = require("./schemas.js");
 const Campground = require("./models/campground");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -29,26 +29,19 @@ app.engine("ejs", ejsMate);
 //write this middleware to setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+1;
 //parse the body when using "req.body"
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 const validateCampground = (req, res, next) => {
-  const campgroundSchema = Joi.object({
-    campground: Joi.object({
-      title: Joi.string().required(),
-      price: Joi.number().required().min(0),
-      image: Joi.string().required,
-      location: Joi.string().required,
-      description: Joi.string().required,
-    }).required(),
-  });
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);
+  } else {
+    next();
   }
-  // console.log(result);
 };
 
 app.get("/", (req, res) => {
@@ -89,7 +82,7 @@ app.post(
     const campground = new Campground(req.body.campground);
     //console.log(campground);
     await campground.save();
-    res.redirect(`/ campgrounds/${campground._id}`);
+    res.redirect(`/campgrounds/${campground._id}`);
   })
 );
 
