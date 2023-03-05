@@ -2,13 +2,10 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
-
 const { campgroundSchema } = require("./schemas.js");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
-
 const methodOverride = require("method-override");
-
 const Campground = require("./models/campground");
 
 mongoose.set("strictQuery", false);
@@ -56,7 +53,6 @@ app.get("/", (req, res) => {
 //list all campgrounds
 app.get(
   "/campgrounds",
-
   catchAsync(async (req, res) => {
     const campgroundData = await Campground.find({});
     res.render("campgrounds/index", { campgroundData });
@@ -77,18 +73,12 @@ app.post(
   "/campgrounds",
   validateCampground,
   catchAsync(async (req, res, next) => {
-    //res.send(req.body);
-    // if (!req.body.campground)
-    //   throw new ExpressError("Invalid Campground Data", 400);
-
-    //create a new model
+    // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
     const campground = new Campground(req.body.campground);
-    //console.log(campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );
-
 //detail page for showing single campground
 //id for looking up the corresponding campground from database
 app.get(
@@ -111,6 +101,7 @@ app.get(
 
 app.put(
   "/campgrounds/:id/",
+  validateCampground,
   catchAsync(async (req, res) => {
     //res.send("IT WORKED!");
     //update the campground info
