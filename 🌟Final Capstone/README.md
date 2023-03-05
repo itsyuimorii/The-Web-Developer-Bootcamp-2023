@@ -1201,8 +1201,6 @@ app.use((err, req, res, next) => {
 
 ### JOI https://joi.dev/api/
 
-
-
 > app.js
 
 ```js
@@ -1230,9 +1228,22 @@ app.post(
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );
+
+app.put(
+  "/campgrounds/:id/",
+  validateCampground,
+  catchAsync(async (req, res) => {
+    //res.send("IT WORKED!");
+    //update the campground info
+    const { id } = req.params;
+    // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });/
+    const campground = await Campground.findByIdAndUpdate(id, {
+      ...req.body.campground,
+    });
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
 ```
-
-
 
 > /schemas.js
 
@@ -1248,9 +1259,9 @@ module.exports.campgroundSchema = Joi.object({
     description: Joi.string().required(),
   }).required(),
 });
-
 ```
 
+## 📍mongoose relationship
 
 
-## 
+
