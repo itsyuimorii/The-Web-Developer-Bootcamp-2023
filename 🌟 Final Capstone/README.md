@@ -1,24 +1,820 @@
-# 🏕 KYANPU_CAMP (キャンプ)
+# 🏕 KYANPU_CAMP (キャンプ)📝 Learning Notes
 
-## 📍 01. Campgrounds CURD
+# ⛳️AJAX and API
 
-## 💥. Creating the Basic Express App
+**應用程式介面（API, Application Programming Interface）** 是程式和程式之間的溝通接口，是一系列預先定義好的函數，目的在於使得不同的站點或應用程式之間可以互相存取資料或服務。
 
-> app.js
+比如說：
+
+- 呼叫 Twitter API 取得提及「Ice Cream」字句的推特。
+- 呼叫 Facebook API 獲取特定用戶的大頭照。
+- 呼叫 Weather API 取得指定地區的氣候狀況。
+- 呼叫 Reddit API 獲取當前 Reddit 上討論最熱烈的文章標題。
+- 呼叫 GooglePlaces API 取得當前用戶鄰近的餐廳資訊。
+
+網路服務平台 [IFTTT](https://ifttt.com/) 就是串接了不同應用服務的 API 來構建一些自動化的命令集。不同的應用程式會提供不同的 API 接口，在 [ProgrammableWeb](https://www.programmableweb.com/) 中彙整了許多網站的 API 資訊。
+
+## JSON and XML
+
+透過 API 接口所取得的資料，通常採用 XML 或 JSON 表示：
+
+XML
+
+**可延伸標記式語言（XML, Extensible Markup Language）** 乍看之下與 HTML 十分類似，但標籤的作用並不在於描述頁面呈現的結果，而是一種 `key-value` 的關係：
+
+```xml
+<person>
+  <age>21</age>
+  <name>Travis</name>
+  <city>Los Angeles</city>
+</person>
+```
+
+JSON
+
+**JavaScript 物件標記格式（JSON, JavaScript Object Notation）** 則是將資料的格式以 JavaScript 物件來表達，由於近幾年的網頁在呼叫 API 時往往透過 JavaScript，當回傳的資料型態以 JSON 表示時，可以十分迅速地作為物件資料來處理，所以漸漸成為近幾年的主流：
+
+```json
+{
+  "person": {
+    "age": "21",
+    "name": "Travis",
+    "city": "Los Angeles"
+  }
+}
+```
+
+# Making API Requests with Node
+
+## Send Request with Command Line
+
+對伺服器發送請求並不是只有透過瀏覽器或是 Postman 這類的工具才可以達成，在命令行中我們可以使用 [curl](https://curl.haxx.se/) 發送請求：
+
+```bash
+$ curl www.google.com
+```
+
+## Send Request with Node.js
+
+我們在 Node.js 中可以引入 [request](https://github.com/request/request) 套件來對伺服器發送請求，首先透過 npm 進行安裝：
+
+```bash
+# Install request with npm
+npm install request
+```
+
+在代碼中使用 request 發送請求：
+
+```javascript
+const request = require('request');
+request('http://www.google.com', function (error, response, body) {
+  console.log('error:', error); // Print the error if one occurred
+  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+  console.log('body:', body); // Print the HTML for the Google homepage.
+});
+```
+
+## Sunset Time API Example
+
+在這一小節我們呼叫 [Yahoo Weather API](https://developer.yahoo.com/weather/) 來獲取夏威夷的日落時間：
+
+```javascript
+const request = require('request');
+
+request('https://query.yahooapis.com/v1/public/yql?q=select%20astronomy.sunset%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22maui%2C%20hi%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys', function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    let parseData = JSON.parse(body);
+    console.log("Sunset At Hawaii is at ...");
+    console.log(parseData["query"]["results"]["channel"]["astronomy"]["sunset"]);
+  }
+});
+```
+
+在上述代碼中我們要注意到的是雖然透過 API 請求所得到的 JSON 檔案以 JavaScript 的物件格式呈現，但他本身並不是一個 JavaScript 物件，而是一個字串。所以此處透過 `JSON.parse()` 方法來將他轉換成物件。
+
+## JSON Placeholder API Example
+
+由於 [Yahoo Weather API](https://developer.yahoo.com/weather/) 將在 2019 年淘汰，在這一小節中將介紹 [JSONPlaceholder](https://jsonplaceholder.typicode.com/) 來進行測試：
+
+```javascript
+const rp = require('request-promise');
+
+rp('https://jsonplaceholder.typicode.com/users/1')
+  .then((body) => {
+    const parsedData = JSON.parse(body);
+    console.log(`${parsedData.name} lives in ${parsedData.address.city}`);
+  })
+  .catch((err) => {
+    console.log('Error!', err);
+  });
+```
+
+## Note about Movie API lectures
+
+在接下來課程中所使用到的 Open Movie Data Base Movie API 已經不提供公用的接口，不過 Colt 申請了 API 密鑰提供大家使用。使用 API 密鑰發送請求的方式為：
+
+- **General search**: `http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb`
+- **Search with Movie ID**: `http://www.omdbapi.com/?i=tt3896198&apikey=thewdb`
+
+操作方式和影片中幾乎一樣，只需要在發送請求時把密鑰放置在末端即可。
+
+## Movie API App: Introduction
+
+在接下來的小節中，我們要透過呼叫 API 來創建一個查找電影資料的應用程式，由於亞馬遜公司下的網路電影資料庫（IMDb, Internet Movie Database）並沒有提供 API 服務，在接下來的課程中我們使用 [OMDB](http://www.omdbapi.com/) 所提供的 API；除此之外，還可以考慮 [TMDB](https://www.themoviedb.org/)。
+
+首先創建我們的專案資料夾與初始環境：
+
+```bash
+# Create Project Folder
+mkdir movie_search_app
+cd movie_search_app
+
+# npm install
+npm init
+npm install --save express ejs request
+
+# Create app.js File
+touch app.js
+```
+
+## Movie API App: Results Route
+
+在這一小節中，我們簡單先處理路由與基礎呼叫 API 的部分，以下代碼的結果將建立一個 `/results` 路由，在該頁面下顯示在 OMDB 資料庫中搜尋「guardians of the galaxy」所找到的第一部電影名稱。
+
+```javascript
+var express = require("express");
+var request = require("request");
+var app = express();
+
+app.get("/results", function(req, res) {
+    request('http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb', function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var data = JSON.parse(body);
+        res.send(data["Search"][0]["Title"]);
+  }
+});
+})
+
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Movie App has started!");
+});
+```
+
+## Movie API App: Displaying Data
+
+這一小節將要實作的是將呼叫 API 所得到的資料，傳遞到模板頁中，並透過模板渲染實際頁面。所以在 `app.js` 中將代碼改寫如下：
+
+```javascript
+var express = require("express");
+var request = require("request");
+var app = express();
+app.set("view engine", "ejs");
+
+app.get("/results", function(req, res) {
+    request('http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb', function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var data = JSON.parse(body);
+        res.render("results", {data: data});
+  }
+});
+})
+
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Movie App has started!");
+});
+```
+
+接著創建 `views` 資料夾與模板頁面 `results.ejs`，並修改模板頁面內容如下：
+
+```ejs
+<h1>Results Pages!!</h1>
+
+<% data["Search"].forEach(function(movie) { %>
+   <li><%= movie["Title"] %></li> 
+<% }) %>
+```
+
+## Movie API App: Adding Search
+
+接著在這一小節我們要建立搜尋頁面，實際上就是透過一個 HTML 中的表單來獲取使用者輸入，並將值傳遞給 `/result` 路由進行渲染。首先我們在 `app.js` 中添加根目錄的路由，並修改 `/result` 路由，注意的是此處由表單所提交的資料，可以透過 `req.query.search` 取得：
+
+```javascript
+var express = require("express");
+var request = require("request");
+var app = express();
+app.set("view engine", "ejs");
+
+app.get("/", function(req, res){
+   res.render("search");
+});
+
+app.get("/results", function(req, res) {
+    var query = req.query.search;
+    var url = "http://omdbapi.com/?s=" + query + "&apikey=thewdb";
+    
+    request(url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var data = JSON.parse(body);
+        res.render("results", {data: data});
+  }
+});
+})
+
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Movie App has started!");
+});
+```
+
+接著修改根目錄的 `search.ejs` 模板：
+
+```ejs
+<h1>Search For a Movie</h1>
+
+<form action="/results" method="GET">
+    <input type="text" placeholder="search term" name="search">
+    <input type="submit">
+</form>
+```
+
+以及 `results.ejs` 模板：
+
+```ejs
+<h1>Results Page!!!</h1>
+
+<ul>
+    <% data["Search"].forEach(function(movie) { %>
+      <li>
+          <strong>
+              <%= movie["Title"] %>
+          </strong> 
+          - <%=movie["Year"]%>
+      </li>
+    <% }) %>
+</ul>
+
+<a href="/">Search Again!</a>
+```
+
+# Server Side Frameworks
+
+## 1. Creating Server with Express
+
+### #Express Method
+
+> NPM package which comes with a bunch of methods and optional plugiins that we can use to build web applications and API`s
+
+## 2. Introduction to Express
+
+### [#]()Library
+
+When you use a library, you are in charge! You control the flow of the application code, and you decide when to use the library. 
+
+### [#]()Framework
+
+With frameworks, that control is inverted.  The framework is in charge, and you are merely a participant! The framework tells you where to plug in the code.
+
+This class is taught using Express.js, a lightweight, Node.js-based open source framework for building web applications. Lightweight does not mean that it implements less functionality, but rather that many of the details that are hidden behind the framework are not obscured compared to heavyweight frameworks like Rails, which allows for a better understanding of the backend.
+
+## 3. Our First Express App
+
+```bash
+$ mkdir FirstExpressApp
+$ cd FirstExpressApp
+$ touch app.js
+$ npm install express --save
+```
+
+> app.use method is that any time we have an incoming request, this callback
+
+```javascript
+// This download does not include the node_modules folder
+// REMEMBER TO RUN "npm install" first, to tell NPM to download the needed packages
+const express = require("express");
+const app = express();
+
+//app.use method is that any time we have an incoming request, this callback
+app.use((req, res) => {
+    console.log("WE GOT A NEW REQUEST!!")
+    res.send('<h1>This is my webpage!</h1>')
+  	console.dir(req);
+})
+
+
+app.listen(3000, () => {
+    console.log("LISTENING ON PORT 8080")
+})
+```
+
+> ‼️ Express creates this JavaScript object automatically for us by parsing the incoming HTTP request information, and then it passes it in as the first argument to this callback.
+>
+> Express通过解析传入的HTTP请求信息，为我们自动创建了这个JavaScript对象，然后将其作为第一个参数传递给这个回调。
+
+The above code will create a server that listens to a specified **port** and responds to requests in a **route**. Routing refers to determining how the application responds to a client's request for a specific endpoint, which contains `URI` and a specific HTTP request method (e.g. `GET`, `POST`...etc.). For more information about this section, please refer to the following document.
+
+- [Express | Hello World](http://expressjs.com/en/starter/hello-world.html)
+- [Express | Basic routing](http://expressjs.com/en/starter/basic-routing.html)
+
+It is worth mentioning that on the local side, the server listening section should be written as follows:
+
+```javascript
+//=============================
+// Server
+//=============================
+
+// Tell Express to Listen for requests (start server)
+app.listen(3000, () => {
+    console.log("LISTENING ON PORT 8080")
+})
+```
+
+- So an HTTP request is not a JavaScript object, it's **text information.**
+  - It is not particular to any programming language, but express turns it into it takes that data, it **parses** **it** and it **turns it into a object that it passes in,** in this case to our **callback** for use.
+
+> app.get 
+
+```javascript
+app.get('/', (req, res) => {
+    res.send('Welcome to the home page!')
+})
+
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.send(`<h1>Browsing the ${subreddit} subreddit</h1>`)
+})
+
+app.get('/r/:subreddit/:postId', (req, res) => {
+    const { subreddit, postId } = req.params;
+    res.send(`<h1>Viewing Post ID: ${postId} on the ${subreddit} subreddit</h1>`)
+})
+
+app.post('/cats', (req, res) => {
+    res.send('POST REQUEST TO /cats!!!! THIS IS DIFFERENT THAN A GET REQUEST!')
+})
+
+app.get('/cats', (req, res) => {
+    res.send('MEOW!!')
+})
+
+app.get('/dogs', (req, res) => {
+    res.send('WOOF!')
+})
+app.get('/search', (req, res) => {
+    const { q } = req.query;
+    if (!q) {
+        res.send('NOTHING FOUND IF NOTHING SEARCHED!')
+    } else {
+        res.send(`<h1>Search results for: ${q}</h1>`)
+    }
+})
+
+app.get('*', (req, res) => {
+    res.send(`I don't know that path!`)
+})
+
+
+// /cats => 'meow'
+// /dogs => 'woof'
+// '/' 
+```
+
+## 4. The Package.json
+
+> `package.json` 是一個符合 [CommonJS 規定](http://wiki.commonjs.org/wiki/Packages/1.1) 用來描述套件包的文件，使用 `json` 格式表示，在其中可以定義 **相依（dependency）** 的相關套件以及應用程式資訊，以便我們管理專案所會使用到的套件及其對應版本。透過以下命令可以初始化 `package.json` 檔案：
+
+```bash
+$ npm init
+```
+
+在安裝套件時，在後方加上 `--save` 參數可以將其加到專案的相依套件中，也就是在 `package.json` 中加上對應的內容，比如：
+
+```bash
+$ npm install express --save
+```
+
+Related supplements can be viewed at.
+
+- [What is the file `package.json`?](https://docs.nodejitsu.com/articles/getting-started/npm/what-is-the-file-package-json/)
+- [Node.js 系列學習日誌 #6 - 使用 package.json 安裝、管理模組](https://ithelp.ithome.com.tw/articles/10158140)
+
+## How to automate server restart
+
+在前面的單元我們知道可以使用 `node app.js` 命令來啟動伺服器，在助教提供的 [YouTube | Automate Node Server Restart with Nodemon](https://www.youtube.com/watch?v=GvLvrlOqq9g) 影片中介紹了 [nodemon](https://nodemon.io/) 工具來自動地重新載入更動的檔案並啟動伺服器。
+
+```bash
+# Install nodemon with npm
+$ npm install -g nodemon
+
+# Run server with nodemon
+$ nodemon
+```
+
+## Route Params
+
+### The  Route Matcher
+
+承接上一個課程的路由概念，當使用者對那些沒有設置路由的位置發送 `GET` 請求時，伺服器端將回應 `Cannot GET /URL`，我們可以透過 `*` 對這些位置進行通配，回應相同的結果：
+
+```javascript
+app.get("*", function(req, res) {
+  res.send("There is no ROUTE!");
+});
+```
+
+### Route Order
+
+值得注意的是，路由撰寫時擺放的位置是會影響伺服器處理的順序的，比方說將 `*` 通配擺放在其他路由之前，那麼伺服器在處理時都會先受到 `*` 通配路由影響，其餘的都不會處理了。
+
+### Route Pamras
+
+除此之外，我們經常需要將某種模式所匹配到所有路由都對應到同一個組件，比如針對不同的 ID 的用戶來說，路徑可能是 `./user/<id>`，在這裡可以透過 **路由參數（route parameter）** 來標記，比如：
+
+```javascript
+app.get("/post/:topic/comments/:id/:title/", function(req, res) {
+  console.log(req.params);
+  res.send("There is a Route Pamras Page!");
+});
+```
+
+傳入時的路由參數將被保存在 `req.parems` 當中。
+
+# ⛳️Intermediate Express
+
+## Creating Dynamic HTML with EJS
+
+>  What is the "E" for? "Embedded?" Could be. How about "Effective," "Elegant," or just "Easy"? EJS is a simple templating language that lets you generate HTML markup with plain JavaScript. No religiousness about how to organize things. No reinvention of iteration and control-flow. It's just plain JavaScript. [ejs-Efficient JavaScript Template Engine](https://ejs.co/)
+
+```javascript
+app.get("/fellinlovewith/:thing", function(req, res){
+  var thing = req.params.thing;
+  res.render("love.ejs", {thingVar: thing});
+});
+```
+
+```javascript
+<h1>You fell in love with: <%= thingVar.toUpperCase() %></h1>
+<p>P.S. this is the love.js</p>
+```
+
+## Install EJS
+
+It's easy to install EJS with NPM.
+
+```bash
+$ npm install ejs
+```
+
+##  Configure the app to use EJS
+
+除此之外，我們可以透過以下方式設定預設的渲染引擎，也就是往後在路由中渲染頁面時不用加上後綴的副檔名：
+
+```javascript
+// Default express variable
+const express = require("express");
+const app = express();
+
+const path = require("path");
+
+// Setting the static PATH
+app.use(express.static(path.join(__dirname, 'public')))
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+```
+
+设置这条语句`app.set("view engine", "ejs");`之后
+
+```javascript
+// Before Setting "view engine"
+app.get("/", function(req, res){
+  res.render("home.ejs");
+});
+
+// After Setting "view engine"
+app.get("/", function(req, res){
+  res.render("home");
+});
+```
+
+## EJS Syntax
+
+- `<%` 'Scriptlet' tag, for control-flow, no output
+
+- `<%_` ‘Whitespace Slurping’ Scriptlet tag, strips all whitespace before it
+
+- `<%=` Outputs the value into the template (HTML escaped)
+
+  > `<%= %> `这里面的代码会被作为javascript处理
+  >
+  > `<%= ‘hello world.toUpperCase() %>`
+
+- `<%-` Outputs the unescaped value into the template
+
+- `<%#` Comment tag, no execution, no output
+
+- `<%%` Outputs a literal '<%'
+
+- `%>` Plain ending tag
+
+- `-%>` Trim-mode ('newline slurp') tag, trims following newline
+
+- `_%>` ‘Whitespace Slurping’ ending tag, removes all whitespace after it
+
+#### 1. Condition&Loops in EJS
+
+在使用條件判斷式時，採用 `<% %>` 進行標註：
+
+```ejs
+<% if(thingVar.toLowerCase() === "rusty") { %>
+  <p>GOOD CHOICE! RUSTY IS THE BEST!</p>
+<% } else { %>
+  <p>Bad Choice! You should have say Rusty!</p>
+<% } %>
+```
+
+在使用迴圈時，採用 `<% %>` 進行標註：
+
+```ejs
+<% for (var i = 0; i < posts.length; i++){ %>
+  <li>
+    <%= posts[i].title %> - <strong><%= posts[i].author %></strong>
+  </li>
+<% } %>
+<% posts.forEach(function(post) { %>
+  <li>
+    <%= post.title %> - <strong><%= post.author %></strong>
+  </li>
+<% }) %>
+```
+
+#### 2. Pass parameters from route directly into the ejs file
+
+> index.js 			=> routes
+
+```javascript
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1;
+    res.render('random', { num })
+})
+```
+
+> Random.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random</title>
+</head>
+
+<body>
+    <h1>Your random number is: <%= num %></h1>
+    <% if(num % 2 === 0){ %>
+    <h2>That is an even number!</h2>
+    <% } else { %>
+    <h2>That is an odd number!</h2>
+    <% } %>
+    <p>Here's an alternate way of doing it:</p>
+    <h3>That number is: <%= num%2===0 ? 'EVEN' : 'ODD' %></h3>
+</body>
+
+</html>
+     
+```
+
+#### 3. EJS with JSON
+
+> Data.json 
+
+```javascript
+const redditData = require('./data.json');
+```
+
+> index.js
+
+```javascript
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    if (data) {
+        res.render('subreddit', { ...data });
+    } else {
+        res.render('notfound', { subreddit })
+    }
+})
+```
+
+> Subreddit.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> </title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+
+<body>
+    <h1>Browsing The <%= name %> subreddit</h1>
+    <h2><%= description %></h2>
+    <p><%=subscribers %> Total Subscribers</p>
+    <hr>
+<!--using for loop to get data from data.JSON -->
+    <% for(let post of posts) { %>
+    <article>
+        <p><%= post.title %> - <b><%=post.author %></b></p>
+        <% if(post.img) { %>
+        <img src="<%= post.img %>" alt="">
+        <% } %>
+    </article>
+    <% } %>
+</body>
+</html>
+```
+
+#### Showcase(Full Code):
+
+```javascript
+const express = require('express');
+const app = express();
+const path = require('path');
+const redditData = require('./data.json');
+
+app.use(express.static(path.join(__dirname, 'public')))
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+
+app.get('/', (req, res) => {
+    res.render('home')
+})
+
+app.get('/cats', (req, res) => {
+    const cats = [
+        'Blue', 'Rocket', 'Monty', 'Stephanie', 'Winston'
+    ]
+    res.render('cats', { cats })
+})
+
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    if (data) {
+        res.render('subreddit', { ...data });
+    } else {
+        res.render('notfound', { subreddit })
+    }
+})
+
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1;
+    res.render('random', { num })
+})
+
+app.listen(3000, () => {
+    console.log("LISTENING ON PORT 3000")
+}
+```
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Found </title>
+</head>
+
+<body>
+    <h1>I'm sorry, we couldn't find the <%= subreddit %> subreddit!</h1>
+
+</body>
+
+</html>
+```
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> </title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+
+<body>
+    <h1>Browsing The <%= name %> subreddit</h1>
+    <h2><%= description %></h2>
+    <p><%=subscribers %> Total Subscribers</p>
+    <hr>
+
+    <% for(let post of posts) { %>
+    <article>
+        <p><%= post.title %> - <b><%=post.author %></b></p>
+        <% if(post.img) { %>
+        <img src="<%= post.img %>" alt="">
+        <% } %>
+    </article>
+    <% } %>
+</body>
+
+</html>
+```
+
+## Serving Static Assets In Express
+
+> notify EJS, Tell Express that we want to use a directory named public for any the image or CSS files, any scripts and the directory will be located in the root directory of our application.
+
+```javascript
+// Setting the static PATH
+app.use(express.static("public"));
+```
+
+## Serving Custom Assets
+
+倘若我們要替頁面加上 CSS 或 JavaScript 效果，當然可以在每一個 ejs 檔案中添加 `<style>` 標籤，但這無疑是個不便利且笨拙的方法。較佳的方式是透過如下的方式引入資源：
+
+```html
+<link ref="stylesheet" href="/style.css">
+```
+
+而我們通常是將這類資源存放在 `public` 文件夾下，然而必須透過以下的方式告知 node.js 在伺服器執行時，存取檔案的預設路徑：
+
+```javascript
+// Default express variable
+var express = require("express");
+var app = express();
+
+// Setting the static PATH
+app.use(express.static("public"));
+```
+
+# ⛳️ Defining RESTful Routes
+
+##  What is REST/RESTful?
+
+**表現層狀態轉換（REST, Representational State Transfer）** 是一種網路架構的風格，具有此種風格的系統可以稱為是 RESTful 的，或者更直白地說：**「將 URL 定位資源，以 HTTP 協議所定義的 `GET`、`POST`、`DELETE` 等請求來描述操作」**。在這樣的基礎之下，可以直觀地從 URL 名稱、發送的請求以及請求所得到的狀態碼就知道做了什麼操作？結果如何？
+
+## URL Design
+
+RESTful 的核心思想就是讓用戶端發送的請求操作都具備有「動詞 + 受詞」的結構，其中「動詞」的部分透過常用的 HTTP 方法來實踐，對應 CRUD 操作：
+
+- `GET`：讀取（Read）
+- `POST`：創建（Create）
+- `PUT`：更新（Update）
+- `PATCH`：更新（Update），通常是部分更新
+- `DELETE`：刪除（Delete）
+
+而「受詞」的部分就是 API 的 URL，這部份透過設置路由來完成。
+
+關於 RESTful 的解釋與說明，很建議查看這篇問題下的回答 [知乎 | 怎样用通俗的语言解释REST，以及RESTful？](https://www.zhihu.com/question/28557115) 和 [阮一峰的网络日志 | RESTful API 最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)。
+
+## A Table of all 7 RESTful routes
+
+承上所述，所謂的 REST 就是將 HTTP 路由與 CRUD 操作進行對應，
+
+| Name    | Path             | HTTP Verb. | Purpose                                           |
+| :------ | :--------------- | :--------: | :------------------------------------------------ |
+| INDEX   | `/dogs/`         |   `GET`    | List all dogs.                                    |
+| NEW     | `/dogs/new`      |   `GET`    | Show new dog form.                                |
+| CREATE  | `/dogs/`         |   `POST`   | Create a new dog, then redirect somewhere.        |
+| SHOW    | `/dogs/:id`      |   `GET`    | Show info about one specific dog.                 |
+| EDIT    | `/dogs/:id/edit` |   `GET`    | Shoe edit form for one dog.                       |
+| UPDATE  | `/dogs/:id`      |   `PUT`    | Update a particular dog, then redirect somewhere. |
+| DESTORY | `/dogs/:id`      |  `DELETE`  | Delete a particular dog, then redirect somewhere. |
+
+
+
+
+
+# ⛳️Basic CRUD
+
+## 💥. Create basic server
+
+app.js
 
 ```js
+//import express
 const express = require("express");
-
+//create app instance
 const app = express();
- 
+//start server
 app.listen(3000, () => {
   console.log("listening on port http://127.0.0.1:3000");
 });
 ```
 
-## 💥. what is Ejs
+## 💥. Ejs
 
-> views/home.ejs
+views/home.ejs
 
 ```js
  <body>
@@ -35,7 +831,7 @@ app.listen(3000, () => {
   </body>
 ```
 
-> app.js
+app.js
 
 ```js
 //write this middleware to setup view engine
@@ -51,11 +847,11 @@ app.get("/", (req, res) => {
 });
 ```
 
-## 💥. Campground Model Bascis
+## 💥. Create Campground model
 
-### 1. Create the schema for the campground model
+> Create the schema for the campground model
 
-> models/campground.js
+models/campground.js
 
 ```js
 const mongoose = require("mongoose");
@@ -75,9 +871,9 @@ const CampgroundSchema = mongoose.Schema({
 module.exports = mongoose.model("Campground", CampgroundSchema);
 ```
 
-connect mongoose 
+> connect mongoose
 
-> app.js
+app.js
 
 ```js
 const mongoose = require("mongoose");
@@ -94,9 +890,9 @@ db.once("open", () => {
 });
 ```
 
-### 2. Create a new campground testing in one of routes
+## 💥. Create a new campground testing in one of routes
 
-> app.js
+app.js
 
 ```js
 app.get("/makecampground", async (req, res) => {
@@ -109,9 +905,9 @@ app.get("/makecampground", async (req, res) => {
 });
 ```
 
-![json](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/json.png)
+![json](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767226/webdevbootcamp2023/json_n7nkc4.png)
 
-### 3. Check new database
+> Check database
 
 ```bash
 mongosh
@@ -119,11 +915,9 @@ use Kyanpu-camp
 db.campgrounds.find()
 ```
 
-![db.find](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/db.find.png)
+![db.find](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767228/webdevbootcamp2023/db.find_qqxqh3.png)
 
-## 💥. Seeding Campground
-
-**Setup some fake campgrounds seed data**
+## 💥. setup some fake campgrounds seed data
 
 > /seeds/index.js
 
@@ -152,7 +946,7 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 // const seedDB = async () => {
 //     await Campground.deleteMany({});// Delete previous records
 //     const c = new Campground({ title: 'purple field' });//Add New Record
-//     await c.save(); 
+//     await c.save();
 
 // array[Math.floor(Math.random() * array.length)], Generate a random number from 0 to array length - 1
 const seedDB = async () => {
@@ -167,14 +961,13 @@ const seedDB = async () => {
     await camp.save();
   }
 };
- // Disconnect mongoose after running
- seedDB().then(() => {
+// Disconnect mongoose after running
+seedDB().then(() => {
   mongoose.connection.close();
 });
-
 ```
 
-## 💥 Listing all campgrounds page
+## 💥All campgrounds listing page
 
 > models/campground.js
 
@@ -196,7 +989,7 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 > app.js
 
-`Campground.find({})` method to retrieve data from ` models/campground.js `
+`Campground.find({})` method to retrieve data from `models/campground.js`
 
 ```js
 app.get("/campgrounds", async (req, res) => {
@@ -205,7 +998,7 @@ app.get("/campgrounds", async (req, res) => {
 });
 ```
 
-### 2.  loop(all new campground site) from db
+### 2. For loop list all new campground site from db
 
 > /views/campgrounds/index.ejs
 
@@ -227,10 +1020,9 @@ app.get("/campgrounds", async (req, res) => {
     </ul>
   </body>
 </html>
-
 ```
 
-## 💥 Campground Show Router 
+## 💥 Show router
 
 > detail page for showing single campground
 
@@ -268,7 +1060,7 @@ Enter the address in the browser plus any random id http://127.0.0.1:8080/campgr
 
 > views/campgrounds/index.ejs
 
-index.ejs中有所有campground list, 在campground.title外層增加a標籤即可實現此效果, 
+index.ejs 中有所有 campground list, 在 campground.title 外層增加 a 標籤即可實現此效果,
 
 ```js
 <ul>
@@ -278,9 +1070,9 @@ index.ejs中有所有campground list, 在campground.title外層增加a標籤即�
 </ul>
 ```
 
- ![list all camp](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/list%20all%20camp.png)
+![list all camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/list all camp.png)
 
-### 3. findById and showing the campground data 
+### 3. findById and showing the campground data
 
 ```js
 app.get("/campgrounds/:id", async (req, res) => {
@@ -307,14 +1099,13 @@ app.get("/campgrounds/:id", async (req, res) => {
 
 ```
 
-![show](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/show.png)
+![show](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767229/webdevbootcamp2023/show_kprbmu.png)
 
-## 💥  Campground New & Create Router 
+## 💥 Create new campground
 
 ### 1. Create new route
 
 ```js
-
 app.get("/campgrounds/new", async (req, res) => {
   res.render("campgrounds/new");
 });
@@ -322,7 +1113,7 @@ app.get("/campgrounds/new", async (req, res) => {
 
 📝note: this route must be exist before campgrounds/:id, as it is new. this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
 
-### 2. create `new.ejs`, it is a form for user to input new campground info
+### 2. Create `new.ejs`, it is a form for user to input new campground info
 
 > views/campgrounds/new.ejs
 
@@ -349,15 +1140,13 @@ app.get("/campgrounds/new", async (req, res) => {
 </html>
 ```
 
-notes📝: `name="campground[title]"` -> This way of writing is for better classification 
+notes📝: `name="campground[title]"` -> 這種寫法是為了更好的分類 ![campground[title]](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767227/webdevbootcamp2023/campground_title_cbkfkh.png)
 
-![campground[title]](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/campground%5Btitle%5D.png)
+![new camp](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767228/webdevbootcamp2023/newcampform_gcbko3.png)
 
-![new camp](/Users/yuimorii/Documents/GitHub/The-Web-Developer-Bootcamp-2023/🌟Final Capstone/images/newcampform.png)
+### 3. Set the endpoint to set a POST request for the "form submission destination" when the "Add Camp" button is clicked.
 
-### 3. Set the endpoint to set a POST request for the "form submission destination" when the "add Campground" button is clicked.
-
-### 3.1 Testing body.parse
+### 1. test body.parse
 
 > app.js
 
@@ -370,32 +1159,34 @@ app.post("./campgrounds", async (req, res) => {
 });
 ```
 
-![newcamp](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/new%20camp.png)
+![newcamp](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767229/webdevbootcamp2023/newcampinfo_bnhx5s.png)
 
-![parsebody](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/parsebody.png)
+![parsebody](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767229/webdevbootcamp2023/parsebody_rmkwam.png)
 
-### 3.2 After getting the data from the client side, create this new camp
+### 2. After getting the data from the client side, create this new camp
 
 ```js
 app.post("/campgrounds", async (req, res) => {
   //res.send(req.body);
-  
+
   //take request of body campground instead of our route and submit that or create a new campground
   const campground = new Campground(req.body.campground);
   await campground.save(); //save data into database
-  
+
   res.redirect(`/campgrounds/${campground._id}`);
 });
 ```
 
-![new camp](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/new%20camp.png)
+![new camp](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767228/webdevbootcamp2023/new_camp_egfjic.png)
 
-### 3.3 add `<a href="">` to page
+### 4. add `<a href="">` to page
 
 > views/campgrounds/index.ejs
 
 ```js
-<div><a href="/campgrounds/new">Add new campground</a></div>
+<div>
+  <a href="/campgrounds/new">Add new campground</a>
+</div>
 ```
 
 > views/campgrounds/show.ejs
@@ -406,13 +1197,15 @@ app.post("/campgrounds", async (req, res) => {
 </footer>
 ```
 
->views/campgrounds/new.ejs
+> views/campgrounds/new.ejs
 
 ```js
-<div><a href="/campgrounds">All campgrounds list</a></div>
+<div>
+  <a href="/campgrounds">All campgrounds list</a>
+</div>
 ```
 
-## 💥 Campground Edit & Update Router 
+## 💥Edit campground info
 
 ### 1. create new route
 
@@ -463,7 +1256,9 @@ app.get("/campgrounds/:id/edit", async (req, res) => {
 > add `edit` link at `show.ejs`
 
 ```js
-<p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
+<p>
+  <a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a>
+</p>
 ```
 
 ### 3. pre populate the values for titles and location
@@ -523,11 +1318,13 @@ app.put("/campgrounds/:id/", async (req, res) => {
    <form action="/campgrounds/<%=campgroundId._id%>?_method=PUT" method="POST">
 ```
 
-![edit](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/edit.png)
+![edit](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767228/webdevbootcamp2023/edit_xoabt1.png)
 
-![succeesful](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/succeesful.png)
+![succeesful](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767230/webdevbootcamp2023/succeesful_z6z1yi.png)
 
-So we are making it to that put route with out `post request` that we are faking out express into thinking or into treating like its a`put request`
+###
+
+**So we are making it to that put route with out `post request` that we are faking out express into thinking or into treating like its a`put request`**
 
 ### 4. update campground info
 
@@ -546,13 +1343,13 @@ app.put("/campgrounds/:id/", async (req, res) => {
 });
 ```
 
-![campground[title]](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/update.png)
+![campground[title]](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767229/webdevbootcamp2023/update_djzp6t.png)
 
-![update info](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/%F0%9F%8C%9FFinal%20Capstone/images/update%20info.png)
+![update info](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767230/webdevbootcamp2023/update_info_te4ged.png)
 
-## 💥 Campground Delete Route
+## 💥 Delete camp
 
-> app.js
+app.js
 
 ```js
 //page for delete
@@ -563,705 +1360,153 @@ app.delete("/campgrounds/:id/", async (req, res) => {
 });
 ```
 
-> show.ejs
+show.ejs
 
 ```js
-    <p>
-      <form action="/campgrounds/<%=campgroundId._id%>?_method=DELETE" method="POST">
-        <button>Delete</button>
-      </form>
-    </p>
+<p>
+  <form
+    action="/campgrounds/<%=campgroundId._id%>?_method=DELETE"
+    method="POST"
+  >
+    <button>Delete</button>
+  </form>
+</p>
 ```
 
-## 📍Express Middleware
+# ⛳️ Handling Errors in Express Apps
 
-### 1. Overview 
+# ⛳️Errors Handling & Validating Data
+
+# ⛳️Data Relationships with Mongo
 
 REQUEST ----->
 
-- middleware are just function 
+- middleware are just function
 - each middlware has **access** to the `request` and `response` object
-- middleware can **end the HTTP request** by sending back a ***response*** with methods like `res.send()`
+- middleware can **end the HTTP request** by sending back a **_response_** with methods like `res.send()`
 - OR middleware can be **chained together**, one after antoher by calling `next()`
 
 RESPONSE ----->
 
-### 1. [morgan](https://github.com/expressjs/morgan)
+### install [morgan](https://github.com/expressjs/morgan)
 
 ```js
-const morgan = require('morgan');
+const express = require("express");
+const app = express();
+const morgan = require("morgan");
 
-app.use(morgan('tiny'));
-```
+app.use(morgan("tiny"));
 
-### 2. Using middleware one specific routes
+app.use((req, res, next) => {
+  req.requestTime = Date.now();
+  console.log(req.method, req.path);
+  next();
+});
 
-> instead of using `app.use`, Routes HTTP GET requests to the specified path with the specified callback functions.
+app.use("/dogs", (req, res, next) => {
+  console.log("I LOVE DOGS!!");
+  next();
+});
 
-```js
-app.get(path, callback [, callback ...])
-```
-
-| Argument   | Description                                                  | Default         |
-| ---------- | ------------------------------------------------------------ | --------------- |
-| `path`     | The path for which the middleware function is invoked; can be any of:A string representing a path.A path pattern.A regular expression pattern to match paths.An array of combinations of any of the above.For examples, see [Path examples](https://expressjs.com/en/5x/api.html#path-examples). | '/' (root path) |
-| `callback` | Callback functions; can be:A middleware function.A series of middleware functions (separated by commas).An array of middleware functions.A combination of all of the above. |                 |
-
-```js
-....
 const verifyPassword = (req, res, next) => {
-    const { password } = req.query;
-    if (password === 'passwords') {
-        next();
-    }
-    res.send("YOU NEED A PASSWORD!")
-}
-
-app.get('/secret', verifyPassword, (req, res) => {
-    res.send('')
-})
-....
-```
-
-## 📍Adding Basic Styles
-
-### 1. what is [EJS mate](https://github.com/JacksonTian/ejs-mate)
-
-Given a template, index.ejs:
-```js
-<% layout('boilerplate') -%>
-<h1>I am the <%= what %> template</h1>
-```
-And a layout, boilerplate.ejs:
-```js
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>It's <%= who %></title>
-  </head>
-  <body>
-    <section>
-      <%- body -%>
-    </section>
-  </body>
-</html>
-```
-
-### 2. Installation
-
-```js
-$ npm install ejs-mate --save
-```
-
-### 3. notify app.js using `ejs-mate`
-
-```js
-const ejsMate = require("ejs-mate");
-
-app.engine("ejs", ejsMate);
-```
-
-### 4. create `layout`
-
-> views/layout/boillerplate.ejs
-
-```html
-<!DOCTYPE html>
-<html lang="en">  
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KyanpuCamp</title>
-  </head>  
-  <body> 
-      <h1>navbar placeholder</h1>
-      <main><%- body %></main>
-      <h1>footer placeholder</h1> 
-  </body>
-</html>
-```
-
-> views/campgrounds/index.ejs
-
-```html
-<% layout("layout/boilerplate") %>
-  
-<h1>All Campgrounds List</h1>
-<div><a href="/campgrounds/new">Add new campground</a></div>
-<ul>
-  <% for (let campground of campgroundData) { %>
-  <li>
-    <a href="/campgrounds/<%=campground._id%>"><%=campground.title%></a>
-  </li>
-  <% } %>
-</ul>
-```
-
-> as well as new.ejs / show.ejs / edit.ejs
-
-### 5. Bootstrap 5.0
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kyanpu Camp</title>
-
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
-      crossorigin="anonymous"/>
-  </head>
-
-  <body>
-    <%- include('../partials/navbar')%>
-    <main class="container mt-5"><%- body %></main>
-    <%- include('../partials/footer')%>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-      integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-      crossorigin="anonymous"></script>
-  </body>
-</html>
-
-```
-
-### 	6. navbar an partials
-
-> views/partials/navbar.ejs
-
-```html
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">KyanpuCamp</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/campgrounds">Campgrounds</a>
-        <a class="nav-link" href="/campgrounds/new">New Campground</a>
-      </div>
-    </div>
-  </div>
-</nav>
-```
-
-> views/partials/footer.ejs
-
-```ejs
-<footer class="footer bg-dark py-3 mt-auto">
-  <div class="container">
-    <span class="text-muted">&copy; Powered by itsyuimorii 2023</span>
-  </div>
-</footer>
-```
-
-> views/layout/boilerplate.ejs
-
-```ejs
-    <%- include('../partials/navbar')%>
-    <main class="container mt-5"><%- body %></main>
-    <%- include('../partials/footer')%>
-```
-
-- using flexbox
-
-> views/layout/boilerplate.ejs
-
-```js
-  <body class="d-flex flex-column vh-100">
-```
-
-## 📍Adding images
-
-> models/campground.js
-
-```js
-//add two more properties
-const CampgroundSchema = new Schema({
-  image: String,
-  description: String,
-});
-```
-
->seeds/index.js
-
-```js
-const seedDB = async () => {
-  await Campground.deleteMany({}); // Delete previous records
-  for (let i = 0; i < 300; i++) {
-    const random1000 = Math.floor(Math.random() * 1000);
-    const price = Math.floor(Math.random() * 20) + 10;
-    const camp = new Campground({
-      location: `${cities[random1000].city}, ${cities[random1000].state}`,
-      title: `${sample(descriptors)} ${sample(places)}`,
-      image: "https://source.unsplash.com/collections/483251",
-      description:
-        "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.",
-      price,
-    });
-    await camp.save();
-  }
-};
-```
-
-🚀if update the files -> **seeds or models**, **Be sure to update** in the command line : `node seeds/index.js`
-
-```ejs
- <img src="<%= campgroundId.image %>" alt="">
- <p><%= campgroundId.description %></p>
- <p><a href="/campgrounds/<%=campgroundId._id%>/edit">Edit</a></p>
-```
-
-## 📍Update styling	
-
-> views/campgrounds/new.ejs
-
-```js
-<% layout("layout/boilerplate") %>
-<div class="row">
-  <h1 class="text-center">⛺️ New Campground</h1>
-  <div class="col-6 offset-3">
-    <form action="/campgrounds" method="POST">
-      <div class="mb-3">
-        <label class="form-label" for="title">Title</label>
-        <input
-          class="form-control"
-          type="text"
-          id="title"
-          name="campground[title]"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="location">Location</label>
-        <input
-          class="form-control"
-          type="text"
-          id="location"
-          name="campground[location]"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="image">Image Url</label>
-        <input
-          class="form-control"
-          type="text"
-          id="image"
-          name="campground[image]"
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="price">Campground Price</label>
-        <div class="input-group">
-          <span class="input-group-text" id="price-label">$</span>
-          <input
-            type="text"
-            class="form-control"
-            id="price"
-            placeholder="0.00"
-            aria-label="price"
-            aria-describedby="price-label"
-            name="campground[price]"
-          />
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="description">Description</label>
-        <textarea
-          class="form-control"
-          type="text"
-          id="description"
-          name="campground[description]"
-        ></textarea>
-      </div>
-
-      <div class="mb-3">
-        <button class="btn btn-success">Add new campground</button>
-      </div>
-    </form>
-    <a href="/campgrounds">All campgrounds list</a></div>
-  </div>
-</div>
-```
-
-![img](https://lh3.googleusercontent.com/_UpV-wXGRjRchfRCQnc3ffF_UKRbxhR6e61R7MLuVkkQQCAGZmxSwOwr4Yplj7F8JNRZqLzz8Xqr6bYnN1MENIbFPw6OzRIo-u9ZYZSFypKxGedwM3cYyBbYt7xjdhAiFQZaPIZbjZ4B1A3Xlu7NduAX4seLIU6rppm3LnOIM5lHbIFZRejcCKdcr1sq74uOHrpa2ferBHBQ5eN_NvVl3h697vvluaW03wZDL13KRarw3N87mohMpFXPVW2qY-CgYMQXu1Yg6OsGwStQ9Je48YbTPZA3LTpRkG_xoJ-CLI3mHcH54qSfMkF7YMcn5q7IXdYc9y3uI_ggb7OasK3hBF-HHIio_iJwauY7dic57XF7m83BP1QaWPRTMEnMOckEdHILDk0bFu2W9hx5mXND8yxY8C2Y2flHbsn5sLdyTakBNQQK32oIQAHHZx8eusGvL7Fy_UsiI4nRffmuwdWwJANcVFT6xfdiuJbXJHmS9ET3GTrX1VQdtJgzNiT2NOBJIgV7l2g8J-8t4J4bSO8mnf11vVq6xHqjHqtEtQR6j-VE6LZ1dp8Rwl6vDBIMtVlYT0PZn8EoEa9SkcJK-12hsPyWDcA0Kuybj6cpZtafX8yy7AKb_moYj4EEeH6FwK7jmLNYKkPS71_oxyOKAdMSmx3yFWPvvD5ektQbZ4j07OpTrVGiuFCoblDNNvGN4ixb_g1OyQJqSUIceorQ0LPQ5ymDr5oEMwt0DkvsGUasEsPPOwMIFRe0Jtm6_ZuHmhzwd8_vVbbOPnFEYl_fYgNJSEyR5yrJXtHW6P8x9aWOJOcysIbYPiMOyWr9vcHwwzH2FKUSSZ_PLgIuIEAKlzaUITx59Ugfp8kwWCsDlyTjEj4gZLZFVoef1zt7hzBwLroUIqWQfgNzkco0eLkLk_xQNFh1YKt5TtfviFpI6NR-ThipYLsDA8UjiHyJgWLGKA5Gl2M9_U2gcN8hvCP_w8Zj1SJal6LZAVUbpUUc6TyxHMSxgIdJDUBLpnVobLyYMErVbA9f7aIN5UjH6OSpTkbN9uUJIZc7j4OvCXRZcF_eIb53NuoZeTtBslbGNq8uVA=w1680-h870-no?authuser=0)
-
-> views/campgrounds/index.ejs
-
-```js
-<% layout("layout/boilerplate") %>
-<h1>All Campgrounds List</h1>
-<div><a href="/campgrounds/new">Add new campground</a></div>
-<ul>
-  <% for (let campground of campgroundData) { %>
-  <div class="card" mb-3>
-    <div class="row">
-      <div class="col-md-4">
-        <img class="img-fluid" alt="" src="<%=campground.image %>" />
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title"><%= campground.title %></h5>
-          <p class="card-text"><%= campground.description %></p>
-          <p class="card-text">
-            <small class="text-muted"> <%= campground.location %> </small>
-          </p>
-          <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>"
-            >View <%= campground.title %>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <% } %>
-</ul>
-```
-
-![img](https://lh3.googleusercontent.com/9T4dPSyquIdrDDCqiEFb9SJtV-Qxf_pWxeN1mTedzNBhKLXZ7e4Oce53wsg0ICyhqyqXInWjb35QUrDL65eCP9a-OuO6hEziDfOITfsxk7XyOnOtSF8v9mjDJQHoI5GVtV_VkDbla3DfdqXbP3wHK0ETwZBW6QOA8mW0My-MQUQJtFgH6GwlSO2CMzpQJQhrvMKE99z6JnvJuW0HHXflb4QGe4Mh11f2Qqz-bFmmnFZ0pWVBSnkB33eLK1MT0140Mjj7QWgERMl5tQhT9IxpDJBGX5AuGlwOCVjMugMkH16pDlTQ8DiGqnLzXAbdCAjzkKewzFxm-JoOnAqTYKZj4Wks_0cdJeE1uu-rm6Yv_0cUFFVG3Ar1LYENOlGws_pisD7Ouk4bnD3JSNVK-uV99SCHUmR_1eoJq3wXZf1jjNPU-4N1WAAA0oEC-wksOneUdAD9z6c2rVjrt-gLjoMVqlucGPlXNiwARxtn_WUwna8fvJ2xyQvXlIHiIlUP_srG92z6YMQeHXZ2oyRAeWW510zsp9XVOrMy50abpkiD_s0IupPa2CzWCOZGgKVnPDXkA7QeaWQmYeg9P15L-yZyo0g6ONzPOkANXTIjrqbQ5hRqbrqw4KPWg51AY00dTke7t-ZCxqEyynKNe-pHz9vpRC18EVTcmlUg2rRmRCznAE-mYdgG0Lzvyp9lv92dnjLeBEtXC5V7GjqjS7nhA2PF5OGDmU1OGRrAryjf7kGJ9JZ8XKMX34XOaIN6WIIZ6iOXkEYJvKB-ljsCPzurxThTY6INx6YeW5wSkAnHk6uIutPe-75WrglRedGyf1mJriMHgLQ-ZKcOiHNXMXC8crjYUN-Eoju3GxbaNBqBofJintIEgM8kAlAxgQbYs6IfQeygkuej-FvaqweXvqEY8DqgeUpk3HgtgKK2BtYP93qKOQ0_XHaOCngBeSBV--nRVoFXajpqGBZOBxUyAcSyfaNqS-mB0Nymp7IFGQ3vsV4cR8GvykWqN98cePrDoSK1P_LOHf5qIEsFR5pC1XgEsZvhcwn2w4nRLmGaW7KXrA5LN2GcHQ7i3Tb7grcxMI4bJw=w1680-h868-no?authuser=0)
-
-> views/campgrounds/show.ejs
-
-```js
-<% layout("layout/boilerplate") %>
-
-<div class="row">
-  <div class="col-6 offset-3">
-    <div class="card mb-3">
-      <img src="<%= campgroundId.image%>" class="card-img-top" alt="" />
-      <div class="card-body">
-        <h5 class="card=title"><%= campgroundId.title %></h5>
-        <p class="card-text"><%= campgroundId.description %></p>
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item text-muted"><%= campgroundId.location%></li>
-        <li class="list-group-item">$<%= campgroundId.price%>/night</li>
-      </ul>
-      <div class="card-body">
-        <a
-          class="card-link btn btn-info"
-          href="/campgrounds/<%=campgroundId._id%>/edit"
-          >Edit</a
-        >
-        <form
-          class="d-inline"
-          action="/campgrounds/<%=campgroundId._id%>?_method=DELETE"
-          method="POST"
-        >
-          <button class="btn btn-danger">Delete</button>
-        </form>
-      </div>
-      <div class="card-footer text-muted">2 days ago</div>
-    </div>
-  </div>
-</div>
-
-```
-
-![img](https://lh3.googleusercontent.com/-chfJvDqJ5JgzuqXj5SdayO2QnN_R8LKydd0pn5zmGm4QAjHikIYYoG-vO9FO3QlWFqEmxqPiG1gPdHnkFatYMadsmyFAYKAGMVSH7sUcrhTUNrV4Zciy-dHJlZvnthwkzUdyo4-7Atfxaq65SZc6v4McE4fjV7XaFGmaR4OzUJI6-sYNCRzkXqMbHwXwG4kxi8POLJgam4IoyWbyfK9RydYklMU6NTGeiyjy-iLHsmseZEnQ63qHpY4KTrZRY0UHClBhtQNpG1L8eIt4tlgJKsJBQuWYGsCu-1vV-TE252LHrsEdVU5NRWzyhfYakQ4-weTeg-yMtTjPzu4FrqlxT7xBb72RAuTJ6L4Uif8maVsI4D8vNQY_wwko4bmQhkZpn26ll8iMnikqW3Qv1MMGfzHsF8uwhuU-rBPCn8Y-SyfCQnw9PWKSCiuK3smiRvrLvdh6m7Suk_g0wS3WFkTLO5cyCB6PnhH0kX4B3A6DZKsu7xY-x3_kDciA7ZXi5wiYVUpIH4cp25uwMX8O6DQLn_bf3FZGFY5EC1fAeN_XPIST4QMGW6X5wz1lY-08tj-3AgXnSHUjkAS0OWZob2pXZn-CBUjXJGiz8La7uujp4hu3G-fj8ijdpV7-Hb9d_WKX5UyKGoWtCmG6J2U4_H88U3NWwNYwgBtBswUemXInfAv-kBkCC6DioRKOr0mN3naeh7Fkg0Av_DhRNqPlV-jH4fAuEqrj-JCVaRsPh2VoWQ61yC17T8_edtlT4ibcKhsgxLaZigas0IwzwRehMiwSOQEp7GB1Vzts5fB0r9I3POtdeAk8mOiFPLRgxlTHjZ_NfpklMN4H4mxu7VhMdczHtFxZBon4YYpkUcOnuF9x9FnV5pY_2BAXlDZ-0hZeihP6aHIm_2q6TNtCUuB4o0JSjt93WMd-mm9MtdM8N4iqmVKRqmQ2RTTcQPetJ-oFx5pv2Ud1nQbCinlUpIVCzamEhEJVMW_pKZdQ0w8dIx66Pz9FD1EB0ea4tzWK5CXr_b9srWRRpW8uh8zxC9tSl5_ZrK_l45QFnMKvAJCQZuOFHO1lxMwxHZk4o3xKtKLLg=w1680-h866-no?authuser=0)
-
-
-
-## 📍Custom Error handling
-
-### Http response status code
-
-```js
-```
-
-
-
-### Handling Async Errors
-
-> index.js
-
-```js
-const verifyPassword = (req, res, next) => {
-    const { password } = req.query;
-    if (password === 'chickennugget') {
-        next();
-    }
-    throw new AppError('password required', 401);
-    // res.send("PASSWORD NEEDED!")
-    // throw new AppError('Password required!', 400)
-}
-```
-
-> appError.js
-
-```js
-class AppError extends Error {
-    constructor(message, status) {
-        super();
-        this.message = message;
-        this.status = status;
-    }
-}
-module.exports = AppError;
-```
-
-### Defining Async Utility
-
-
-
-
-
-### Differentiating Mongoose Errors
-
-## 📍Kyanpu Errors & Validating data
-
-[Bootstrap Validation](https://getbootstrap.com/docs/5.0/forms/validation/)
-
-### Validate new campground form
-
-> /views/layout/boilerplate.ejs
-
-```js
-<script>
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.validated-form')
-
-  // Loop over them and prevent submission
-  Array.from(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()
-</script>
-```
-
-> new.ejs & edit.ejs
->
-> add `required` for each input and `class="validated-form"`
-
-```js
- <form action="/campgrounds" method="POST" novalidate class="validated-form">
-   
- <input class="form-control" type="text" id="title" name="campground[title]" required/>
-   
- <input class="form-control" type="text" id="location" name="campground[location]" required/>
-   
- <input class="form-control" type="text" id="image" name="campground[image]" required/>
-   
- <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required/>
-```
-
-### Basic Error Handler test
-
-> app.js
-
-```js
-app.post("/campgrounds", async (req, res, next) => {
-  //res.send(req.body);
-  //create a new model
-  try {
-    const campground = new Campground(req.body.campground);
-    //console.log(campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  } catch (error) {
-    next(error);
-  }
-});
-```
-
-```js
-app.use((err, req, res, next) => {
-  //error handling logic
-});
-```
-
-### Defining ExpressError Class
-
-> new 📁 /utils/ExpressError.js
-
-```js
-class ExpressError extends Error {
-  constructor(message, statusCode) {
-    super();
-    this.message = message;
-    this.statusCode = statusCode;
-  }
-}
-
-module.exports = ExpressError;
-```
-
-> new 📁/utils/catchAsync.js
-
-```js
-module.exports = (func) => {
-  return (req, res, next) => {
-    func(req, res, next).catch(next);
-  };
-};
-```
-
-> app.js	
-
-```js
-const catchAsync = require('./utils/catchAsync');
-const ExpressError = require('./utils/ExpressError');
-
-
-
-app.post(
-  "/campgrounds",
-  catchAsync(async (req, res, next) => {
-    //res.send(req.body);
-    //create a new model
-    const campground = new Campground(req.body.campground);
-    //console.log(campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-
-
-app.use((err, req, res, next) => {
-  res.send("something went wrong");
-});
-
-```
-
-### More Error
-
-```js
-app.post(
-  "/campgrounds",
-  catchAsync(async (req, res, next) => {
-    //res.send(req.body);
-    if (!req.body.campground)
-      throw new ExpressError("Invalid Campground Data", 400);
-    //create a new model
-    const campground = new Campground(req.body.campground);
-    //console.log(campground);
-    await campground.save();
-    res.redirect(`/ campgrounds/${campground._id}`);
-  })
-);
-
-//for every path call next()
-app.all("*", (req, res, next) => {
-  next(new ExpressError("Page not Found", 404));
-});
-
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "something went wrong" } = err;
-  res.status(statusCode).send(message);
-});
-```
-
-
-> browser: Cast to ObjectId failed for value "63fasdfd84a62ba0c31ba0a9f7c7" (type string) at path "_id" for model "Campground"
-
-### Defining Error template
-
-> /views/error.ejs
-
-```js
-<% layout('layouts/boilerplate')%>
-<div class="row">
-  <div class="col-6 offset-3">
-    <div class="alert alert-danger" role="alert">
-      <h4 class="alert-heading"><%=err.message%></h4>
-      <p><%= err.stack %></p>
-    </div>
-  </div>
-</div>
-```
-
-### JOI https://joi.dev/api/
-
-> app.js
-
-```js
-const { campgroundSchema } = require("./schemas.js");
-
-const validateCampground = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
+  const { password } = req.query;
+  if (password === "chickennugget") {
     next();
   }
+  res.send("YOU NEED A PASSWORD!");
 };
 
+// app.use((req, res, next) => {
+//     console.log("THIS IS MY FIRST MIDDLEWARE!!!")
+//     return next();
+//     console.log("THIS IS MY FIRST MIDDLEWARE - AFTER CALLING NEXT()")
+// })
+// app.use((req, res, next) => {
+//     console.log("THIS IS MY SECOND MIDDLEWARE!!!")
+//     return next();
+// })
+// app.use((req, res, next) => {
+//     console.log("THIS IS MY THIRD MIDDLEWARE!!!")
+//     return next();
+// })
 
-app.post(
-  "/campgrounds",
-  validateCampground,
-  catchAsync(async (req, res, next) => {
-    //create a new model
-    const campground = new Campground(req.body.campground);
-    //console.log(campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
+app.get("/", (req, res) => {
+  console.log(`REQUEST DATE: ${req.requestTime}`);
+  res.send("HOME PAGE!");
+});
 
-app.put(
-  "/campgrounds/:id/",
-  validateCampground,
-  catchAsync(async (req, res) => {
-    //res.send("IT WORKED!");
-    //update the campground info
-    const { id } = req.params;
-    // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });/
-    const campground = await Campground.findByIdAndUpdate(id, {
-      ...req.body.campground,
-    });
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-```
+app.get("/dogs", (req, res) => {
+  console.log(`REQUEST DATE: ${req.requestTime}`);
+  res.send("WOOF WOOF!");
+});
 
-> /schemas.js
+app.get("/secret", verifyPassword, (req, res) => {
+  res.send(
+    "MY SECRET IS: Sometimes I wear headphones in public so I dont have to talk to anyone"
+  );
+});
 
-```js
-const Joi = require("joi");
+app.use((req, res) => {
+  res.status(404).send("NOT FOUND!");
+});
 
-module.exports.campgroundSchema = Joi.object({
-  campground: Joi.object({
-    title: Joi.string().required(),
-    price: Joi.number().required().min(0),
-    image: Joi.string().required(),
-    location: Joi.string().required(),
-    description: Joi.string().required(),
-  }).required(),
+app.listen(3000, () => {
+  console.log("App is running on localhost:3000");
 });
 ```
 
-## 📍mongoose relationship
 
 
+# 
+
+# ⛳️Mongo Relationships with Express
+
+
+
+# ⛳️ Campground Review  
+
+## Defining the review models
+
+Connect multiple reviews to one campground, so it is `one to many` relationship, And what we're going to do is just embed **an array of object IDs** in each campground. And the reason for that is that *we could theoretically have thousands and thousands of reviews for someof the more popular places, just like Yelp does.* 
+
+> models/review.js
+
+```js
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const reviewSchema = new Schema({
+  body: String,
+  rating: Number,
+});
+
+
+module.exports = mongoose.model("Review", reviewSchema);
+```
+
+> models/review.js
+
+```js
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const CampgroundSchema = new Schema({
+  title: String,
+  image: String,
+  price: Number,
+  description: String,
+  location: String,
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+});
+
+module.exports = mongoose.model("Campground", CampgroundSchema);
+
+```
+
+## Add the review form
 
