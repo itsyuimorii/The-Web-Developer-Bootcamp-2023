@@ -6,5 +6,5 @@ const reviewSchema = new Schema({
   rating: Number,
 });
 
-//one to many relationship
+//connect multiple reviews to one campground, so it is one to many relationship
 module.exports = mongoose.model("Review", reviewSchema);
