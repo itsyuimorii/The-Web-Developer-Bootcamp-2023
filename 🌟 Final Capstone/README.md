@@ -1510,3 +1510,39 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ## Add the review form
 
+> views/campgrounds/show.ejs
+
+```js
+  <h3>📝Leave a Review</h3>
+    <form action=" " class="mb-3">
+      <div class="mb-3">
+        <label class="form-label" for="body">Rating:</label>
+        <input
+          class="form-range"
+          type="range"
+          min="1"
+          max="5"
+          name="review[rating]"
+          id="rating"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review:</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+        ></textarea>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+  </div>
+```
+
+## Creating Reviews
+
+### 💥Where the Review submit to ? 
+
+POST /reviews
