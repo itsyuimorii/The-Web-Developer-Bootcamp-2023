@@ -1713,9 +1713,9 @@ We want to make a new review in the context of a individual campground.So I'm go
 ```js
 module.exports.reviewSchema = Joi.object({
   review: Joi.object({
-    rating: Joi.number().require(),
+    rating: Joi.number().required().min(1).max(500),
     body: Joi.string().required(),
-  }),
+  }).required(),
 });
 ```
 
@@ -1724,15 +1724,17 @@ module.exports.reviewSchema = Joi.object({
 ```js
 const { reviewSchema, campgroundSchema } = require("./schemas.js");
 
+
 const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.valid(Req.body);
+  const { error } = reviewSchema.validate(req.body);
   if (error) {
-    const msg = error.details.map((el) => el.message);
+    const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);
   } else {
     next();
   }
 };
+
 
 app.post(
   "/campgrounds/:id/reviews",
@@ -1740,6 +1742,8 @@ app.post(
   catchAsync(async (req, res) => {
  ......
 ```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678909596/webdevbootcamp2023/Screen_Shot_2023-03-15_at_2.46.23_PM_nvjxvg.png)
 
 ### 4. Displaying Reviews
 
