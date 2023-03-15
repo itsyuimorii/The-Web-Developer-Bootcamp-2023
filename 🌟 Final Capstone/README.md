@@ -1,4 +1,4 @@
-# 🏕 KYANPU_CAMP (キャンプ)📝 Learning Notes
+# 🏕 キャンプ場の王国Kyanpuba no ōkoku📝 Learning Notes
 
 # ⛳️AJAX and API
 
