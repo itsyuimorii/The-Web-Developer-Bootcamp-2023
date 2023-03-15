@@ -255,7 +255,7 @@ app.listen(process.env.PORT, process.env.IP, function(){
 <a href="/">Search Again!</a>
 ```
 
-# Server Side Frameworks
+# ⛳️Server Side Frameworks
 
 ## 1. Creating Server with Express
 
@@ -437,11 +437,9 @@ app.get("/post/:topic/comments/:id/:title/", function(req, res) {
 
 傳入時的路由參數將被保存在 `req.parems` 當中。
 
-# ⛳️Intermediate Express
+# ⛳️Creating Dynamic HTML with EJS
 
-## Creating Dynamic HTML with EJS
-
->  What is the "E" for? "Embedded?" Could be. How about "Effective," "Elegant," or just "Easy"? EJS is a simple templating language that lets you generate HTML markup with plain JavaScript. No religiousness about how to organize things. No reinvention of iteration and control-flow. It's just plain JavaScript. [ejs-Efficient JavaScript Template Engine](https://ejs.co/)
+What is the "E" for? "Embedded?" Could be. How about "Effective," "Elegant," or just "Easy"? EJS is a simple templating language that lets you generate HTML markup with plain JavaScript. No religiousness about how to organize things. No reinvention of iteration and control-flow. It's just plain JavaScript. [ejs-Efficient JavaScript Template Engine](https://ejs.co/)
 
 ```javascript
 app.get("/fellinlovewith/:thing", function(req, res){
@@ -757,7 +755,7 @@ var app = express();
 app.use(express.static("public"));
 ```
 
-# ⛳️ Defining RESTful Routes
+# ⛳️ Defining RESTful Routes ??35
 
 ##  What is REST/RESTful?
 
@@ -792,6 +790,10 @@ RESTful 的核心思想就是讓用戶端發送的請求操作都具備有「動
 | DESTORY | `/dogs/:id`      |  `DELETE`  | Delete a particular dog, then redirect somewhere. |
 
 
+
+# ⛳️mongoDB
+
+# ⛳️mongoDB with mongoose
 
 
 
@@ -1373,9 +1375,44 @@ show.ejs
 </p>
 ```
 
+# ⛳️middleware: the key to Express
+
+## Express"built-in"Error handler
+
+
+
+## Defining Custom error
+
+## Our custom error class
+
+## Handling async errors
+
+## Handling more async errors
+
+## Defining an Async utility
+
+## Differentiating mongoose Errors
+
 # ⛳️ Handling Errors in Express Apps
 
+
+
 # ⛳️Errors Handling & Validating Data
+
+```js
+const validateCampground = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+```
+
+
 
 # ⛳️Data Relationships with Mongo
 
@@ -1597,7 +1634,11 @@ app.post(
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678899450/webdevbootcamp2023/Screen_Shot_2023-03-15_at_11.56.09_AM_vwv4xv.png)
 
-### 2.  Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.
+### 2.  Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.\
+
+
+
+> views/campgrounds/show.ejs
 
 ```js
 app.post(
@@ -1627,8 +1668,6 @@ app.post(
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678902011/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.39.26_PM_bofbkd.png)
 
-
-
 ### 3. Validate review
 
 ```ejs
@@ -1644,6 +1683,23 @@ app.post(
 ```
 
 
+
+> schemas.js
+
+```js
+module.exports.reviewSchema = Joi.object({
+  review: Joi.object({
+    rating: Joi.number().require(),
+    body: Joi.string().required(),
+  }),
+});
+```
+
+> app.js
+
+```js
+const { reviewSchema, campgroundSchema } = require("./schemas.js");
+```
 
 
 
