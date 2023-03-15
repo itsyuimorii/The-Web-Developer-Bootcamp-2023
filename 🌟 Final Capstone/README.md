@@ -799,7 +799,7 @@ RESTful 的核心思想就是讓用戶端發送的請求操作都具備有「動
 
 # ⛳️Basic CRUD
 
-## 💥. Create basic server
+## Create basic server
 
 app.js
 
@@ -814,7 +814,7 @@ app.listen(3000, () => {
 });
 ```
 
-## 💥. Ejs
+##  Ejs
 
 views/home.ejs
 
@@ -849,7 +849,7 @@ app.get("/", (req, res) => {
 });
 ```
 
-## 💥. Create Campground model
+## Create Campground model
 
 > Create the schema for the campground model
 
@@ -892,7 +892,7 @@ db.once("open", () => {
 });
 ```
 
-## 💥. Create a new campground testing in one of routes
+## Create a new campground testing in one of routes
 
 app.js
 
@@ -919,7 +919,7 @@ db.campgrounds.find()
 
 ![db.find](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767228/webdevbootcamp2023/db.find_qqxqh3.png)
 
-## 💥. setup some fake campgrounds seed data
+## Setup some fake campgrounds seed data
 
 > /seeds/index.js
 
@@ -969,7 +969,7 @@ seedDB().then(() => {
 });
 ```
 
-## 💥All campgrounds listing page
+## All campgrounds listing page
 
 > models/campground.js
 
@@ -1024,7 +1024,7 @@ app.get("/campgrounds", async (req, res) => {
 </html>
 ```
 
-## 💥 Show router
+## Show router
 
 > detail page for showing single campground
 
@@ -1103,7 +1103,7 @@ app.get("/campgrounds/:id", async (req, res) => {
 
 ![show](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767229/webdevbootcamp2023/show_kprbmu.png)
 
-## 💥 Create new campground
+## Create new campground
 
 ### 1. Create new route
 
@@ -1207,7 +1207,7 @@ app.post("/campgrounds", async (req, res) => {
 </div>
 ```
 
-## 💥Edit campground info
+## Edit campground info
 
 ### 1. create new route
 
@@ -1349,7 +1349,7 @@ app.put("/campgrounds/:id/", async (req, res) => {
 
 ![update info](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767230/webdevbootcamp2023/update_info_te4ged.png)
 
-## 💥 Delete camp
+##  Delete camp
 
 app.js
 
@@ -1580,7 +1580,7 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ## Creating Reviews
 
-### 💥Where the Review submit to ?
+### Where the Review submit to ?
 
 Now let's figure out where it submits to and actually create the reviews.So what I'm thinking in order to make a review, right, we need to know the campground that it needs to be associated with.So most likely I mean, the easiest option is just to include the campground ID in the path. So some form of a nested route, probably something like if we go to our app file, if I can find it,   `POST /campgrounds/:id/reviews`
 
