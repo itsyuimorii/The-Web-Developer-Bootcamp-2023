@@ -1543,6 +1543,76 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ## Creating Reviews
 
-### 💥Where the Review submit to ? 
+### 💥Where the Review submit to ?
 
-> POST /campgrounds/:id/reviews
+Now let's figure out where it submits to and actually create the reviews.So what I'm thinking in order to make a review, right, we need to know the campground that it needs to be associated with.So most likely I mean, the easiest option is just to include the campground ID in the path. So some form of a nested route, probably something like if we go to our app file, if I can find it,   `POST /campgrounds/:id/reviews`
+
+Now we don't really need full CRUD or we don't need full restful routes for reviews. We don't need like an index for reviews and then a show page for a single review  We're just going to look at them all reviews for a single campground, so we don't need everything.But in this case, we certainly **do want that campground ID so that we can associate the to a single campground with some new review.** So that's where we'll post the data to.
+
+> app.js 
+
+```js
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res) => {
+    res.send("POST reivews");
+  })
+);
+```
+
+> views/campgrounds/show.ejs
+
+```ejs
+<form
+      action="/campgrounds/<%=campgroundId._id%>/reviews"
+      method="POST"
+      class="mb-3"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="body">Rating:</label>
+        <input
+          class="form-range"
+          type="range"
+          min="1"
+          max="5"
+          name="review[rating]"
+          id="rating"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review:</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+        ></textarea>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678899530/webdevbootcamp2023/Screen_Shot_2023-03-15_at_11.58.32_AM_nmrwly.png)
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678899450/webdevbootcamp2023/Screen_Shot_2023-03-15_at_11.56.09_AM_vwv4xv.png)
+
+### 2.  Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.
+
+```js
+const Review = require("./models/review");
+
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res) => {
+    // res.send("POST reivews");
+    const campground = await Campground.findById(req.param.id);
+    
+  })
+);
+```
+
+
+
+### 3. make a new review
+

@@ -7,6 +7,8 @@ const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 const methodOverride = require("method-override");
 const Campground = require("./models/campground");
+const Review = require("./models/review");
+const campground = require("./models/campground");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -126,7 +128,20 @@ app.delete(
 app.post(
   "/campgrounds/:id/reviews",
   catchAsync(async (req, res) => {
-    res.send("POST reivews");
+    // res.send("POSTf review");
+    //1. find our campground
+    const campground = await Campground.findById(req.params.id);
+
+    //2. require review model
+    //3.
+
+    const review = new Review(req.body.review);
+
+    campground.reviews.push(review);
+
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
   })
 );
 
