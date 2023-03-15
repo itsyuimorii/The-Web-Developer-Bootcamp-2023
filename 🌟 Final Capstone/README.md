@@ -1600,14 +1600,23 @@ app.post(
 ### 2.  Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.
 
 ```js
-const Review = require("./models/review");
-
 app.post(
   "/campgrounds/:id/reviews",
   catchAsync(async (req, res) => {
-    // res.send("POST reivews");
-    const campground = await Campground.findById(req.param.id);
-    
+    // res.send("POSTf review");
+    //1. find our campground
+    const campground = await Campground.findById(req.params.id);
+
+    //2. require review model
+    //3. get the review from show.ejs
+
+    const review = new Review(req.body.review);
+    //4. push review to reviews at campground models
+    campground.reviews.push(review);
+
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
   })
 );
 ```

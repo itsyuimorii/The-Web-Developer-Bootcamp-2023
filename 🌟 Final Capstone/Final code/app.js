@@ -133,10 +133,10 @@ app.post(
     const campground = await Campground.findById(req.params.id);
 
     //2. require review model
-    //3.
+    //3. get the review from show.ejs
 
     const review = new Review(req.body.review);
-
+    //4. push review to reviews at campground models
     campground.reviews.push(review);
 
     await review.save();
