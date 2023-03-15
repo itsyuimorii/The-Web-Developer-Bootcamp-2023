@@ -1621,7 +1621,21 @@ app.post(
 );
 ```
 
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678901757/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.33.10_PM_cvxnif.png)
+
+> check the mongosh the reviews testing
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678902011/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.39.26_PM_bofbkd.png)
 
 
-### 3. make a new review
+
+### 3. Validate review
+
+
+
+
+
+### 3. Add a new form to make a new review
+
+We want to make a new review in the context of a individual campground.So I'm going to add the form on this page `http://127.0.0.1:8080/campgrounds/63fd84a62ba0c31ba0a9f7d1`. and it's not going to be a separate route or anything like that, although of course **it needs to submit data to its own route.**
 
