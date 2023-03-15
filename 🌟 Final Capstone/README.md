@@ -1632,10 +1632,11 @@ app.post(
 ### 3. Validate review
 
 ```ejs
-  <form
+    <form
       action="/campgrounds/<%=campgroundId._id%>/reviews"
       method="POST"
-      class="mb-3 validate-form"
+      class="mb-3 validated-form"
+      novalidate
     >
     
     
