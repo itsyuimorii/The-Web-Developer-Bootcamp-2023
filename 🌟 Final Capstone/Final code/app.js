@@ -123,6 +123,13 @@ app.delete(
   })
 );
 
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res) => {
+    res.send("POST reivews");
+  })
+);
+
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
