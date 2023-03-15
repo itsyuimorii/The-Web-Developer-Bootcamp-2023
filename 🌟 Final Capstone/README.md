@@ -1545,4 +1545,4 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ### 💥Where the Review submit to ? 
 
-POST /reviews
+> POST /campgrounds/:id/reviews
