@@ -44,6 +44,16 @@ const validateCampground = (req, res, next) => {
   }
 };
 
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.valid(Req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message);
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
   // and passing title variable through it
@@ -127,8 +137,9 @@ app.delete(
 
 app.post(
   "/campgrounds/:id/reviews",
+  validateReview,
   catchAsync(async (req, res) => {
-    // res.send("POSTf review");
+    // res.send("POST review");
     //1. find our campground
     const campground = await Campground.findById(req.params.id);
 

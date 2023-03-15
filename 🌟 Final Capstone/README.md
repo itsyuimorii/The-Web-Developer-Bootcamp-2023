@@ -1377,6 +1377,10 @@ show.ejs
 
 # ⛳️middleware: the key to Express
 
+
+
+# ⛳️ Handling Errors in Express Apps
+
 ## Express"built-in"Error handler
 
 
@@ -1393,11 +1397,27 @@ show.ejs
 
 ## Differentiating mongoose Errors
 
-# ⛳️ Handling Errors in Express Apps
+
 
 
 
 # ⛳️Errors Handling & Validating Data
+
+### Client-Side Form Validations
+
+###  Basic Error Handler
+
+###  Defining ExpressError Class
+
+###  More Errors
+
+### Defining Error Template
+
+
+
+###  JOI Schema Validations
+
+###  JOI Validation Middleware
 
 ```js
 const validateCampground = (req, res, next) => {
@@ -1662,6 +1682,10 @@ app.post(
 );
 ```
 
+> Add a new form to make a new review
+
+We want to make a new review in the context of a individual campground.So I'm going to add the form on this page `http://127.0.0.1:8080/campgrounds/63fd84a62ba0c31ba0a9f7d1`. and it's not going to be a separate route or anything like that, although of course **it needs to submit data to its own route.**
+
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678901757/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.33.10_PM_cvxnif.png)
 
 > check the mongosh the reviews testing
@@ -1669,6 +1693,8 @@ app.post(
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678902011/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.39.26_PM_bofbkd.png)
 
 ### 3. Validate review
+
+> views/campgrounds/show.ejs
 
 ```ejs
     <form
@@ -1681,8 +1707,6 @@ app.post(
     
     <div class="valid-feedback">Looks good!</div>
 ```
-
-
 
 > schemas.js
 
@@ -1699,11 +1723,25 @@ module.exports.reviewSchema = Joi.object({
 
 ```js
 const { reviewSchema, campgroundSchema } = require("./schemas.js");
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.valid(Req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message);
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+app.post(
+  "/campgrounds/:id/reviews",
+  validateReview,
+  catchAsync(async (req, res) => {
+ ......
 ```
 
+### 4. Displaying Reviews
 
 
-### 3. Add a new form to make a new review
-
-We want to make a new review in the context of a individual campground.So I'm going to add the form on this page `http://127.0.0.1:8080/campgrounds/63fd84a62ba0c31ba0a9f7d1`. and it's not going to be a separate route or anything like that, although of course **it needs to submit data to its own route.**
 
