@@ -1711,12 +1711,18 @@ We want to make a new review in the context of a individual campground.So I'm go
 > schemas.js
 
 ```js
-module.exports.reviewSchema = Joi.object({
-  review: Joi.object({
-    rating: Joi.number().required().min(1).max(500),
-    body: Joi.string().required(),
+const Joi = require("joi");
+
+module.exports.campgroundSchema = Joi.object({
+  campground: Joi.object({
+    title: Joi.string().required(),
+    price: Joi.number().required().min(0),
+    image: Joi.string().required(),
+    location: Joi.string().required(),
+    description: Joi.string().required(),
   }).required(),
 });
+
 ```
 
 > app.js
