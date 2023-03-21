@@ -1753,5 +1753,31 @@ app.post(
 
 ### 4. Displaying Reviews
 
+> delete all reviews
 
+```js
+db.reviews.deleteMany({})
+```
+
+> show.ejs
+
+```js
+...
+      <% for(let review of campgroundId.reviews) { %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Rating: <%= review.rating %></h5>
+          <p class="card-text">Review: <%= review.body %></p>
+          <form
+            action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+      <% } %>
+ 
+
+```
 
