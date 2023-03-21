@@ -1793,16 +1793,44 @@ db.reviews.deleteMany({})
 
 ```
 
-![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679429745/Screen_Shot_2023-03-21_at_3.14.50_PM_jupg1p.png)
-
 ### 5. Deleting reviews
 
+> app.js
+
 ```js
- <form
-            action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
-            method="POST"
-          >
-            <button class="btn btn-sm btn-danger">Delete</button>
-          </form>
+app.delete(
+  "/campgrounds/:id/reviews/:review_id",
+  catchAsync(async (req, res) => {
+    res.send("Delete review");
+  })
+);
 ```
+
+> show.js
+
+```js
+<form action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
+            method="POST">
+    <button class="btn btn-sm btn-danger">Delete</button>
+</form>
+```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679429745/Screen_Shot_2023-03-21_at_3.14.50_PM_jupg1p.png)
+
+```js
+
+app.delete(
+  "/campgrounds/:id/reviews/:reviewId",
+  catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+   
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+    // res.send("Delete review");
+  })
+);
+```
+
+$pull https://www.mongodb.com/docs/manual/reference/operator/update/pull/
 
