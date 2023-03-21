@@ -1753,6 +1753,23 @@ app.post(
 
 ### 4. Displaying Reviews
 
+> app.js
+
+```js
+app.get(
+  "/campgrounds/:id",
+  catchAsync(async (req, res) => {
+    const campgroundId = await Campground.findById(req.params.id).populate(
+      "reviews"
+    );
+    console.log(campgroundId);
+    res.render("campgrounds/show", { campgroundId });
+  })
+);
+```
+
+
+
 > delete all reviews
 
 ```js
@@ -1780,4 +1797,8 @@ db.reviews.deleteMany({})
  
 
 ```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679429745/Screen_Shot_2023-03-21_at_3.14.50_PM_jupg1p.png)
+
+### 5. Deleting reviews
 
