@@ -159,6 +159,13 @@ app.post(
   })
 );
 
+app.delete(
+  "/campgrounds/:id/reviews/:review_id",
+  catchAsync(async (req, res) => {
+    res.send("Delete review");
+  })
+);
+
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });

@@ -1785,12 +1785,7 @@ db.reviews.deleteMany({})
         <div class="card-body">
           <h5 class="card-title">Rating: <%= review.rating %></h5>
           <p class="card-text">Review: <%= review.body %></p>
-          <form
-            action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
-            method="POST"
-          >
-            <button class="btn btn-sm btn-danger">Delete</button>
-          </form>
+       
         </div>
       </div>
       <% } %>
@@ -1801,4 +1796,13 @@ db.reviews.deleteMany({})
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679429745/Screen_Shot_2023-03-21_at_3.14.50_PM_jupg1p.png)
 
 ### 5. Deleting reviews
+
+```js
+ <form
+            action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
+            method="POST"
+          >
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+```
 
