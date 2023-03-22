@@ -5,21 +5,19 @@
   </a>
 </div>
 
-# 🏕 KYANPU_CAMP (キャンプ)
+# 🏕 キャンプ場の王国
 
-### 🔑 Introduction
+# 🔑 Introduction
 
 KYANPU*CAMP is a website where users can discover campgrounds. This project was part of \_Colt Steele's web dev course on udemy.*
 
-### 📰Certificate
+# 👀Demo
+
+# 📰Certificate
 
 > ![](https://udemy-certificate.s3.amazonaws.com/image/UC-f42e71ec-9da8-415d-8b8b-f238f17b1517.jpg?v=1672978934000)
 
-### 📝Notes
-
-> [View More Notes](https://github.com/itsyuimorii/The-Web-Developer-Bootcamp-2023/blob/main/NOTES.md)
-
-### 💻 Features:
+# 💻 Features:
 
 Users cannot manage posts and view user profiles without authentication, nor can they edit or delete posts and comments created by other users
 
@@ -32,7 +30,57 @@ Users cannot manage posts and view user profiles without authentication, nor can
 - 🧩[Google Maps API](https://developers.google.com/maps/documentation)
 - 💎Create and update forms with client-side and server-side **validation**
 
-### ⚙️ Built With
+-------------------------------------------------------------------------
+Normal Routes
+-------------------------------------------------------------------------
+[Method]  [Route]
+GET       /                       Landing page
+GET       /login                  Request the user login page
+GET       /register               Request the user edit page
+
+-------------------------------------------------------------------------
+Users Route
+-------------------------------------------------------------------------
+[Method]  [Route]
+GET       /users                  Fetch all users
+POST      /users                  Create new user in database
+GET       /users/new              Request the user register page
+GET       /users/:id              Show the user information
+PATCH     /users/:id              Update user information
+DELETE    /users/:id              Delete user information
+GET       /users/:id/edit         Request the user edit page
+
+-------------------------------------------------------------------------
+Sessions Route
+-------------------------------------------------------------------------
+[Method]  [Route]
+POST      /sessions               Create a session (user login)
+GET       /sessions/login         Request the user login page
+DELETE    /sessions               Delete a session (user logout)
+
+-------------------------------------------------------------------------
+Campgrounds Route
+-------------------------------------------------------------------------
+[Method]  [Route]
+GET       /campgrounds            Fetch all campgrounds
+POST      /campgrounds            Create a new campground to database
+GET       /campgrounds/new        Request the campground adding page
+GET       /campgrounds/:id        Show the campground information
+PUT       /campgrounds/:id        Update campground information (all)
+PATCH     /campgrounds/:id        Update campground information (part)
+DELETE    /campgrounds/:id        Delete a campground
+GET       /campgrounds/:id/edit   Request the campground editing page
+POST      /campgrounds/:id/likes  Like the campground
+
+-------------------------------------------------------------------------
+Comments Route
+-------------------------------------------------------------------------
+[Method]  [Route]
+POST      /campgrounds/:id/comments       Create a new comment
+PATCH     /campgrounds/:id/comments/:cid  Update comment
+DELETE    /campgrounds/:id/comments/:cid  Delete comment
+
+# ⚙️ Built With
 
 This project was created using Node.js, Express, MongoDB, and Bootstrap. Passport.js was used to handle authentication.
 
@@ -50,7 +98,7 @@ This project was created using Node.js, Express, MongoDB, and Bootstrap. Passpor
 - **💳passport.js** for password hash and salt
 - 📍Geocoder with **Google Maps API** for rendering locations of campsites
 
-### 🚀 Getting Started
+# 🚀 Getting Started
 
 Follow the instructions below to set up the environment and run this project on your local machine.
 
@@ -80,7 +128,7 @@ $ npm run dev
 
 
 
-### 🏗️ Dependencies
+# 🏗️ Dependencies
 
 ```
   "express": $ npm install express
@@ -97,15 +145,15 @@ $ npm run dev
   "passport-local-mongoose"
 ```
 
-### 📣 Acknowledgments
+# 📣 Acknowledgments
 
 The skeleton of this project was based on Colt Steele's YelpCamp during the Web Development Bootcamp.
 
-### ✨More Information
+# ✨More Information
 
 All the notes I took in [Markdown]format. You can find them in my [Udemy-Notes](https://github.com/Hsins/Udemy-Notes) repository. The note for this course is [here]().
 
-### 🔒 License
+# 🔒 License
 
 Licensed under the MIT License, Copyright © 2023-present Itsyuimorii
 
