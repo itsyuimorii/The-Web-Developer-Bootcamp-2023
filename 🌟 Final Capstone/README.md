@@ -2,17 +2,17 @@
 
 # ⛳️AJAX and API
 
-**應用程式介面（API, Application Programming Interface）** 是程式和程式之間的溝通接口，是一系列預先定義好的函數，目的在於使得不同的站點或應用程式之間可以互相存取資料或服務。
+**API (Application Programming Interface)** is a program-to-program communication interface, which is a set of predefined functions designed to enable different sites or applications to access data or services from each other.
 
-比如說：
+For example.
 
-- 呼叫 Twitter API 取得提及「Ice Cream」字句的推特。
-- 呼叫 Facebook API 獲取特定用戶的大頭照。
-- 呼叫 Weather API 取得指定地區的氣候狀況。
-- 呼叫 Reddit API 獲取當前 Reddit 上討論最熱烈的文章標題。
-- 呼叫 GooglePlaces API 取得當前用戶鄰近的餐廳資訊。
+- Call the Twitter API to get a tweet that mentions the word "Ice Cream".
+- Calling the Facebook API to get a headshot of a specific user.
+- Call the Weather API to get the weather conditions for a specific area.
+- Call the Reddit API to get the title of the most discussed article on Reddit.
+- Call the GooglePlaces API to get information about restaurants near the current user.
 
-網路服務平台 [IFTTT](https://ifttt.com/) 就是串接了不同應用服務的 API 來構建一些自動化的命令集。不同的應用程式會提供不同的 API 接口，在 [ProgrammableWeb](https://www.programmableweb.com/) 中彙整了許多網站的 API 資訊。
+The web service platform [IFTTT](https://ifttt.com/) is a string of APIs from different applications to build some automated command sets. Different applications provide different API interfaces, and in [ProgrammableWeb](https://www.programmableweb.com/), the API information of many web sites is compiled.
 
 ## JSON and XML
 
