@@ -52,13 +52,33 @@ This project was created using Node.js, Express, MongoDB, and Bootstrap. Passpor
 
 ### 🚀 Getting Started
 
-- Install [mongodb](https://www.mongodb.com/)
-- Create a cloudinary account to get an API key and secret code
-  ```
-  git clone https://github.com/itsyuimorii/Kyanpu-camp.git
-  cd Kyanpucamp
-  npm init -y
-  ```
+Follow the instructions below to set up the environment and run this project on your local machine.
+
+1. Clone this repository.
+
+```bash
+# Clone repository
+$ git clone https://github.com/Hsins/udemy_Yelp-Camp.git
+```
+
+2. Install dependencies via NPM or Yarn
+
+```bash
+# Install dependencies via npm
+$ npm install
+
+# Install dependencies via yarn
+$ yarn install
+```
+
+3. Run the server with [nodemon](https://nodemon.io/) and open a browser to visit [http://localhost:3000/](http://localhost:3000/).
+
+```bash
+# Run server
+$ npm run dev
+```
+
+
 
 ### 🏗️ Dependencies
 
@@ -81,6 +101,12 @@ This project was created using Node.js, Express, MongoDB, and Bootstrap. Passpor
 
 The skeleton of this project was based on Colt Steele's YelpCamp during the Web Development Bootcamp.
 
+### ✨More Information
+
+All the notes I took in [Markdown]format. You can find them in my [Udemy-Notes](https://github.com/Hsins/Udemy-Notes) repository. The note for this course is [here]().
+
 ### 🔒 License
 
-Copyright Notice and Statement: currently not offering any license. Permission only to view and download.Declare
+Licensed under the MIT License, Copyright © 2023-present Itsyuimorii
+
+### 
