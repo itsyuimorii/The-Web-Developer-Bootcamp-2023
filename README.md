@@ -1,3 +1,10 @@
+<div align="right">
+  <img src="https://img.shields.io/badge/Completion-100%25-blue.svg" />
+  <a href="https://github.com/Hsins/udemy_Yelp-Camp/blob/master/LICENSE" alt="License">
+    <img src="https://img.shields.io/github/license/Hsins/udemy_Yelp-Camp.svg" />
+  </a>
+</div>
+
 # 🏕 KYANPU_CAMP (キャンプ)
 
 ### 🔑 Introduction
