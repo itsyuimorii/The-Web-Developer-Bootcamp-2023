@@ -13,9 +13,13 @@ KYANPU*CAMP is a website where users can discover campgrounds. This project was 
 
 # 👀Demo
 
+
+
 # 📰Certificate
 
 > ![](https://udemy-certificate.s3.amazonaws.com/image/UC-f42e71ec-9da8-415d-8b8b-f238f17b1517.jpg?v=1672978934000)
+
+
 
 # 💻 Features:
 
@@ -28,10 +32,9 @@ Users cannot manage posts and view user profiles without authentication, nor can
 - 🔎**Search** for campgrounds by name or location
 - 📚**Sort** campgrounds (ratings, reviews and prices)
 - 🧩[Google Maps API](https://developers.google.com/maps/documentation)
-- 💎Create and update forms with client-side and server-side **validation**
+- 💎Create and update forms with client-side and server-side **validation
 
--------------------------------------------------------------------------
-- RESTful API
+
 
 ```
 -------------------------------------------------------------------------
