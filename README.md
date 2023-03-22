@@ -31,6 +31,10 @@ Users cannot manage posts and view user profiles without authentication, nor can
 - 💎Create and update forms with client-side and server-side **validation**
 
 -------------------------------------------------------------------------
+- RESTful API
+
+```
+-------------------------------------------------------------------------
 Normal Routes
 -------------------------------------------------------------------------
 [Method]  [Route]
@@ -79,6 +83,7 @@ Comments Route
 POST      /campgrounds/:id/comments       Create a new comment
 PATCH     /campgrounds/:id/comments/:cid  Update comment
 DELETE    /campgrounds/:id/comments/:cid  Delete comment
+```
 
 # ⚙️ Built With
 
