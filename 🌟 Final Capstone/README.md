@@ -1834,3 +1834,38 @@ app.delete(
 
 $pull https://www.mongodb.com/docs/manual/reference/operator/update/pull/
 
+## campground deleting middleware
+
+when delete the whole campground, the folloiwing reviews should be deleted. That's where we need to use **mongoose middleware**: query middleware vs document middleware
+
+[`Model.findByIdAndDelete()`](https://mongoosejs.com/docs/api/model.html#model_Model-findByIdAndDelete)
+
+ ```js
+ //So this thing has been deleted, but it's also been passed to our middleware function.And so if there were reviews, they would be in that array and then we could delete based upon the particular object IDs.
+ CampgroundSchema.post("findOneAndDelete", async function (doc) {
+   // console.log(doc);
+   if (doc) {
+     await Review.remove({
+       _id: {
+         $in: doc.reviews,
+       },
+     });
+   }
+ });
+ ```
+
+https://kb.objectrocket.com/mongo-db/the-mongoose-in-operator-1015
+
+# ⛳️Express Router & Cookie
+
+
+
+### Cookie Parser 
+
+### HMAC signing
+
+
+
+
+
+# ⛳️Restructuring & Flash
