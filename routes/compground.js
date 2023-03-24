@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const catchAsync = require("./utils/catchAsync");
+const ExpressError = require("./utils/ExpressError");
 
 //list all campgrounds
-app.get(
-  "/campgrounds",
+router.get(
+  "/",
   catchAsync(async (req, res) => {
     const campgroundData = await Campground.find({});
     res.render("campgrounds/index", { campgroundData });
@@ -11,8 +13,8 @@ app.get(
 );
 //Create new campground
 //this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
-app.get(
-  "/campgrounds/new",
+router.get(
+  "/new",
   catchAsync(async (req, res) => {
     res.render("campgrounds/new");
   })
@@ -21,7 +23,7 @@ app.get(
 //setup endpoint, when click`add campground` button as a post where the form is submitted to
 
 router.post(
-  "/campgrounds",
+  "/",
   validateCampground,
   catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
@@ -33,7 +35,7 @@ router.post(
 //detail page for showing single campground
 //id for looking up the corresponding campground from database
 router.get(
-  "/campgrounds/:id",
+  "/:id",
   catchAsync(async (req, res) => {
     const campgroundId = await Campground.findById(req.params.id).populate(
       "reviews"
@@ -45,7 +47,7 @@ router.get(
 
 //page for editing
 router.get(
-  "/campgrounds/:id/edit",
+  "/:id/edit",
   catchAsync(async (req, res) => {
     //assume we found a id
     const campgroundId = await Campground.findById(req.params.id);
@@ -54,7 +56,7 @@ router.get(
 );
 
 router.put(
-  "/campgrounds/:id/",
+  "/:id/",
   validateCampground,
   catchAsync(async (req, res) => {
     //res.send("IT WORKED!");
@@ -69,10 +71,11 @@ router.put(
 );
 //page for delete
 router.delete(
-  "/campgrounds/:id/",
+  "/:id/",
   catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     res.redirect("/campgrounds");
   })
 );
+module.exports = router;

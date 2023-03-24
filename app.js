@@ -8,7 +8,8 @@ const ExpressError = require("./utils/ExpressError");
 const methodOverride = require("method-override");
 const Campground = require("./models/campground");
 const Review = require("./models/review");
-const campground = require("./models/campground");
+
+const campgrounds = require("./routes/campgrounds");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -29,7 +30,7 @@ app.engine("ejs", ejsMate);
 //write this middleware to setup view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-1;
+
 //parse the body when using "req.body"
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
@@ -53,6 +54,8 @@ const validateReview = (req, res, next) => {
     next();
   }
 };
+
+app.use("/campgrounds", campgrounds);
 
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
