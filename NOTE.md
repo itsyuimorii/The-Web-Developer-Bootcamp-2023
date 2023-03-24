@@ -1,18 +1,18 @@
-# 🏕 KYANPU_CAMP (キャンプ)📝 Learning Notes
+# 🏕 キャンプ場の王国Kyanpuba no ōkoku📝 Learning Notes
 
 # ⛳️AJAX and API
 
-**應用程式介面（API, Application Programming Interface）** 是程式和程式之間的溝通接口，是一系列預先定義好的函數，目的在於使得不同的站點或應用程式之間可以互相存取資料或服務。
+**API (Application Programming Interface)** is a program-to-program communication interface, which is a set of predefined functions designed to enable different sites or applications to access data or services from each other.
 
-比如說：
+For example.
 
-- 呼叫 Twitter API 取得提及「Ice Cream」字句的推特。
-- 呼叫 Facebook API 獲取特定用戶的大頭照。
-- 呼叫 Weather API 取得指定地區的氣候狀況。
-- 呼叫 Reddit API 獲取當前 Reddit 上討論最熱烈的文章標題。
-- 呼叫 GooglePlaces API 取得當前用戶鄰近的餐廳資訊。
+- Call the Twitter API to get a tweet that mentions the word "Ice Cream".
+- Calling the Facebook API to get a headshot of a specific user.
+- Call the Weather API to get the weather conditions for a specific area.
+- Call the Reddit API to get the title of the most discussed article on Reddit.
+- Call the GooglePlaces API to get information about restaurants near the current user.
 
-網路服務平台 [IFTTT](https://ifttt.com/) 就是串接了不同應用服務的 API 來構建一些自動化的命令集。不同的應用程式會提供不同的 API 接口，在 [ProgrammableWeb](https://www.programmableweb.com/) 中彙整了許多網站的 API 資訊。
+The web service platform [IFTTT](https://ifttt.com/) is a string of APIs from different applications to build some automated command sets. Different applications provide different API interfaces, and in [ProgrammableWeb](https://www.programmableweb.com/), the API information of many web sites is compiled.
 
 ## JSON and XML
 
@@ -255,7 +255,7 @@ app.listen(process.env.PORT, process.env.IP, function(){
 <a href="/">Search Again!</a>
 ```
 
-# Server Side Frameworks
+# ⛳️Server Side Frameworks
 
 ## 1. Creating Server with Express
 
@@ -437,11 +437,9 @@ app.get("/post/:topic/comments/:id/:title/", function(req, res) {
 
 傳入時的路由參數將被保存在 `req.parems` 當中。
 
-# ⛳️Intermediate Express
+# ⛳️Creating Dynamic HTML with EJS
 
-## Creating Dynamic HTML with EJS
-
->  What is the "E" for? "Embedded?" Could be. How about "Effective," "Elegant," or just "Easy"? EJS is a simple templating language that lets you generate HTML markup with plain JavaScript. No religiousness about how to organize things. No reinvention of iteration and control-flow. It's just plain JavaScript. [ejs-Efficient JavaScript Template Engine](https://ejs.co/)
+What is the "E" for? "Embedded?" Could be. How about "Effective," "Elegant," or just "Easy"? EJS is a simple templating language that lets you generate HTML markup with plain JavaScript. No religiousness about how to organize things. No reinvention of iteration and control-flow. It's just plain JavaScript. [ejs-Efficient JavaScript Template Engine](https://ejs.co/)
 
 ```javascript
 app.get("/fellinlovewith/:thing", function(req, res){
@@ -757,7 +755,7 @@ var app = express();
 app.use(express.static("public"));
 ```
 
-# ⛳️ Defining RESTful Routes
+# ⛳️ Defining RESTful Routes ??35
 
 ##  What is REST/RESTful?
 
@@ -793,11 +791,15 @@ RESTful 的核心思想就是讓用戶端發送的請求操作都具備有「動
 
 
 
+# ⛳️mongoDB
+
+# ⛳️mongoDB with mongoose
+
 
 
 # ⛳️Basic CRUD
 
-## 💥. Create basic server
+## Create basic server
 
 app.js
 
@@ -812,7 +814,7 @@ app.listen(3000, () => {
 });
 ```
 
-## 💥. Ejs
+##  Ejs
 
 views/home.ejs
 
@@ -847,7 +849,7 @@ app.get("/", (req, res) => {
 });
 ```
 
-## 💥. Create Campground model
+## Create Campground model
 
 > Create the schema for the campground model
 
@@ -890,7 +892,7 @@ db.once("open", () => {
 });
 ```
 
-## 💥. Create a new campground testing in one of routes
+## Create a new campground testing in one of routes
 
 app.js
 
@@ -917,7 +919,7 @@ db.campgrounds.find()
 
 ![db.find](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767228/webdevbootcamp2023/db.find_qqxqh3.png)
 
-## 💥. setup some fake campgrounds seed data
+## Setup some fake campgrounds seed data
 
 > /seeds/index.js
 
@@ -967,7 +969,7 @@ seedDB().then(() => {
 });
 ```
 
-## 💥All campgrounds listing page
+## All campgrounds listing page
 
 > models/campground.js
 
@@ -1022,7 +1024,7 @@ app.get("/campgrounds", async (req, res) => {
 </html>
 ```
 
-## 💥 Show router
+## Show router
 
 > detail page for showing single campground
 
@@ -1101,7 +1103,7 @@ app.get("/campgrounds/:id", async (req, res) => {
 
 ![show](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767229/webdevbootcamp2023/show_kprbmu.png)
 
-## 💥 Create new campground
+## Create new campground
 
 ### 1. Create new route
 
@@ -1205,7 +1207,7 @@ app.post("/campgrounds", async (req, res) => {
 </div>
 ```
 
-## 💥Edit campground info
+## Edit campground info
 
 ### 1. create new route
 
@@ -1347,7 +1349,7 @@ app.put("/campgrounds/:id/", async (req, res) => {
 
 ![update info](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767230/webdevbootcamp2023/update_info_te4ged.png)
 
-## 💥 Delete camp
+##  Delete camp
 
 app.js
 
@@ -1373,49 +1375,64 @@ show.ejs
 </p>
 ```
 
+# ⛳️middleware: the key to Express
+
+
+
 # ⛳️ Handling Errors in Express Apps
 
-```js
-const express = require('express');
-const app = express();
-
-const cookieParser = require('cookie-parser');
-app.use(cookieParser('thisismysecret'));
-
-app.get('/greet', (req, res) => {
-    const { name = 'No-name' } = req.cookies;
-    res.send(`Hey there, ${name}`)
-})
-
-app.get('/setname', (req, res) => {
-    res.cookie('name', 'henrietta');
-    res.cookie('animal', 'harlequin shrimp')
-    res.send('OK SENT YOU A COOKIE!!!')
-})
-
-app.get('/getsignedcookie', (req, res) => {
-    res.cookie('fruit', 'grape', { signed: true })
-    res.send('OK SIGNED YOUR FRUIT COOKIE!')
-})
-
-app.get('/verifyfruit', (req, res) => {
-    console.log(req.cookies)
-    console.log(req.signedCookies)
-    res.send(req.signedCookies)
-})
-
-app.listen(3000, () => {
-    console.log("SERVING!")
-})
-```
+## Express"built-in"Error handler
 
 
 
-[cookie-parser](https://www.npmjs.com/package/cookie-parser)
+## Defining Custom error
+
+## Our custom error class
+
+## Handling async errors
+
+## Handling more async errors
+
+## Defining an Async utility
+
+## Differentiating mongoose Errors
+
+
 
 
 
 # ⛳️Errors Handling & Validating Data
+
+### Client-Side Form Validations
+
+###  Basic Error Handler
+
+###  Defining ExpressError Class
+
+###  More Errors
+
+### Defining Error Template
+
+
+
+###  JOI Schema Validations
+
+###  JOI Validation Middleware
+
+```js
+const validateCampground = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+```
+
+
 
 # ⛳️Data Relationships with Mongo
 
@@ -1550,18 +1567,309 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ## Add the review form
 
+> views/campgrounds/show.ejs
+
+```js
+  <h3>📝Leave a Review</h3>
+    <form action=" " class="mb-3">
+      <div class="mb-3">
+        <label class="form-label" for="body">Rating:</label>
+        <input
+          class="form-range"
+          type="range"
+          min="1"
+          max="5"
+          name="review[rating]"
+          id="rating"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review:</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+        ></textarea>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+  </div>
+```
+
+## Creating Reviews
+
+### Where the Review submit to ?
+
+Now let's figure out where it submits to and actually create the reviews.So what I'm thinking in order to make a review, right, we need to know the campground that it needs to be associated with.So most likely I mean, the easiest option is just to include the campground ID in the path. So some form of a nested route, probably something like if we go to our app file, if I can find it,   `POST /campgrounds/:id/reviews`
+
+Now we don't really need full CRUD or we don't need full restful routes for reviews. We don't need like an index for reviews and then a show page for a single review  We're just going to look at them all reviews for a single campground, so we don't need everything.But in this case, we certainly **do want that campground ID so that we can associate the to a single campground with some new review.** So that's where we'll post the data to.
+
+> app.js 
+
+```js
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res) => {
+    res.send("POST reivews");
+  })
+);
+```
+
+> views/campgrounds/show.ejs
+
+```ejs
+<form
+      action="/campgrounds/<%=campgroundId._id%>/reviews"
+      method="POST"
+      class="mb-3"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="body">Rating:</label>
+        <input
+          class="form-range"
+          type="range"
+          min="1"
+          max="5"
+          name="review[rating]"
+          id="rating"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review:</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+        ></textarea>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678899530/webdevbootcamp2023/Screen_Shot_2023-03-15_at_11.58.32_AM_nmrwly.png)
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678899450/webdevbootcamp2023/Screen_Shot_2023-03-15_at_11.56.09_AM_vwv4xv.png)
+
+### 2.  Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.\
 
 
 
+> views/campgrounds/show.ejs
+
+```js
+app.post(
+  "/campgrounds/:id/reviews",
+  catchAsync(async (req, res) => {
+    // res.send("POSTf review");
+    //1. find our campground
+    const campground = await Campground.findById(req.params.id);
+
+    //2. require review model
+    //3. get the review from show.ejs
+
+    const review = new Review(req.body.review);
+    //4. push review to reviews at campground models
+    campground.reviews.push(review);
+
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
+```
+
+> Add a new form to make a new review
+
+We want to make a new review in the context of a individual campground.So I'm going to add the form on this page `http://127.0.0.1:8080/campgrounds/63fd84a62ba0c31ba0a9f7d1`. and it's not going to be a separate route or anything like that, although of course **it needs to submit data to its own route.**
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678901757/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.33.10_PM_cvxnif.png)
+
+> check the mongosh the reviews testing
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678902011/webdevbootcamp2023/Screen_Shot_2023-03-15_at_12.39.26_PM_bofbkd.png)
+
+### 3. Validate review
+
+> views/campgrounds/show.ejs
+
+```ejs
+    <form
+      action="/campgrounds/<%=campgroundId._id%>/reviews"
+      method="POST"
+      class="mb-3 validated-form"
+      novalidate
+    >
+    
+    
+    <div class="valid-feedback">Looks good!</div>
+```
+
+> schemas.js
+
+```js
+const Joi = require("joi");
+
+module.exports.campgroundSchema = Joi.object({
+  campground: Joi.object({
+    title: Joi.string().required(),
+    price: Joi.number().required().min(0),
+    image: Joi.string().required(),
+    location: Joi.string().required(),
+    description: Joi.string().required(),
+  }).required(),
+});
+
+```
+
+> app.js
+
+```js
+const { reviewSchema, campgroundSchema } = require("./schemas.js");
+
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+
+app.post(
+  "/campgrounds/:id/reviews",
+  validateReview,
+  catchAsync(async (req, res) => {
+ ......
+```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678909596/webdevbootcamp2023/Screen_Shot_2023-03-15_at_2.46.23_PM_nvjxvg.png)
+
+### 4. Displaying Reviews
+
+> app.js
+
+```js
+app.get(
+  "/campgrounds/:id",
+  catchAsync(async (req, res) => {
+    const campgroundId = await Campground.findById(req.params.id).populate(
+      "reviews"
+    );
+    console.log(campgroundId);
+    res.render("campgrounds/show", { campgroundId });
+  })
+);
+```
 
 
 
+> delete all reviews
 
+```js
+db.reviews.deleteMany({})
+```
 
+> show.ejs
 
+```js
+...
+      <% for(let review of campgroundId.reviews) { %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Rating: <%= review.rating %></h5>
+          <p class="card-text">Review: <%= review.body %></p>
+       
+        </div>
+      </div>
+      <% } %>
+ 
+
+```
+
+### 5. Deleting reviews
+
+> app.js
+
+```js
+app.delete(
+  "/campgrounds/:id/reviews/:review_id",
+  catchAsync(async (req, res) => {
+    res.send("Delete review");
+  })
+);
+```
+
+> show.js
+
+```js
+<form action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
+            method="POST">
+    <button class="btn btn-sm btn-danger">Delete</button>
+</form>
+```
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679429745/Screen_Shot_2023-03-21_at_3.14.50_PM_jupg1p.png)
+
+```js
+
+app.delete(
+  "/campgrounds/:id/reviews/:reviewId",
+  catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+   
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+    // res.send("Delete review");
+  })
+);
+```
+
+$pull https://www.mongodb.com/docs/manual/reference/operator/update/pull/
+
+## campground deleting middleware
+
+when delete the whole campground, the folloiwing reviews should be deleted. That's where we need to use **mongoose middleware**: query middleware vs document middleware
+
+[`Model.findByIdAndDelete()`](https://mongoosejs.com/docs/api/model.html#model_Model-findByIdAndDelete)
+
+ ```js
+ //So this thing has been deleted, but it's also been passed to our middleware function.And so if there were reviews, they would be in that array and then we could delete based upon the particular object IDs.
+ CampgroundSchema.post("findOneAndDelete", async function (doc) {
+   // console.log(doc);
+   if (doc) {
+     await Review.remove({
+       _id: {
+         $in: doc.reviews,
+       },
+     });
+   }
+ });
+ ```
+
+https://kb.objectrocket.com/mongo-db/the-mongoose-in-operator-1015
+
+# ⛳️Express Router & Cookie
+
+### Cookie Parser 
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679629485/Screen_Shot_2023-03-23_at_10.44.00_PM_zekfow.png)
 
 
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679629485/Screen_Shot_2023-03-23_at_10.44.04_PM_f6wtkd.png)
+
+### HMAC signing
+
+
+
+
+
+# ⛳️Restructuring & Flash
