@@ -3,13 +3,11 @@ const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const { reviewSchema, campgroundSchema } = require("./schemas.js");
-const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 const methodOverride = require("method-override");
-const Campground = require("./models/campground");
 const Review = require("./models/review");
 
-const campgrounds = require("./routes/campgrounds");
+const campgrounds = require("./routes/campground");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -34,16 +32,7 @@ app.set("views", path.join(__dirname, "views"));
 //parse the body when using "req.body"
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-
-const validateCampground = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
+app.use(express.static(path.join(__dirname, "public")));
 
 const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -55,7 +44,7 @@ const validateReview = (req, res, next) => {
   }
 };
 
-app.use("/campgrounds", campgrounds);
+app.use("/campgrounds", campground);
 
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
