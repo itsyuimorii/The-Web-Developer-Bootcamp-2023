@@ -7,7 +7,7 @@ const ExpressError = require("./utils/ExpressError");
 const methodOverride = require("method-override");
 const Review = require("./models/review");
 
-const campgrounds = require("./routes/campground");
+const campgrounds = require("./routes/campgrounds");
 
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
@@ -44,7 +44,7 @@ const validateReview = (req, res, next) => {
   }
 };
 
-app.use("/campgrounds", campground);
+app.use("/campgrounds", campgrounds);
 
 app.get("/", (req, res) => {
   // Rendering our web page i.e. Demo.ejs
