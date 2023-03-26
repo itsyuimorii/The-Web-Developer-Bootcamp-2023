@@ -301,7 +301,7 @@ app.use((req, res) => {
 
 
 app.listen(3000, () => {
-    console.log("LISTENING ON PORT 8080")
+    console.log("LISTENING ON PORT 3000")
 })
 ```
 
@@ -1874,87 +1874,220 @@ https://kb.objectrocket.com/mongo-db/the-mongoose-in-operator-1015
 
 # ⛳️Restructuring & Flash
 
-
+> app.js
 
 ```js
 const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
+const session = require("express-session");
+const flash = require("connect-flash");
+const ExpressError = require("./utils/ExpressError");
+const methodOverride = require("method-override");
+
+const campgrounds = require("./routes/campgrounds");
+const reviews = require("./routes/reviews");
+
+mongoose.set("strictQuery", false);
+mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "database is connection error"));
+db.once("open", () => {
+  console.log("database is connected successfully");
+});
+
+const app = express();
+
+app.engine("ejs", ejsMate);
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
+
+const sessionConfig = {
+  secret: "thisshouldbeabettersecret!",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
+app.use("/campgrounds", campgrounds);
+app.use("/campgrounds/:id/reviews", reviews);
+
+app.get("/", (req, res) => {
+  // Rendering our web page i.e. Demo.ejs
+  // and passing title variable through it
+  res.render("Demo", {
+    title: "View Engine Demo",
+  });
+});
+
+app.all("*", (req, res, next) => {
+  next(new ExpressError("Page Not Found", 404));
+});
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Oh No, Something Went Wrong!";
+  res.status(statusCode).render("error", { err });
+});
+
+//create a new campground testing in one of routes
+/* app.get("/makeCampground", async (req, res) => {
+  const camp = new Campground({
+    title: "Campground Demo",
+    description: "Testing the routes",
+  });
+  await camp.save();
+  //res.send(camp);
+});
+ */
+
+app.listen(3000, () => {
+  console.log("Serving on port 3000");
+});
+ 
+```
+
+> routes/campgrounds.js
+
+```js
+const express = require('express');
 const router = express.Router();
+const catchAsync = require('../utils/catchAsync');
+const { campgroundSchema } = require('../schemas.js');
 
-//list all campgrounds
-app.get(
-  "/campgrounds",
-  catchAsync(async (req, res) => {
-    const campgroundData = await Campground.find({});
-    res.render("campgrounds/index", { campgroundData });
-  })
-);
-//Create new campground
-//this route must be exist before campgrounds/:id, as if it is after :id route, it will treat new as an id
-app.get(
-  "/campgrounds/new",
-  catchAsync(async (req, res) => {
-    res.render("campgrounds/new");
-  })
-);
+const ExpressError = require('../utils/ExpressError');
+const Campground = require('../models/campground');
 
-//setup endpoint, when click`add campground` button as a post where the form is submitted to
+const validateCampground = (req, res, next) => {
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
 
-router.post(
-  "/campgrounds",
-  validateCampground,
-  catchAsync(async (req, res, next) => {
+router.get('/', catchAsync(async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds })
+}));
+
+router.get('/new', (req, res) => {
+    res.render('campgrounds/new');
+})
+
+
+router.post('/', validateCampground, catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
     const campground = new Campground(req.body.campground);
     await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-//detail page for showing single campground
-//id for looking up the corresponding campground from database
-router.get(
-  "/campgrounds/:id",
-  catchAsync(async (req, res) => {
-    const campgroundId = await Campground.findById(req.params.id).populate(
-      "reviews"
-    );
-    console.log(campgroundId);
-    res.render("campgrounds/show", { campgroundId });
-  })
-);
+    req.flash('success', 'Successfully made a new campground!');
+    res.redirect(`/campgrounds/${campground._id}`)
+}))
 
-//page for editing
-router.get(
-  "/campgrounds/:id/edit",
-  catchAsync(async (req, res) => {
-    //assume we found a id
-    const campgroundId = await Campground.findById(req.params.id);
-    res.render("campgrounds/edit", { campgroundId });
-  })
-);
+router.get('/:id', catchAsync(async (req, res,) => {
+    const campground = await Campground.findById(req.params.id).populate('reviews');
+    if (!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds');
+    }
+    res.render('campgrounds/show', { campground });
+}));
 
-router.put(
-  "/campgrounds/:id/",
-  validateCampground,
-  catchAsync(async (req, res) => {
-    //res.send("IT WORKED!");
-    //update the campground info
+router.get('/:id/edit', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+    if (!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds');
+    }
+    res.render('campgrounds/edit', { campground });
+}))
+
+router.put('/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
-    // const campground = await Campground.findByIdAndUpdate(id, { title: "test", location });/
-    const campground = await Campground.findByIdAndUpdate(id, {
-      ...req.body.campground,
-    });
-    res.redirect(`/campgrounds/${campground._id}`);
-  })
-);
-//page for delete
-router.delete(
-  "/campgrounds/:id/",
-  catchAsync(async (req, res) => {
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    req.flash('success', 'Successfully updated campground!');
+    res.redirect(`/campgrounds/${campground._id}`)
+}));
+
+router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
-    res.redirect("/campgrounds");
-  })
-);
+    req.flash('success', 'Successfully deleted campground')
+    res.redirect('/campgrounds');
+}));
 
+module.exports = router;
+```
+
+> routes/reviews.js
+
+```js
+const express = require('express');
+const router = express.Router({ mergeParams: true });
+
+const Campground = require('../models/campground');
+const Review = require('../models/review');
+
+const { reviewSchema } = require('../schemas.js');
+
+
+const ExpressError = require('../utils/ExpressError');
+const catchAsync = require('../utils/catchAsync');
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+
+
+router.post('/', validateReview, catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    req.flash('success', 'Created new review!');
+    res.redirect(`/campgrounds/${campground._id}`);
+}))
+
+router.delete('/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    req.flash('success', 'Successfully deleted review')
+    res.redirect(`/campgrounds/${id}`);
+}))
+
+module.exports = router;
 ```
 
