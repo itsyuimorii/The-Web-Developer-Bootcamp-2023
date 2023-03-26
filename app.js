@@ -14,6 +14,7 @@ mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://127.0.0.1:27017/Kyanpu-camp", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const db = mongoose.connection;

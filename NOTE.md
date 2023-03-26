@@ -2110,3 +2110,38 @@ const router = express.Router({ mergeParams: true });
 ## Serving Static Assets
 
 > public/javascripts/validateForms.js
+
+```js
+(function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.validated-form')
+
+    // Loop over them and prevent submission
+    Array.from(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+```
+
+## Configure Session
+
+```js
+const session = require("express-session");
+const flash = require("connect-flash");
+
+
+
+const session = require("express-session");
+const flash = require("connect-flash");
+```
+
