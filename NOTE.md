@@ -1834,7 +1834,7 @@ app.delete(
 
 $pull https://www.mongodb.com/docs/manual/reference/operator/update/pull/
 
-## campground deleting middleware
+## Campground deleting middleware
 
 when delete the whole campground, the folloiwing reviews should be deleted. That's where we need to use **mongoose middleware**: query middleware vs document middleware
 
@@ -1873,6 +1873,8 @@ https://kb.objectrocket.com/mongo-db/the-mongoose-in-operator-1015
 
 
 # ⛳️Restructuring & Flash
+
+## Breaking Out Review and Campgournd Routes
 
 > app.js
 
@@ -2091,3 +2093,20 @@ router.delete('/:reviewId', catchAsync(async (req, res) => {
 module.exports = router;
 ```
 
+### handling the Error `Cannot read properties of null (reading 'reviews')`
+
+
+
+
+
+![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679798840/Screen_Shot_2023-03-25_at_9.45.28_PM_zcms86.png)
+
+Express router likes to keep params separate.So over here we're saying there's an ID in the root in the path that prefixes all of these routes, but by default we actually won't have access to that ID in our reviews routes. Routers get separate params and they are separate, but we can actually specify an option here whichis merge params and set that to true. Now all of the params from over here are also going to be merged alongside the params in this file.
+
+```js
+const router = express.Router({ mergeParams: true });
+```
+
+## Serving Static Assets
+
+> public/javascripts/validateForms.js
