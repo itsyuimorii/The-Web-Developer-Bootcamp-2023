@@ -1877,7 +1877,7 @@ https://kb.objectrocket.com/mongo-db/the-mongoose-in-operator-1015
 
 
 ```js
- const express = require("express");
+const express = require("express");
 const router = express.Router();
 
 //list all campgrounds
