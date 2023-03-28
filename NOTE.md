@@ -1,4 +1,4 @@
-# 🏕 キャンプ場の王国Kyanpuba no ōkoku📝 Learning Notes
+# 🏕 キャンプ場の王国 Kyanpuba no ōkoku📝 Learning Notes
 
 # ⛳️AJAX and API
 
@@ -66,11 +66,11 @@ npm install request
 在代碼中使用 request 發送請求：
 
 ```javascript
-const request = require('request');
-request('http://www.google.com', function (error, response, body) {
-  console.log('error:', error); // Print the error if one occurred
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  console.log('body:', body); // Print the HTML for the Google homepage.
+const request = require("request");
+request("http://www.google.com", function (error, response, body) {
+  console.log("error:", error); // Print the error if one occurred
+  console.log("statusCode:", response && response.statusCode); // Print the response status code if a response was received
+  console.log("body:", body); // Print the HTML for the Google homepage.
 });
 ```
 
@@ -79,15 +79,20 @@ request('http://www.google.com', function (error, response, body) {
 在這一小節我們呼叫 [Yahoo Weather API](https://developer.yahoo.com/weather/) 來獲取夏威夷的日落時間：
 
 ```javascript
-const request = require('request');
+const request = require("request");
 
-request('https://query.yahooapis.com/v1/public/yql?q=select%20astronomy.sunset%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22maui%2C%20hi%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys', function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    let parseData = JSON.parse(body);
-    console.log("Sunset At Hawaii is at ...");
-    console.log(parseData["query"]["results"]["channel"]["astronomy"]["sunset"]);
+request(
+  "https://query.yahooapis.com/v1/public/yql?q=select%20astronomy.sunset%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22maui%2C%20hi%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys",
+  function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      let parseData = JSON.parse(body);
+      console.log("Sunset At Hawaii is at ...");
+      console.log(
+        parseData["query"]["results"]["channel"]["astronomy"]["sunset"]
+      );
+    }
   }
-});
+);
 ```
 
 在上述代碼中我們要注意到的是雖然透過 API 請求所得到的 JSON 檔案以 JavaScript 的物件格式呈現，但他本身並不是一個 JavaScript 物件，而是一個字串。所以此處透過 `JSON.parse()` 方法來將他轉換成物件。
@@ -97,15 +102,15 @@ request('https://query.yahooapis.com/v1/public/yql?q=select%20astronomy.sunset%2
 由於 [Yahoo Weather API](https://developer.yahoo.com/weather/) 將在 2019 年淘汰，在這一小節中將介紹 [JSONPlaceholder](https://jsonplaceholder.typicode.com/) 來進行測試：
 
 ```javascript
-const rp = require('request-promise');
+const rp = require("request-promise");
 
-rp('https://jsonplaceholder.typicode.com/users/1')
+rp("https://jsonplaceholder.typicode.com/users/1")
   .then((body) => {
     const parsedData = JSON.parse(body);
     console.log(`${parsedData.name} lives in ${parsedData.address.city}`);
   })
   .catch((err) => {
-    console.log('Error!', err);
+    console.log("Error!", err);
   });
 ```
 
@@ -146,17 +151,20 @@ var express = require("express");
 var request = require("request");
 var app = express();
 
-app.get("/results", function(req, res) {
-    request('http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb', function (error, response, body) {
+app.get("/results", function (req, res) {
+  request(
+    "http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb",
+    function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var data = JSON.parse(body);
         res.send(data["Search"][0]["Title"]);
-  }
+      }
+    }
+  );
 });
-})
 
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Movie App has started!");
+app.listen(process.env.PORT, process.env.IP, function () {
+  console.log("Movie App has started!");
 });
 ```
 
@@ -170,17 +178,20 @@ var request = require("request");
 var app = express();
 app.set("view engine", "ejs");
 
-app.get("/results", function(req, res) {
-    request('http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb', function (error, response, body) {
+app.get("/results", function (req, res) {
+  request(
+    "http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb",
+    function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var data = JSON.parse(body);
-        res.render("results", {data: data});
-  }
+        res.render("results", { data: data });
+      }
+    }
+  );
 });
-})
 
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Movie App has started!");
+app.listen(process.env.PORT, process.env.IP, function () {
+  console.log("Movie App has started!");
 });
 ```
 
@@ -190,7 +201,7 @@ app.listen(process.env.PORT, process.env.IP, function(){
 <h1>Results Pages!!</h1>
 
 <% data["Search"].forEach(function(movie) { %>
-   <li><%= movie["Title"] %></li> 
+   <li><%= movie["Title"] %></li>
 <% }) %>
 ```
 
@@ -204,24 +215,24 @@ var request = require("request");
 var app = express();
 app.set("view engine", "ejs");
 
-app.get("/", function(req, res){
-   res.render("search");
+app.get("/", function (req, res) {
+  res.render("search");
 });
 
-app.get("/results", function(req, res) {
-    var query = req.query.search;
-    var url = "http://omdbapi.com/?s=" + query + "&apikey=thewdb";
-    
-    request(url, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var data = JSON.parse(body);
-        res.render("results", {data: data});
-  }
-});
-})
+app.get("/results", function (req, res) {
+  var query = req.query.search;
+  var url = "http://omdbapi.com/?s=" + query + "&apikey=thewdb";
 
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Movie App has started!");
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var data = JSON.parse(body);
+      res.render("results", { data: data });
+    }
+  });
+});
+
+app.listen(process.env.PORT, process.env.IP, function () {
+  console.log("Movie App has started!");
 });
 ```
 
@@ -246,7 +257,7 @@ app.listen(process.env.PORT, process.env.IP, function(){
       <li>
           <strong>
               <%= movie["Title"] %>
-          </strong> 
+          </strong>
           - <%=movie["Year"]%>
       </li>
     <% }) %>
@@ -267,11 +278,11 @@ app.listen(process.env.PORT, process.env.IP, function(){
 
 ### [#]()Library
 
-When you use a library, you are in charge! You control the flow of the application code, and you decide when to use the library. 
+When you use a library, you are in charge! You control the flow of the application code, and you decide when to use the library.
 
 ### [#]()Framework
 
-With frameworks, that control is inverted.  The framework is in charge, and you are merely a participant! The framework tells you where to plug in the code.
+With frameworks, that control is inverted. The framework is in charge, and you are merely a participant! The framework tells you where to plug in the code.
 
 This class is taught using Express.js, a lightweight, Node.js-based open source framework for building web applications. Lightweight does not mean that it implements less functionality, but rather that many of the details that are hidden behind the framework are not obscured compared to heavyweight frameworks like Rails, which allows for a better understanding of the backend.
 
@@ -294,20 +305,19 @@ const app = express();
 
 //app.use method is that any time we have an incoming request, this callback
 app.use((req, res) => {
-    console.log("WE GOT A NEW REQUEST!!")
-    res.send('<h1>This is my webpage!</h1>')
-  	console.dir(req);
-})
-
+  console.log("WE GOT A NEW REQUEST!!");
+  res.send("<h1>This is my webpage!</h1>");
+  console.dir(req);
+});
 
 app.listen(3000, () => {
-    console.log("LISTENING ON PORT 3000")
-})
+  console.log("LISTENING ON PORT 3000");
+});
 ```
 
 > ‼️ Express creates this JavaScript object automatically for us by parsing the incoming HTTP request information, and then it passes it in as the first argument to this callback.
 >
-> Express通过解析传入的HTTP请求信息，为我们自动创建了这个JavaScript对象，然后将其作为第一个参数传递给这个回调。
+> Express 通过解析传入的 HTTP 请求信息，为我们自动创建了这个 JavaScript 对象，然后将其作为第一个参数传递给这个回调。
 
 The above code will create a server that listens to a specified **port** and responds to requests in a **route**. Routing refers to determining how the application responds to a client's request for a specific endpoint, which contains `URI` and a specific HTTP request method (e.g. `GET`, `POST`...etc.). For more information about this section, please refer to the following document.
 
@@ -323,58 +333,57 @@ It is worth mentioning that on the local side, the server listening section shou
 
 // Tell Express to Listen for requests (start server)
 app.listen(3000, () => {
-    console.log("LISTENING ON PORT 8080")
-})
+  console.log("LISTENING ON PORT 8080");
+});
 ```
 
 - So an HTTP request is not a JavaScript object, it's **text information.**
   - It is not particular to any programming language, but express turns it into it takes that data, it **parses** **it** and it **turns it into a object that it passes in,** in this case to our **callback** for use.
 
-> app.get 
+> app.get
 
 ```javascript
-app.get('/', (req, res) => {
-    res.send('Welcome to the home page!')
-})
+app.get("/", (req, res) => {
+  res.send("Welcome to the home page!");
+});
 
-app.get('/r/:subreddit', (req, res) => {
-    const { subreddit } = req.params;
-    res.send(`<h1>Browsing the ${subreddit} subreddit</h1>`)
-})
+app.get("/r/:subreddit", (req, res) => {
+  const { subreddit } = req.params;
+  res.send(`<h1>Browsing the ${subreddit} subreddit</h1>`);
+});
 
-app.get('/r/:subreddit/:postId', (req, res) => {
-    const { subreddit, postId } = req.params;
-    res.send(`<h1>Viewing Post ID: ${postId} on the ${subreddit} subreddit</h1>`)
-})
+app.get("/r/:subreddit/:postId", (req, res) => {
+  const { subreddit, postId } = req.params;
+  res.send(`<h1>Viewing Post ID: ${postId} on the ${subreddit} subreddit</h1>`);
+});
 
-app.post('/cats', (req, res) => {
-    res.send('POST REQUEST TO /cats!!!! THIS IS DIFFERENT THAN A GET REQUEST!')
-})
+app.post("/cats", (req, res) => {
+  res.send("POST REQUEST TO /cats!!!! THIS IS DIFFERENT THAN A GET REQUEST!");
+});
 
-app.get('/cats', (req, res) => {
-    res.send('MEOW!!')
-})
+app.get("/cats", (req, res) => {
+  res.send("MEOW!!");
+});
 
-app.get('/dogs', (req, res) => {
-    res.send('WOOF!')
-})
-app.get('/search', (req, res) => {
-    const { q } = req.query;
-    if (!q) {
-        res.send('NOTHING FOUND IF NOTHING SEARCHED!')
-    } else {
-        res.send(`<h1>Search results for: ${q}</h1>`)
-    }
-})
+app.get("/dogs", (req, res) => {
+  res.send("WOOF!");
+});
+app.get("/search", (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    res.send("NOTHING FOUND IF NOTHING SEARCHED!");
+  } else {
+    res.send(`<h1>Search results for: ${q}</h1>`);
+  }
+});
 
-app.get('*', (req, res) => {
-    res.send(`I don't know that path!`)
-})
-
+app.get("*", (req, res) => {
+  res.send(`I don't know that path!`);
+});
 
 // /cats => 'meow'
 // /dogs => 'woof'
-// '/' 
+// '/'
 ```
 
 ## 4. The Package.json
@@ -410,12 +419,12 @@ $ nodemon
 
 ## Route Params
 
-### The  Route Matcher
+### The Route Matcher
 
 承接上一個課程的路由概念，當使用者對那些沒有設置路由的位置發送 `GET` 請求時，伺服器端將回應 `Cannot GET /URL`，我們可以透過 `*` 對這些位置進行通配，回應相同的結果：
 
 ```javascript
-app.get("*", function(req, res) {
+app.get("*", function (req, res) {
   res.send("There is no ROUTE!");
 });
 ```
@@ -429,7 +438,7 @@ app.get("*", function(req, res) {
 除此之外，我們經常需要將某種模式所匹配到所有路由都對應到同一個組件，比如針對不同的 ID 的用戶來說，路徑可能是 `./user/<id>`，在這裡可以透過 **路由參數（route parameter）** 來標記，比如：
 
 ```javascript
-app.get("/post/:topic/comments/:id/:title/", function(req, res) {
+app.get("/post/:topic/comments/:id/:title/", function (req, res) {
   console.log(req.params);
   res.send("There is a Route Pamras Page!");
 });
@@ -442,9 +451,9 @@ app.get("/post/:topic/comments/:id/:title/", function(req, res) {
 What is the "E" for? "Embedded?" Could be. How about "Effective," "Elegant," or just "Easy"? EJS is a simple templating language that lets you generate HTML markup with plain JavaScript. No religiousness about how to organize things. No reinvention of iteration and control-flow. It's just plain JavaScript. [ejs-Efficient JavaScript Template Engine](https://ejs.co/)
 
 ```javascript
-app.get("/fellinlovewith/:thing", function(req, res){
+app.get("/fellinlovewith/:thing", function (req, res) {
   var thing = req.params.thing;
-  res.render("love.ejs", {thingVar: thing});
+  res.render("love.ejs", { thingVar: thing });
 });
 ```
 
@@ -461,7 +470,7 @@ It's easy to install EJS with NPM.
 $ npm install ejs
 ```
 
-##  Configure the app to use EJS
+## Configure the app to use EJS
 
 除此之外，我們可以透過以下方式設定預設的渲染引擎，也就是往後在路由中渲染頁面時不用加上後綴的副檔名：
 
@@ -473,22 +482,22 @@ const app = express();
 const path = require("path");
 
 // Setting the static PATH
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, "public")));
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '/views'))
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
 ```
 
 设置这条语句`app.set("view engine", "ejs");`之后
 
 ```javascript
 // Before Setting "view engine"
-app.get("/", function(req, res){
+app.get("/", function (req, res) {
   res.render("home.ejs");
 });
 
 // After Setting "view engine"
-app.get("/", function(req, res){
+app.get("/", function (req, res) {
   res.render("home");
 });
 ```
@@ -501,7 +510,7 @@ app.get("/", function(req, res){
 
 - `<%=` Outputs the value into the template (HTML escaped)
 
-  > `<%= %> `这里面的代码会被作为javascript处理
+  > `<%= %> `这里面的代码会被作为 javascript 处理
   >
   > `<%= ‘hello world.toUpperCase() %>`
 
@@ -546,13 +555,13 @@ app.get("/", function(req, res){
 
 #### 2. Pass parameters from route directly into the ejs file
 
-> index.js 			=> routes
+> index.js => routes
 
 ```javascript
-app.get('/rand', (req, res) => {
-    const num = Math.floor(Math.random() * 10) + 1;
-    res.render('random', { num })
-})
+app.get("/rand", (req, res) => {
+  const num = Math.floor(Math.random() * 10) + 1;
+  res.render("random", { num });
+});
 ```
 
 > Random.ejs
@@ -560,14 +569,13 @@ app.get('/rand', (req, res) => {
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Random</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Your random number is: <%= num %></h1>
     <% if(num % 2 === 0){ %>
     <h2>That is an even number!</h2>
@@ -576,32 +584,30 @@ app.get('/rand', (req, res) => {
     <% } %>
     <p>Here's an alternate way of doing it:</p>
     <h3>That number is: <%= num%2===0 ? 'EVEN' : 'ODD' %></h3>
-</body>
-
+  </body>
 </html>
-     
 ```
 
 #### 3. EJS with JSON
 
-> Data.json 
+> Data.json
 
 ```javascript
-const redditData = require('./data.json');
+const redditData = require("./data.json");
 ```
 
 > index.js
 
 ```javascript
-app.get('/r/:subreddit', (req, res) => {
-    const { subreddit } = req.params;
-    const data = redditData[subreddit];
-    if (data) {
-        res.render('subreddit', { ...data });
-    } else {
-        res.render('notfound', { subreddit })
-    }
-})
+app.get("/r/:subreddit", (req, res) => {
+  const { subreddit } = req.params;
+  const data = redditData[subreddit];
+  if (data) {
+    res.render("subreddit", { ...data });
+  } else {
+    res.render("notfound", { subreddit });
+  }
+});
 ```
 
 > Subreddit.ejs
@@ -609,29 +615,28 @@ app.get('/r/:subreddit', (req, res) => {
 ```html
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= name %></title>
+    <link rel="stylesheet" href="/app.css" />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= name %> </title>
-    <link rel="stylesheet" href="/app.css">
-</head>
-
-<body>
+  <body>
     <h1>Browsing The <%= name %> subreddit</h1>
     <h2><%= description %></h2>
     <p><%=subscribers %> Total Subscribers</p>
-    <hr>
-<!--using for loop to get data from data.JSON -->
+    <hr />
+    <!--using for loop to get data from data.JSON -->
     <% for(let post of posts) { %>
     <article>
-        <p><%= post.title %> - <b><%=post.author %></b></p>
-        <% if(post.img) { %>
-        <img src="<%= post.img %>" alt="">
-        <% } %>
+      <p><%= post.title %> - <b><%=post.author %></b></p>
+      <% if(post.img) { %>
+      <img src="<%= post.img %>" alt="" />
+      <% } %>
     </article>
     <% } %>
-</body>
+  </body>
 </html>
 ```
 
@@ -741,7 +746,7 @@ app.use(express.static("public"));
 倘若我們要替頁面加上 CSS 或 JavaScript 效果，當然可以在每一個 ejs 檔案中添加 `<style>` 標籤，但這無疑是個不便利且笨拙的方法。較佳的方式是透過如下的方式引入資源：
 
 ```html
-<link ref="stylesheet" href="/style.css">
+<link ref="stylesheet" href="/style.css" />
 ```
 
 而我們通常是將這類資源存放在 `public` 文件夾下，然而必須透過以下的方式告知 node.js 在伺服器執行時，存取檔案的預設路徑：
@@ -757,7 +762,7 @@ app.use(express.static("public"));
 
 # ⛳️ Defining RESTful Routes ??35
 
-##  What is REST/RESTful?
+## What is REST/RESTful?
 
 **表現層狀態轉換（REST, Representational State Transfer）** 是一種網路架構的風格，具有此種風格的系統可以稱為是 RESTful 的，或者更直白地說：**「將 URL 定位資源，以 HTTP 協議所定義的 `GET`、`POST`、`DELETE` 等請求來描述操作」**。在這樣的基礎之下，可以直觀地從 URL 名稱、發送的請求以及請求所得到的狀態碼就知道做了什麼操作？結果如何？
 
@@ -773,7 +778,7 @@ RESTful 的核心思想就是讓用戶端發送的請求操作都具備有「動
 
 而「受詞」的部分就是 API 的 URL，這部份透過設置路由來完成。
 
-關於 RESTful 的解釋與說明，很建議查看這篇問題下的回答 [知乎 | 怎样用通俗的语言解释REST，以及RESTful？](https://www.zhihu.com/question/28557115) 和 [阮一峰的网络日志 | RESTful API 最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)。
+關於 RESTful 的解釋與說明，很建議查看這篇問題下的回答 [知乎 | 怎样用通俗的语言解释 REST，以及 RESTful？](https://www.zhihu.com/question/28557115) 和 [阮一峰的网络日志 | RESTful API 最佳实践](http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html)。
 
 ## A Table of all 7 RESTful routes
 
@@ -789,13 +794,9 @@ RESTful 的核心思想就是讓用戶端發送的請求操作都具備有「動
 | UPDATE  | `/dogs/:id`      |   `PUT`    | Update a particular dog, then redirect somewhere. |
 | DESTORY | `/dogs/:id`      |  `DELETE`  | Delete a particular dog, then redirect somewhere. |
 
-
-
 # ⛳️mongoDB
 
 # ⛳️mongoDB with mongoose
-
-
 
 # ⛳️Basic CRUD
 
@@ -814,7 +815,7 @@ app.listen(3000, () => {
 });
 ```
 
-##  Ejs
+## Ejs
 
 views/home.ejs
 
@@ -1349,7 +1350,7 @@ app.put("/campgrounds/:id/", async (req, res) => {
 
 ![update info](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678767230/webdevbootcamp2023/update_info_te4ged.png)
 
-##  Delete camp
+## Delete camp
 
 app.js
 
@@ -1377,13 +1378,9 @@ show.ejs
 
 # ⛳️middleware: the key to Express
 
-
-
 # ⛳️ Handling Errors in Express Apps
 
 ## Express"built-in"Error handler
-
-
 
 ## Defining Custom error
 
@@ -1397,27 +1394,21 @@ show.ejs
 
 ## Differentiating mongoose Errors
 
-
-
-
-
 # ⛳️Errors Handling & Validating Data
 
 ### Client-Side Form Validations
 
-###  Basic Error Handler
+### Basic Error Handler
 
-###  Defining ExpressError Class
+### Defining ExpressError Class
 
-###  More Errors
+### More Errors
 
 ### Defining Error Template
 
+### JOI Schema Validations
 
-
-###  JOI Schema Validations
-
-###  JOI Validation Middleware
+### JOI Validation Middleware
 
 ```js
 const validateCampground = (req, res, next) => {
@@ -1429,10 +1420,7 @@ const validateCampground = (req, res, next) => {
     next();
   }
 };
-
 ```
-
-
 
 # ⛳️Data Relationships with Mongo
 
@@ -1512,19 +1500,15 @@ app.listen(3000, () => {
 });
 ```
 
-
-
-# 
+#
 
 # ⛳️Mongo Relationships with Express
 
-
-
-# ⛳️ Campground Review  
+# ⛳️ Campground Review
 
 ## Defining the review models
 
-Connect multiple reviews to one campground, so it is `one to many` relationship, And what we're going to do is just embed **an array of object IDs** in each campground. And the reason for that is that *we could theoretically have thousands and thousands of reviews for someof the more popular places, just like Yelp does.* 
+Connect multiple reviews to one campground, so it is `one to many` relationship, And what we're going to do is just embed **an array of object IDs** in each campground. And the reason for that is that _we could theoretically have thousands and thousands of reviews for someof the more popular places, just like Yelp does._
 
 > models/review.js
 
@@ -1536,7 +1520,6 @@ const reviewSchema = new Schema({
   body: String,
   rating: Number,
 });
-
 
 module.exports = mongoose.model("Review", reviewSchema);
 ```
@@ -1562,7 +1545,6 @@ const CampgroundSchema = new Schema({
 });
 
 module.exports = mongoose.model("Campground", CampgroundSchema);
-
 ```
 
 ## Add the review form
@@ -1602,11 +1584,11 @@ module.exports = mongoose.model("Campground", CampgroundSchema);
 
 ### Where the Review submit to ?
 
-Now let's figure out where it submits to and actually create the reviews.So what I'm thinking in order to make a review, right, we need to know the campground that it needs to be associated with.So most likely I mean, the easiest option is just to include the campground ID in the path. So some form of a nested route, probably something like if we go to our app file, if I can find it,   `POST /campgrounds/:id/reviews`
+Now let's figure out where it submits to and actually create the reviews.So what I'm thinking in order to make a review, right, we need to know the campground that it needs to be associated with.So most likely I mean, the easiest option is just to include the campground ID in the path. So some form of a nested route, probably something like if we go to our app file, if I can find it, `POST /campgrounds/:id/reviews`
 
-Now we don't really need full CRUD or we don't need full restful routes for reviews. We don't need like an index for reviews and then a show page for a single review  We're just going to look at them all reviews for a single campground, so we don't need everything.But in this case, we certainly **do want that campground ID so that we can associate the to a single campground with some new review.** So that's where we'll post the data to.
+Now we don't really need full CRUD or we don't need full restful routes for reviews. We don't need like an index for reviews and then a show page for a single review We're just going to look at them all reviews for a single campground, so we don't need everything.But in this case, we certainly **do want that campground ID so that we can associate the to a single campground with some new review.** So that's where we'll post the data to.
 
-> app.js 
+> app.js
 
 ```js
 app.post(
@@ -1654,9 +1636,7 @@ app.post(
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1678899450/webdevbootcamp2023/Screen_Shot_2023-03-15_at_11.56.09_AM_vwv4xv.png)
 
-### 2.  Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.\
-
-
+### 2. Find the corresponding campground that we're going to add the review to, that we're going to associate with this review.\
 
 > views/campgrounds/show.ejs
 
@@ -1703,8 +1683,8 @@ We want to make a new review in the context of a individual campground.So I'm go
       class="mb-3 validated-form"
       novalidate
     >
-    
-    
+
+
     <div class="valid-feedback">Looks good!</div>
 ```
 
@@ -1722,7 +1702,6 @@ module.exports.campgroundSchema = Joi.object({
     description: Joi.string().required(),
   }).required(),
 });
-
 ```
 
 > app.js
@@ -1768,12 +1747,10 @@ app.get(
 );
 ```
 
-
-
 > delete all reviews
 
 ```js
-db.reviews.deleteMany({})
+db.reviews.deleteMany({});
 ```
 
 > show.ejs
@@ -1785,11 +1762,11 @@ db.reviews.deleteMany({})
         <div class="card-body">
           <h5 class="card-title">Rating: <%= review.rating %></h5>
           <p class="card-text">Review: <%= review.body %></p>
-       
+
         </div>
       </div>
       <% } %>
- 
+
 
 ```
 
@@ -1809,21 +1786,22 @@ app.delete(
 > show.js
 
 ```js
-<form action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
-            method="POST">
-    <button class="btn btn-sm btn-danger">Delete</button>
+<form
+  action="/campgrounds/<%=campgroundId._id%>/reviews/<%=review._id%>?_method=DELETE"
+  method="POST"
+>
+  <button class="btn btn-sm btn-danger">Delete</button>
 </form>
 ```
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679429745/Screen_Shot_2023-03-21_at_3.14.50_PM_jupg1p.png)
 
 ```js
-
 app.delete(
   "/campgrounds/:id/reviews/:reviewId",
   catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
-   
+
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
     res.redirect(`/campgrounds/${id}`);
@@ -1840,37 +1818,31 @@ when delete the whole campground, the folloiwing reviews should be deleted. That
 
 [`Model.findByIdAndDelete()`](https://mongoosejs.com/docs/api/model.html#model_Model-findByIdAndDelete)
 
- ```js
- //So this thing has been deleted, but it's also been passed to our middleware function.And so if there were reviews, they would be in that array and then we could delete based upon the particular object IDs.
- CampgroundSchema.post("findOneAndDelete", async function (doc) {
-   // console.log(doc);
-   if (doc) {
-     await Review.remove({
-       _id: {
-         $in: doc.reviews,
-       },
-     });
-   }
- });
- ```
+```js
+//So this thing has been deleted, but it's also been passed to our middleware function.And so if there were reviews, they would be in that array and then we could delete based upon the particular object IDs.
+CampgroundSchema.post("findOneAndDelete", async function (doc) {
+  // console.log(doc);
+  if (doc) {
+    await Review.remove({
+      _id: {
+        $in: doc.reviews,
+      },
+    });
+  }
+});
+```
 
 https://kb.objectrocket.com/mongo-db/the-mongoose-in-operator-1015
 
 # ⛳️Express Router & Cookie
 
-### Cookie Parser 
+### Cookie Parser
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679629485/Screen_Shot_2023-03-23_at_10.44.00_PM_zekfow.png)
-
-
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679629485/Screen_Shot_2023-03-23_at_10.44.04_PM_f6wtkd.png)
 
 ### HMAC signing
-
-
-
-
 
 # ⛳️Restructuring & Flash
 
@@ -1968,79 +1940,101 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
   console.log("Serving on port 3000");
 });
- 
 ```
 
 > routes/campgrounds.js
 
 ```js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const { campgroundSchema } = require('../schemas.js');
+const catchAsync = require("../utils/catchAsync");
+const { campgroundSchema } = require("../schemas.js");
 
-const ExpressError = require('../utils/ExpressError');
-const Campground = require('../models/campground');
+const ExpressError = require("../utils/ExpressError");
+const Campground = require("../models/campground");
 
 const validateCampground = (req, res, next) => {
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
 
-router.get('/', catchAsync(async (req, res) => {
+router.get(
+  "/",
+  catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds })
-}));
+    res.render("campgrounds/index", { campgrounds });
+  })
+);
 
-router.get('/new', (req, res) => {
-    res.render('campgrounds/new');
-})
+router.get("/new", (req, res) => {
+  res.render("campgrounds/new");
+});
 
-
-router.post('/', validateCampground, catchAsync(async (req, res, next) => {
+router.post(
+  "/",
+  validateCampground,
+  catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
     const campground = new Campground(req.body.campground);
     await campground.save();
-    req.flash('success', 'Successfully made a new campground!');
-    res.redirect(`/campgrounds/${campground._id}`)
-}))
+    req.flash("success", "Successfully made a new campground!");
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
 
-router.get('/:id', catchAsync(async (req, res,) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews');
+router.get(
+  "/:id",
+  catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id).populate(
+      "reviews"
+    );
     if (!campground) {
-        req.flash('error', 'Cannot find that campground!');
-        return res.redirect('/campgrounds');
+      req.flash("error", "Cannot find that campground!");
+      return res.redirect("/campgrounds");
     }
-    res.render('campgrounds/show', { campground });
-}));
+    res.render("campgrounds/show", { campground });
+  })
+);
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id)
+router.get(
+  "/:id/edit",
+  catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
     if (!campground) {
-        req.flash('error', 'Cannot find that campground!');
-        return res.redirect('/campgrounds');
+      req.flash("error", "Cannot find that campground!");
+      return res.redirect("/campgrounds");
     }
-    res.render('campgrounds/edit', { campground });
-}))
+    res.render("campgrounds/edit", { campground });
+  })
+);
 
-router.put('/:id', validateCampground, catchAsync(async (req, res) => {
+router.put(
+  "/:id",
+  validateCampground,
+  catchAsync(async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    req.flash('success', 'Successfully updated campground!');
-    res.redirect(`/campgrounds/${campground._id}`)
-}));
+    const campground = await Campground.findByIdAndUpdate(id, {
+      ...req.body.campground,
+    });
+    req.flash("success", "Successfully updated campground!");
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete(
+  "/:id",
+  catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
-    req.flash('success', 'Successfully deleted campground')
-    res.redirect('/campgrounds');
-}));
+    req.flash("success", "Successfully deleted campground");
+    res.redirect("/campgrounds");
+  })
+);
 
 module.exports = router;
 ```
@@ -2048,56 +2042,56 @@ module.exports = router;
 > routes/reviews.js
 
 ```js
-const express = require('express');
+const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-const Campground = require('../models/campground');
-const Review = require('../models/review');
+const Campground = require("../models/campground");
+const Review = require("../models/review");
 
-const { reviewSchema } = require('../schemas.js');
+const { reviewSchema } = require("../schemas.js");
 
-
-const ExpressError = require('../utils/ExpressError');
-const catchAsync = require('../utils/catchAsync');
+const ExpressError = require("../utils/ExpressError");
+const catchAsync = require("../utils/catchAsync");
 
 const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
 
-
-
-router.post('/', validateReview, catchAsync(async (req, res) => {
+router.post(
+  "/",
+  validateReview,
+  catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
     campground.reviews.push(review);
     await review.save();
     await campground.save();
-    req.flash('success', 'Created new review!');
+    req.flash("success", "Created new review!");
     res.redirect(`/campgrounds/${campground._id}`);
-}))
+  })
+);
 
-router.delete('/:reviewId', catchAsync(async (req, res) => {
+router.delete(
+  "/:reviewId",
+  catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
-    req.flash('success', 'Successfully deleted review')
+    req.flash("success", "Successfully deleted review");
     res.redirect(`/campgrounds/${id}`);
-}))
+  })
+);
 
 module.exports = router;
 ```
 
 ### handling the Error `Cannot read properties of null (reading 'reviews')`
-
-
-
-
 
 ![](https://res.cloudinary.com/dxmfrq4tk/image/upload/v1679798840/Screen_Shot_2023-03-25_at_9.45.28_PM_zcms86.png)
 
@@ -2113,31 +2107,33 @@ const router = express.Router({ mergeParams: true });
 
 ```js
 (function () {
-    'use strict'
+  "use strict";
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.validated-form')
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll(".validated-form");
 
-    // Loop over them and prevent submission
-    Array.from(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(function (form) {
+    form.addEventListener(
+      "submit",
+      function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
 
-                form.classList.add('was-validated')
-            }, false)
-        })
-})()
+        form.classList.add("was-validated");
+      },
+      false
+    );
+  });
+})();
 ```
 
 ## Configure Session
 
 ```js
 const session = require("express-session");
- 
 
 const sessionConfig = {
   secret: "thisshouldbeabettersecret!",
@@ -2151,6 +2147,4 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
- 
 ```
-
