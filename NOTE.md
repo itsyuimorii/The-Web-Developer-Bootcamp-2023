@@ -32,7 +32,7 @@ XML
 
 JSON
 
-**JavaScript 物件標記格式（JSON, JavaScript Object Notation）** 則是將資料的格式以 JavaScript 物件來表達，由於近幾年的網頁在呼叫 API 時往往透過 JavaScript，當回傳的資料型態以 JSON 表示時，可以十分迅速地作為物件資料來處理，所以漸漸成為近幾年的主流：
+JSON (JavaScript Object Notation) is a JavaScript object format that expresses data as JavaScript objects. Therefore, it has gradually become the mainstream in recent years.：
 
 ```json
 {
