@@ -16,11 +16,11 @@ The web service platform [IFTTT](https://ifttt.com/) is a string of APIs from di
 
 ## JSON and XML
 
-透過 API 接口所取得的資料，通常採用 XML 或 JSON 表示：
+The data obtained through the API interface is usually expressed in XML or JSON:
 
 XML
 
-**可延伸標記式語言（XML, Extensible Markup Language）** 乍看之下與 HTML 十分類似，但標籤的作用並不在於描述頁面呈現的結果，而是一種 `key-value` 的關係：
+**Extensible Markup Language (XML) ** At first glance, it looks very similar to HTML, but the role of tags is not to describe the result of a page presentation, but rather a `key-value` relationship:
 
 ```xml
 <person>
