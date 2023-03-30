@@ -407,7 +407,7 @@ Related supplements can be viewed at.
 
 ## How to automate server restart
 
-在前面的單元我們知道可以使用 `node app.js` 命令來啟動伺服器，在助教提供的 [YouTube | Automate Node Server Restart with Nodemon](https://www.youtube.com/watch?v=GvLvrlOqq9g) 影片中介紹了 [nodemon](https://nodemon.io/) 工具來自動地重新載入更動的檔案並啟動伺服器。
+In the previous unit, we learned that you can use the node app.js command to start the server. The YouTube video Automate Node Server Restart with Nodemon provided by the tutor introduces the nodemon tool to automatically reload the changed files and start the server.
 
 ```bash
 # Install nodemon with npm
