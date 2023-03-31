@@ -317,7 +317,7 @@ app.listen(3000, () => {
 
 > ‼️ Express creates this JavaScript object automatically for us by parsing the incoming HTTP request information, and then it passes it in as the first argument to this callback.
 >
-> Express 通过解析传入的 HTTP 请求信息，为我们自动创建了这个 JavaScript 对象，然后将其作为第一个参数传递给这个回调。
+> Express automatically creates this JavaScript object for us by parsing the incoming HTTP request and then passing it as the first parameter to this callback.
 
 The above code will create a server that listens to a specified **port** and responds to requests in a **route**. Routing refers to determining how the application responds to a client's request for a specific endpoint, which contains `URI` and a specific HTTP request method (e.g. `GET`, `POST`...etc.). For more information about this section, please refer to the following document.
 
