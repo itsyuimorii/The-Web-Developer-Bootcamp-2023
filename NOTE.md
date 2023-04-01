@@ -2134,6 +2134,8 @@ const router = express.Router({ mergeParams: true });
 
 ```js
 const session = require("express-session");
+const flash = require("connect-flash");
+
 
 const sessionConfig = {
   secret: "thisshouldbeabettersecret!",
@@ -2147,4 +2149,5 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
+app.use(flash());
 ```
