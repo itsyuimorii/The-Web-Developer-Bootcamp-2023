@@ -48,7 +48,7 @@ JSON (JavaScript Object Notation) is a JavaScript object format that expresses d
 
 ## Send Request with Command Line
 
-對伺服器發送請求並不是只有透過瀏覽器或是 Postman 這類的工具才可以達成，在命令行中我們可以使用 [curl](https://curl.haxx.se/) 發送請求：
+Sending a request to the server is not only possible with a browser or a tool like Postman, but we can use curl to send a request from the command line:
 
 ```bash
 $ curl www.google.com
@@ -56,14 +56,14 @@ $ curl www.google.com
 
 ## Send Request with Node.js
 
-我們在 Node.js 中可以引入 [request](https://github.com/request/request) 套件來對伺服器發送請求，首先透過 npm 進行安裝：
+We can introduce the [request](https://github.com/request/request) package in Node.js to send requests to the server by first installing it via npm at
 
 ```bash
 # Install request with npm
 npm install request
 ```
 
-在代碼中使用 request 發送請求：
+To send a request in code using request:
 
 ```javascript
 const request = require("request");
@@ -76,7 +76,7 @@ request("http://www.google.com", function (error, response, body) {
 
 ## Sunset Time API Example
 
-在這一小節我們呼叫 [Yahoo Weather API](https://developer.yahoo.com/weather/) 來獲取夏威夷的日落時間：
+In this section we call [Yahoo Weather API](https://developer.yahoo.com/weather/) to get the sunset time in Hawaii:
 
 ```javascript
 const request = require("request");
@@ -95,7 +95,7 @@ request(
 );
 ```
 
-在上述代碼中我們要注意到的是雖然透過 API 請求所得到的 JSON 檔案以 JavaScript 的物件格式呈現，但他本身並不是一個 JavaScript 物件，而是一個字串。所以此處透過 `JSON.parse()` 方法來將他轉換成物件。
+In the above code we should note that although the JSON file requested through the API is presented in JavaScript object format, it is not a JavaScript object itself, but a string. So here we use the `JSON.parse()` method to convert it into an object.
 
 ## JSON Placeholder API Example
 
@@ -116,18 +116,18 @@ rp("https://jsonplaceholder.typicode.com/users/1")
 
 ## Note about Movie API lectures
 
-在接下來課程中所使用到的 Open Movie Data Base Movie API 已經不提供公用的接口，不過 Colt 申請了 API 密鑰提供大家使用。使用 API 密鑰發送請求的方式為：
+The Open Movie Data Base Movie API used in the next course no longer provides a public interface, but Colt has applied for an API key for you to use. The way to send a request using the API key is
 
 - **General search**: `http://www.omdbapi.com/?s=guardians+of+the+galaxy&apikey=thewdb`
 - **Search with Movie ID**: `http://www.omdbapi.com/?i=tt3896198&apikey=thewdb`
 
-操作方式和影片中幾乎一樣，只需要在發送請求時把密鑰放置在末端即可。
+The operation is almost the same as in the video, you just need to place the key at the end when sending the request.
 
-## Movie API App: Introduction
+### Movie API App: Introduction
 
-在接下來的小節中，我們要透過呼叫 API 來創建一個查找電影資料的應用程式，由於亞馬遜公司下的網路電影資料庫（IMDb, Internet Movie Database）並沒有提供 API 服務，在接下來的課程中我們使用 [OMDB](http://www.omdbapi.com/) 所提供的 API；除此之外，還可以考慮 [TMDB](https://www.themoviedb.org/)。
+In the next section, we will create an application to find movie data by calling the API. Since the IMDb (Internet Movie Database) under Amazon does not provide API services, we will use the API provided by OMDB in the next lesson; in addition, we can also consider TMDB.
 
-首先創建我們的專案資料夾與初始環境：
+First create our project folder and initial environment:
 
 ```bash
 # Create Project Folder
@@ -144,7 +144,7 @@ touch app.js
 
 ## Movie API App: Results Route
 
-在這一小節中，我們簡單先處理路由與基礎呼叫 API 的部分，以下代碼的結果將建立一個 `/results` 路由，在該頁面下顯示在 OMDB 資料庫中搜尋「guardians of the galaxy」所找到的第一部電影名稱。
+In this section, we briefly deal with the routing and base call API parts first. The result of the following code will create a `/results` route, where the first movie name found by searching for "guardians of the galaxy" in the OMDB database is displayed.
 
 ```javascript
 var express = require("express");
@@ -170,7 +170,7 @@ app.listen(process.env.PORT, process.env.IP, function () {
 
 ## Movie API App: Displaying Data
 
-這一小節將要實作的是將呼叫 API 所得到的資料，傳遞到模板頁中，並透過模板渲染實際頁面。所以在 `app.js` 中將代碼改寫如下：
+What we will do in this section is to pass the data obtained by calling the API to the template page and render the actual page through the template. So the code in `app.js` will be rewritten as follows:
 
 ```javascript
 var express = require("express");
@@ -195,7 +195,7 @@ app.listen(process.env.PORT, process.env.IP, function () {
 });
 ```
 
-接著創建 `views` 資料夾與模板頁面 `results.ejs`，並修改模板頁面內容如下：
+Next, create the views folder and template page ·`results.ejs`, and modify the contents of the template page as follows:
 
 ```ejs
 <h1>Results Pages!!</h1>
@@ -207,7 +207,7 @@ app.listen(process.env.PORT, process.env.IP, function () {
 
 ## Movie API App: Adding Search
 
-接著在這一小節我們要建立搜尋頁面，實際上就是透過一個 HTML 中的表單來獲取使用者輸入，並將值傳遞給 `/result` 路由進行渲染。首先我們在 `app.js` 中添加根目錄的路由，並修改 `/result` 路由，注意的是此處由表單所提交的資料，可以透過 `req.query.search` 取得：
+Then in this section we will create the search page, which is actually a form in HTML that gets user input and passes the values to the `/result` route for rendering. First we add the root route in `app.js` and modify the `/result` route, noting that the data submitted by the form here can be obtained via `req.query.search`: `req.query.search`:
 
 ```javascript
 var express = require("express");
@@ -236,7 +236,7 @@ app.listen(process.env.PORT, process.env.IP, function () {
 });
 ```
 
-接著修改根目錄的 `search.ejs` 模板：
+Next, modify the`search.ejs` template in the root directory:
 
 ```ejs
 <h1>Search For a Movie</h1>
@@ -247,7 +247,7 @@ app.listen(process.env.PORT, process.env.IP, function () {
 </form>
 ```
 
-以及 `results.ejs` 模板：
+以及``results.ejs` 模板：
 
 ```ejs
 <h1>Results Page!!!</h1>
