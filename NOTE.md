@@ -388,7 +388,7 @@ app.get("*", (req, res) => {
 
 ## 4. The Package.json
 
-> `package.json` 是一個符合 [CommonJS 規定](http://wiki.commonjs.org/wiki/Packages/1.1) 用來描述套件包的文件，使用 `json` 格式表示，在其中可以定義 **相依（dependency）** 的相關套件以及應用程式資訊，以便我們管理專案所會使用到的套件及其對應版本。透過以下命令可以初始化 `package.json` 檔案：
+`package.json` is a file that conforms to the [CommonJS requirements](http://wiki.commonjs.org/wiki/Packages/1.1) for describing packages, using the `json` format, in which you can define **dependency** related packages and application information so that we can manage the packages and their corresponding versions used by the project. The `package.json` file can be initialized with the following command:
 
 ```bash
 $ npm init
