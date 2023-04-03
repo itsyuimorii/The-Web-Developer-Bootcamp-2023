@@ -431,11 +431,11 @@ app.get("*", function (req, res) {
 
 ### Route Order
 
-值得注意的是，路由撰寫時擺放的位置是會影響伺服器處理的順序的，比方說將 `*` 通配擺放在其他路由之前，那麼伺服器在處理時都會先受到 `*` 通配路由影響，其餘的都不會處理了。
+It is worth noting that the placement of the route when it is written will affect the order of processing by the server. For example, if the `*` wildcard is placed before other routes, then the server will be affected by the `*` wildcard route first and the rest will not be processed.
 
 ### Route Pamras
 
-除此之外，我們經常需要將某種模式所匹配到所有路由都對應到同一個組件，比如針對不同的 ID 的用戶來說，路徑可能是 `./user/<id>`，在這裡可以透過 **路由參數（route parameter）** 來標記，比如：
+In addition, we often need to match all routes of a certain pattern to the same component, for example, for users with different IDs, the path may be `. /user/<id>`, where it can be marked by a **route parameter**, e.g:
 
 ```javascript
 app.get("/post/:topic/comments/:id/:title/", function (req, res) {
