@@ -247,7 +247,7 @@ Next, modify the`search.ejs` template in the root directory:
 </form>
 ```
 
-以及``results.ejs` 模板：
+``results.ejs` templates
 
 ```ejs
 <h1>Results Page!!!</h1>
@@ -2135,7 +2135,6 @@ const router = express.Router({ mergeParams: true });
 ```js
 const session = require("express-session");
 const flash = require("connect-flash");
-
 
 const sessionConfig = {
   secret: "thisshouldbeabettersecret!",
